@@ -70,11 +70,6 @@ computeLayout state =
 
 view state =
     let
-        sizeAttributes =
-            [ toString state.windowSize.width
-            , toString state.windowSize.height
-            ]
-
         layout =
             computeLayout state
 
@@ -93,10 +88,13 @@ view state =
 kanjiColor k =
     case k.srs of
         Nothing ->
-            "grey"
+            "#222222"
 
         Just level ->
-            "red"
+            let
+                interp = 255 * level // 8 |> toString
+            in
+                "rgb(" ++ interp ++ "," ++ interp ++ "," ++ interp ++ ")"
 
 
 viewKanji layout index kanji =
