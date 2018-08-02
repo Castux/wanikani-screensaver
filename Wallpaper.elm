@@ -2,45 +2,45 @@ module Main exposing (main)
 
 import AnimationFrame
 import Api exposing (getData)
+import Array
 import Html
+import Random
 import Task
+import Time
 import Types exposing (..)
 import View
 import Window
-import Time
-import Random
-import Array
 
 
 initTiles kanjis =
     kanjis
+        |> List.sortBy .level
         |> List.map (Tile Nothing)
 
 
-scrambleTiles (a,b) tiles =
+scrambleTiles ( a, b ) tiles =
     let
-        array = Array.fromList tiles
-
-        tilesToSwap =
-            Maybe.map2 (,)
-                    (Array.get a array)
-                    (Array.get b array)
+        array =
+            Array.fromList tiles
     in
-        case tilesToSwap of
-            Just (ta, tb) ->
-                array
-                    |> Array.set b ta
-                    |> Array.set a tb
-                    |> Array.toList
+    Maybe.map2
+        (\ta tb ->
+            array
+                |> Array.set b ta
+                |> Array.set a tb
+                |> Array.toList
+        )
+        (Array.get a array)
+        (Array.get b array)
+        |> Maybe.withDefault tiles
 
-            Nothing ->
-                tiles
 
 randomPairGenerator numTiles =
     let
-        intGen = Random.int 0 (numTiles - 1)
+        intGen =
+            Random.int 0 (numTiles - 1)
     in
-        Random.pair intGen intGen |> Random.generate Shuffle
+    Random.pair intGen intGen |> Random.generate Shuffle
 
 
 init : ( State, Cmd Message )
@@ -60,7 +60,7 @@ init =
     ( initState, initCommands )
 
 
-update : Message -> State -> (State, Cmd Message)
+update : Message -> State -> ( State, Cmd Message )
 update msg state =
     case msg of
         Nop ->

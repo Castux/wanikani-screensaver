@@ -173,7 +173,8 @@ updateTile dt layout index tile =
         ( tx, ty ) =
             computeGridPos layout index |> computeRealPos layout
 
-        speed = 0.001
+        speed =
+            0.001
 
         newPos =
             case tile.realPos of

@@ -41,4 +41,4 @@ type Message
     | WindowResize Window.Size
     | Tick Time.Time
     | Tock Time.Time
-    | Shuffle (Int, Int)
+    | Shuffle ( Int, Int )
