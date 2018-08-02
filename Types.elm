@@ -1,6 +1,7 @@
 module Types exposing (..)
 
 import Http
+import Time
 import Window
 
 
@@ -14,9 +15,23 @@ type alias Kanji =
     }
 
 
+type alias Tile =
+    { realPos : Maybe ( Float, Float )
+    , kanji : Kanji
+    }
+
+
+type alias Layout =
+    { w : Int
+    , h : Int
+    , tileSize : Float
+    , delta : ( Float, Float )
+    }
+
+
 type alias State =
     { windowSize : Window.Size
-    , kanjis : List Kanji
+    , tiles : List Tile
     }
 
 
@@ -24,3 +39,6 @@ type Message
     = Nop
     | HttpAnswer (Result Http.Error (List Kanji))
     | WindowResize Window.Size
+    | Tick Time.Time
+    | Tock Time.Time
+    | Shuffle (Int, Int)

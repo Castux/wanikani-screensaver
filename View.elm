@@ -1,17 +1,11 @@
-module View exposing (view)
+module View exposing (updateTiles, view)
 
 import Debug
+import Html
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Time
 import Types exposing (..)
-
-
-type alias Layout =
-    { w : Int
-    , h : Int
-    , tileSize : Float
-    , delta : ( Float, Float )
-    }
 
 
 third ( a, b, c ) =
@@ -44,18 +38,18 @@ svgWrap windowSize =
         ]
 
 
-computeLayout state =
+computeLayout windowSize numTiles =
     let
         margin =
             10.0
 
         ( ww, wh ) =
-            ( toFloat state.windowSize.width - 2 * margin
-            , toFloat state.windowSize.height - 2 * margin
+            ( toFloat windowSize.width - 2 * margin
+            , toFloat windowSize.height - 2 * margin
             )
 
         ( w, h ) =
-            bestFit (ww / wh) (List.length state.kanjis)
+            bestFit (ww / wh) numTiles
 
         tileSize =
             ww / toFloat w
@@ -68,17 +62,17 @@ computeLayout state =
     Layout w h tileSize delta
 
 
+view : State -> Html.Html msg
 view state =
     let
         layout =
-            computeLayout state
+            computeLayout state.windowSize (List.length state.tiles)
 
         font =
             floor layout.tileSize - 1 |> toString
     in
-    state.kanjis
-        |> List.sortBy .character
-        |> List.indexedMap (viewKanji layout)
+    state.tiles
+        |> List.map viewTile
         |> g [ fontFamily "Noto Sans CJK JP", fontSize font, dominantBaseline "middle", textAnchor "middle" ]
         |> List.singleton
         |> (++) [ background state.windowSize ]
@@ -92,35 +86,54 @@ kanjiColor k =
 
         Just level ->
             let
-                interp = 255 * level // 8 |> toString
+                interp =
+                    255 * level // 8 |> toString
             in
-                "rgb(" ++ interp ++ "," ++ interp ++ "," ++ interp ++ ")"
+            "rgb(" ++ interp ++ "," ++ interp ++ "," ++ interp ++ ")"
 
 
-viewKanji layout index kanji =
+computeGridPos layout index =
+    ( index % layout.w, index // layout.w )
+
+
+computeRealPos layout ( gx, gy ) =
     let
         ( dx, dy ) =
             layout.delta
 
         sx =
-            (index % layout.w)
+            gx
                 |> toFloat
                 |> (+) 0.5
                 |> (*) layout.tileSize
                 |> (+) dx
-                |> toString
 
         sy =
-            (index // layout.w)
+            gy
                 |> toFloat
                 |> (+) 0.5
                 |> (*) layout.tileSize
                 |> (+) dy
-                |> toString
     in
-    text_
-        [ x sx, y sy, fill (kanjiColor kanji) ]
-        [ text kanji.character ]
+    ( sx, sy )
+
+
+viewTile : Tile -> Svg msg
+viewTile tile =
+    case tile.realPos of
+        Just pos ->
+            let
+                ( cx, cy ) =
+                    pos
+                        |> Tuple.mapFirst toString
+                        |> Tuple.mapSecond toString
+            in
+            text_
+                [ x cx, y cy, fill (kanjiColor tile.kanji) ]
+                [ text tile.kanji.character ]
+
+        Nothing ->
+            text_ [] []
 
 
 
@@ -130,6 +143,7 @@ viewKanji layout index kanji =
 -- h = sqrt(N/ratio)
 
 
+bestFit : Float -> Int -> ( Int, Int )
 bestFit ratio n =
     let
         fn =
@@ -142,3 +156,33 @@ bestFit ratio n =
             fn / toFloat h |> ceiling
     in
     ( w, h )
+
+
+updateTiles : Time.Time -> State -> List Tile
+updateTiles dt state =
+    let
+        layout =
+            computeLayout state.windowSize (List.length state.tiles)
+    in
+    List.indexedMap (updateTile dt layout) state.tiles
+
+
+updateTile : Time.Time -> Layout -> Int -> Tile -> Tile
+updateTile dt layout index tile =
+    let
+        ( tx, ty ) =
+            computeGridPos layout index |> computeRealPos layout
+
+        speed = 0.001
+
+        newPos =
+            case tile.realPos of
+                Just ( x, y ) ->
+                    ( x + (tx - x) * speed * dt
+                    , y + (ty - y) * speed * dt
+                    )
+
+                Nothing ->
+                    ( tx, ty )
+    in
+    { tile | realPos = Just newPos }
