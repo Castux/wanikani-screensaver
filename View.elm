@@ -73,7 +73,12 @@ view state =
     in
     state.tiles
         |> List.map viewTile
-        |> g [ fontFamily "Noto Sans CJK JP", fontSize font, dominantBaseline "middle", textAnchor "middle" ]
+        |> g
+            [ fontFamily "Noto Sans CJK JP"
+            , fontSize font
+            , dominantBaseline "middle"
+            , textAnchor "middle"
+            ]
         |> List.singleton
         |> (++) [ background state.windowSize ]
         |> svgWrap state.windowSize

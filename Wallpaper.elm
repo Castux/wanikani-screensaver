@@ -14,12 +14,13 @@ import View
 import Window
 
 
+initTiles : List Kanji -> List Tile
 initTiles kanjis =
     kanjis
         |> List.map (Tile Nothing)
 
 
-scrambleTiles ( a, b ) tiles =
+swapTiles ( a, b ) tiles =
     tiles
         |> Array.fromList
         |> Utils.arraySwap a b
@@ -32,6 +33,13 @@ swapRandomPair tiles =
             Random.int 0 (List.length tiles - 1)
     in
     Random.pair intGen intGen |> Random.generate SwapTiles
+
+
+shuffleTiles : List Tile -> Cmd Message
+shuffleTiles tiles =
+    tiles
+        |> Random.List.shuffle
+        |> Random.generate SetTiles
 
 
 init : ( State, Cmd Message )
@@ -58,11 +66,7 @@ update msg state =
             state ! []
 
         HttpAnswer (Ok kanjis) ->
-            state
-                ! [ kanjis
-                        |> Random.List.shuffle
-                        |> Random.generate KanjiShuffled
-                  ]
+            state ! [ shuffleTiles (initTiles kanjis) ]
 
         HttpAnswer (Err error) ->
             state ! []
@@ -77,10 +81,10 @@ update msg state =
             state ! [ swapRandomPair state.tiles ]
 
         SwapTiles indices ->
-            { state | tiles = scrambleTiles indices state.tiles } ! []
+            { state | tiles = swapTiles indices state.tiles } ! []
 
-        KanjiShuffled kanjis ->
-            { state | tiles = initTiles kanjis } ! []
+        SetTiles newTiles ->
+            { state | tiles = newTiles } ! []
 
 
 subscriptions state =

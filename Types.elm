@@ -43,4 +43,4 @@ type Message
     | Tick Time.Time
     | Tock Time.Time
     | SwapTiles ( Int, Int )
-    | KanjiShuffled (List Kanji)
+    | SetTiles (List Tile)
