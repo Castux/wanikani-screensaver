@@ -1,8 +1,10 @@
 module View exposing (updateTiles, view)
 
-import Color
+import Array
 import Debug
 import Html
+import Html.Attributes
+import Palettes
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Time
@@ -35,8 +37,7 @@ svgWrap windowSize =
     in
     svg
         [ viewBox ("0 0 " ++ w ++ " " ++ h)
-        , width w
-        , height h
+        , Html.Attributes.style [ ( "margin", "auto" ), ( "width", "100%" ), ( "height", "100%" ) ]
         ]
 
 
@@ -84,15 +85,25 @@ view state =
         |> List.singleton
         |> (++) [ background state.windowSize ]
         |> svgWrap state.windowSize
+        |> List.singleton
+        |> Html.div
+            [ width "100%"
+            , height "100%"
+            , Html.Attributes.style
+                [ ( "display", "flex" )
+                , ( "min-height", "100%" )
+                , ( "background", "black" )
+                ]
+            ]
 
 
 kanjiColor k =
     case k.srs of
         Nothing ->
-            "#222222"
+            "#202020"
 
         Just level ->
-            1 - toFloat level / 8.0 |> Color.grayscale |> Utils.cssColor
+            Palettes.wanikani level
 
 
 computeGridPos layout index =
