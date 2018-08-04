@@ -1,5 +1,6 @@
 module Types exposing (..)
 
+import Array exposing (Array)
 import Http
 import Time
 import Window
@@ -41,4 +42,5 @@ type Message
     | WindowResize Window.Size
     | Tick Time.Time
     | Tock Time.Time
-    | Shuffle ( Int, Int )
+    | SwapTiles ( Int, Int )
+    | KanjiShuffled (List Kanji)

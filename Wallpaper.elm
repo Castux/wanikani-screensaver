@@ -2,45 +2,36 @@ module Main exposing (main)
 
 import AnimationFrame
 import Api exposing (getData)
-import Array
+import Array exposing (Array)
 import Html
 import Random
+import Random.List
 import Task
 import Time
 import Types exposing (..)
+import Utils
 import View
 import Window
 
 
 initTiles kanjis =
     kanjis
-        |> List.sortBy .level
         |> List.map (Tile Nothing)
 
 
 scrambleTiles ( a, b ) tiles =
-    let
-        array =
-            Array.fromList tiles
-    in
-    Maybe.map2
-        (\ta tb ->
-            array
-                |> Array.set b ta
-                |> Array.set a tb
-                |> Array.toList
-        )
-        (Array.get a array)
-        (Array.get b array)
-        |> Maybe.withDefault tiles
+    tiles
+        |> Array.fromList
+        |> Utils.arraySwap a b
+        |> Array.toList
 
 
-randomPairGenerator numTiles =
+swapRandomPair tiles =
     let
         intGen =
-            Random.int 0 (numTiles - 1)
+            Random.int 0 (List.length tiles - 1)
     in
-    Random.pair intGen intGen |> Random.generate Shuffle
+    Random.pair intGen intGen |> Random.generate SwapTiles
 
 
 init : ( State, Cmd Message )
@@ -67,7 +58,11 @@ update msg state =
             state ! []
 
         HttpAnswer (Ok kanjis) ->
-            { state | tiles = initTiles kanjis } ! []
+            state
+                ! [ kanjis
+                        |> Random.List.shuffle
+                        |> Random.generate KanjiShuffled
+                  ]
 
         HttpAnswer (Err error) ->
             state ! []
@@ -79,10 +74,13 @@ update msg state =
             { state | tiles = View.updateTiles dt state } ! []
 
         Tock dt ->
-            state ! [ randomPairGenerator (List.length state.tiles) ]
+            state ! [ swapRandomPair state.tiles ]
 
-        Shuffle indices ->
+        SwapTiles indices ->
             { state | tiles = scrambleTiles indices state.tiles } ! []
+
+        KanjiShuffled kanjis ->
+            { state | tiles = initTiles kanjis } ! []
 
 
 subscriptions state =
