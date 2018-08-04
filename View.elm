@@ -1,11 +1,13 @@
 module View exposing (updateTiles, view)
 
+import Color
 import Debug
 import Html
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Time
 import Types exposing (..)
+import Utils
 
 
 third ( a, b, c ) =
@@ -90,11 +92,7 @@ kanjiColor k =
             "#222222"
 
         Just level ->
-            let
-                interp =
-                    255 * level // 8 |> toString
-            in
-            "rgb(" ++ interp ++ "," ++ interp ++ "," ++ interp ++ ")"
+            1 - toFloat level / 8.0 |> Color.grayscale |> Utils.cssColor
 
 
 computeGridPos layout index =
