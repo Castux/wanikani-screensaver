@@ -78,7 +78,9 @@ update msg state =
             { state | tiles = View.updateTiles dt state } ! []
 
         Tock dt ->
-            state ! [ swapRandomPair state.tiles ]
+            --state ! [ swapRandomPair state.tiles ]
+            state
+                ! [ shuffleTiles state.tiles ]
 
         SwapTiles indices ->
             { state | tiles = swapTiles indices state.tiles } ! []
@@ -91,7 +93,7 @@ subscriptions state =
     Sub.batch
         [ Window.resizes WindowResize
         , AnimationFrame.diffs Tick
-        , Time.every (0.1 * Time.second) Tock
+        , Time.every (8 * Time.second) Tock
         ]
 
 
