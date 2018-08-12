@@ -42,3 +42,17 @@ pairRange (s1, s2) (e1, e2) =
 pairMap : (a1 -> b1) -> (a2 -> b2) -> (a1,a2) -> (b1,b2)
 pairMap f1 f2 (e1, e2) =
     (f1 e1, f2 e2)
+
+randomListElement : List a -> Random.Seed -> (Maybe a, Random.Seed)
+randomListElement list seed =
+    case list of
+        [] ->
+            (Nothing, seed)
+
+        _ ->
+            let
+                gen = Random.int 0 (List.length list - 1)
+                (index, newSeed) = Random.step gen seed
+                element = list |> List.drop index |> List.head
+            in
+                (element, newSeed)

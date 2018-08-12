@@ -1,7 +1,8 @@
 module Layout exposing (computeLayout)
 
 import Dict exposing (Dict)
-import Utils exposing (pairMap, pairRange)
+import Random
+import Utils exposing (pairMap, pairRange, randomListElement)
 
 
 type Cell
@@ -50,8 +51,42 @@ freeCells grid size =
         |> List.filter (freeCell grid size)
 
 
-computeLayout : List ( a, Int ) -> Float -> List ( a, Int, ( Int, Int ) )
-computeLayout items aspectRatio =
+insertInGrid : Grid -> Int -> ( Int, Int ) -> Grid
+insertInGrid grid size ( x, y ) =
+    pairRange ( 0, 0 ) ( size - 1, size - 1 )
+        |> List.map (pairMap ((+) x) ((+) y))
+        |> List.foldr (\p -> Dict.insert p Blocked) grid
+        |> Dict.insert ( x, y ) (Corner size)
+
+
+randomFill : Grid -> List ( a, Int ) -> Random.Seed -> List ( a, Int, ( Int, Int ) )
+randomFill emptyGrid items initialSeed =
+    let
+        rec grid items seed result =
+            case items of
+                [] ->
+                    result
+
+                ( item, size ) :: rest ->
+                    let
+                        spots =
+                            freeCells grid size
+
+                        ( spot, newSeed ) =
+                            randomListElement spots seed
+                    in
+                    case spot of
+                        Nothing ->
+                            result
+
+                        Just spot ->
+                            rec (insertInGrid grid size spot) rest newSeed (( item, size, spot ) :: result)
+    in
+    rec emptyGrid items initialSeed []
+
+
+computeLayout : List ( a, Int ) -> Float -> Random.Seed -> List ( a, Int, ( Int, Int ) )
+computeLayout items aspectRatio seed =
     let
         surface =
             items |> List.map (Tuple.second >> (\n -> n * n)) |> List.sum
@@ -61,6 +96,8 @@ computeLayout items aspectRatio =
 
         sorted =
             List.sortBy Tuple.second items |> List.reverse
+
+        grid =
+            makeGrid ( w, h )
     in
-    items
-        |> List.map (\( item, size ) -> ( item, size, ( 0, 0 ) ))
+    randomFill grid items seed
