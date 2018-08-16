@@ -1,7 +1,9 @@
-module KanjiScreen exposing (Model, Msg, init, view)
+module KanjiScreen exposing (Model, Msg, init, subscriptions, view)
 
 import Html
 import Html.Attributes
+import KanjiData exposing (KanjiData)
+import Layout
 import Window
 
 
@@ -10,11 +12,13 @@ type Msg
 
 
 type alias Model =
-    Int
+    { aspect : Float
+    , kanjis : List KanjiData
+    }
 
 
 init kanjis ratio =
-    0
+    Model ratio kanjis
 
 
 view state =
@@ -35,7 +39,7 @@ view state =
                 , ( "margin", "auto" )
                 ]
             ]
-            [ Html.text "Gurido!" ]
+            [ Html.text "格子" ]
         ]
 
 

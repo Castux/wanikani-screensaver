@@ -4,19 +4,19 @@ import Api
 import Html
 import Html.Attributes
 import Http
+import KanjiData exposing (KanjiData)
 import Task
-import Types exposing (Kanji)
 import Window
 
 
 type alias Model =
-    { kanjis : Maybe (List Kanji)
+    { kanjis : Maybe (List KanjiData)
     , aspect : Maybe Float
     }
 
 
 type Msg
-    = ReceivedKanjis (Result Http.Error (List Kanji))
+    = ReceivedKanjis (Result Http.Error (List KanjiData))
     | WindowResize Window.Size
 
 
@@ -41,7 +41,7 @@ fullyLoaded state =
     Maybe.map2 (,) state.kanjis state.aspect
 
 
-update : Msg -> Model -> ( Model, Maybe ( List Kanji, Float ) )
+update : Msg -> Model -> ( Model, Maybe ( List KanjiData, Float ) )
 update msg state =
     let
         updatedState =

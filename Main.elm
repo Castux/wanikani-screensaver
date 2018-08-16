@@ -12,6 +12,7 @@ type Screen
 
 type Msg
     = LoadingMsg LoadingScreen.Msg
+    | KanjiMsg KanjiScreen.Msg
 
 
 init =
@@ -51,10 +52,19 @@ view screen =
             KanjiScreen.view model
 
 
+subscriptions screen =
+    case screen of
+        Loading model ->
+            Sub.map LoadingMsg (LoadingScreen.subscriptions model)
+
+        Kanji model ->
+            Sub.map KanjiMsg (KanjiScreen.subscriptions model)
+
+
 main =
     Html.program
         { init = init
         , update = update
         , view = view
-        , subscriptions = \state -> Sub.none
+        , subscriptions = subscriptions
         }
