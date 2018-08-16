@@ -1,32 +1,60 @@
 module Main exposing (main)
 
-import LoadingScreen
 import Html
+import KanjiScreen
+import LoadingScreen
+
 
 type Screen
     = Loading LoadingScreen.Model
+    | Kanji KanjiScreen.Model
+
 
 type Msg
     = LoadingMsg LoadingScreen.Msg
 
+
 init =
     wrap Loading LoadingMsg LoadingScreen.init
 
-wrap pageCon msgCon (state, msg) =
+
+wrap pageCon msgCon ( state, msg ) =
     ( pageCon state, Cmd.map msgCon msg )
 
-update : Msg -> Screen -> (Screen, Cmd Msg)
+
+update : Msg -> Screen -> ( Screen, Cmd Msg )
 update msg screen =
-    case (msg, screen) of
-        (LoadingMsg msg, Loading model) ->
-            wrap Loading LoadingMsg (LoadingScreen.update msg model)
-        
+    case ( msg, screen ) of
+        ( LoadingMsg msg, Loading model ) ->
+            let
+                ( newState, fullyLoaded ) =
+                    LoadingScreen.update msg model
+            in
+            case fullyLoaded of
+                Nothing ->
+                    ( Loading newState, Cmd.none )
+
+                Just ( kanjis, ratio ) ->
+                    ( Kanji <| KanjiScreen.init kanjis ratio, Cmd.none )
+
+        _ ->
+            ( screen, Cmd.none )
+
+
+view : Screen -> Html.Html Msg
+view screen =
+    case screen of
+        Loading model ->
+            LoadingScreen.view model
+
+        Kanji model ->
+            KanjiScreen.view model
 
 
 main =
     Html.program
         { init = init
         , update = update
-        , view = \state -> Html.div [] []
+        , view = view
         , subscriptions = \state -> Sub.none
         }
