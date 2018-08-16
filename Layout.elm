@@ -25,7 +25,7 @@ bestFit numItems aspectRatio =
             fn / aspectRatio |> sqrt |> floor
 
         w =
-            fn / toFloat h |> ceiling
+            fn / toFloat h |> floor
     in
     ( w, h )
 
@@ -100,4 +100,4 @@ computeLayout items aspectRatio seed =
         grid =
             makeGrid ( w, h )
     in
-    randomFill grid items seed
+    randomFill grid sorted seed

@@ -22,4 +22,4 @@ wanikani level =
 
 
 grayscale level =
-    1 - toFloat level / 8.0 |> Color.grayscale |> Utils.cssColor
+    toFloat level / 8.0 |> Color.grayscale |> Utils.cssColor

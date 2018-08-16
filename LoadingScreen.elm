@@ -37,25 +37,17 @@ init =
     ( initState, initCommands )
 
 
-fullyLoaded state =
-    Maybe.map2 (,) state.kanjis state.aspect
-
-
-update : Msg -> Model -> ( Model, Maybe ( List KanjiData, Float ) )
+update : Msg -> Model -> Model
 update msg state =
-    let
-        updatedState =
-            case msg of
-                ReceivedKanjis (Ok kanjis) ->
-                    { state | kanjis = Just kanjis }
+    case msg of
+        ReceivedKanjis (Ok kanjis) ->
+            { state | kanjis = Just kanjis }
 
-                ReceivedKanjis (Err error) ->
-                    state
+        ReceivedKanjis (Err error) ->
+            state
 
-                WindowResize size ->
-                    { state | aspect = Just (toFloat size.width / toFloat size.height) }
-    in
-    ( updatedState, fullyLoaded updatedState )
+        WindowResize size ->
+            { state | aspect = Just (toFloat size.width / toFloat size.height) }
 
 
 view state =
@@ -68,7 +60,7 @@ view state =
             , ( "height", "100%" )
             ]
         ]
-        [ Html.span
+        [ Html.div
             [ Html.Attributes.style
                 [ ( "color", "white" )
                 , ( "font-size", "20vmin" )

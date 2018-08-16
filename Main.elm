@@ -5,6 +5,16 @@ import KanjiScreen
 import LoadingScreen
 
 
+--(<<<) f g x y =
+--    f (g x y)
+
+
+(<<<) : (a -> b) -> (c -> d -> a) -> (c -> d -> b)
+(<<<) =
+    (<<) << (<<)
+infixr 9 <<<
+
+
 type Screen
     = Loading LoadingScreen.Model
     | Kanji KanjiScreen.Model
@@ -28,15 +38,14 @@ update msg screen =
     case ( msg, screen ) of
         ( LoadingMsg msg, Loading model ) ->
             let
-                ( newState, fullyLoaded ) =
+                newState =
                     LoadingScreen.update msg model
-            in
-            case fullyLoaded of
-                Nothing ->
-                    ( Loading newState, Cmd.none )
 
-                Just ( kanjis, ratio ) ->
-                    ( Kanji <| KanjiScreen.init kanjis ratio, Cmd.none )
+                nextState =
+                    Maybe.map2 (Kanji <<< KanjiScreen.init) newState.aspect newState.kanjis
+                        |> Maybe.withDefault (Loading newState)
+            in
+            ( nextState, Cmd.none )
 
         _ ->
             ( screen, Cmd.none )
