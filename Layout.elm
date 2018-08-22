@@ -105,8 +105,19 @@ computeLayout items aspectRatio seed =
         ( w, h ) =
             bestFit surface aspectRatio
 
+        decreasingSize ( a, sa ) ( b, sb ) =
+            case compare sa sb of
+                LT ->
+                    GT
+
+                EQ ->
+                    EQ
+
+                GT ->
+                    LT
+
         sorted =
-            List.sortBy Tuple.second items |> List.reverse
+            List.sortWith decreasingSize items
 
         grid =
             makeGrid ( w, h )
