@@ -10531,20 +10531,28 @@ var _user$project$Layout$computeLayout = F3(
 						return _elm_lang$core$Basics$LT;
 				}
 			});
-		var sorted = A2(_elm_lang$core$List$sortWith, decreasingSize, items);
+		var sorted = A2(
+			function (_p23) {
+				return _elm_lang$core$List$map(
+					_elm_lang$core$Tuple$mapSecond(_p23));
+			},
+			function (s) {
+				return _elm_lang$core$Native_Utils.eq(s, 0) ? 1 : s;
+			},
+			A2(_elm_lang$core$List$sortWith, decreasingSize, items));
 		var surface = _elm_lang$core$List$sum(
 			A2(
 				_elm_lang$core$List$map,
-				function (_p23) {
+				function (_p24) {
 					return function (n) {
 						return n * n;
 					}(
-						_elm_lang$core$Tuple$second(_p23));
+						_elm_lang$core$Tuple$second(_p24));
 				},
-				items));
-		var _p24 = A2(_user$project$Layout$bestFit, surface, aspectRatio);
-		var w = _p24._0;
-		var h = _p24._1;
+				sorted));
+		var _p25 = A2(_user$project$Layout$bestFit, surface, aspectRatio);
+		var w = _p25._0;
+		var h = _p25._1;
 		var grid = _user$project$Layout$makeGrid(
 			{ctor: '_Tuple2', _0: w, _1: h});
 		return {
@@ -10703,7 +10711,7 @@ var _user$project$KanjiScreen$sizing = function (srs) {
 			break _v3_8;
 		}
 	} while(false);
-	return 1;
+	return 0;
 };
 var _user$project$KanjiScreen$viewKanjis = F2(
 	function (kanjis, aspect) {
