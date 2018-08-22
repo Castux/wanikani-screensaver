@@ -10648,7 +10648,11 @@ var _user$project$KanjiScreen$viewKanji = function (_p1) {
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$svg$Svg_Attributes$transform(trans),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$dy('0.875em'),
+					_1: {ctor: '[]'}
+				}
 			}
 		},
 		{
@@ -10762,11 +10766,7 @@ var _user$project$KanjiScreen$viewKanjis = F2(
 					{
 						ctor: '::',
 						_0: _elm_lang$svg$Svg_Attributes$fontSize('32px'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$dominantBaseline('hanging'),
-							_1: {ctor: '[]'}
-						}
+						_1: {ctor: '[]'}
 					},
 					A2(_elm_lang$core$List$map, _user$project$KanjiScreen$viewKanji, tiles))));
 	});
