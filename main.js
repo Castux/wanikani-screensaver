@@ -6064,6 +6064,137 @@ var _elm_lang$core$Color$Linear = F3(
 	});
 var _elm_lang$core$Color$linear = _elm_lang$core$Color$Linear;
 
+var _elm_lang$core$Set$foldr = F3(
+	function (f, b, _p0) {
+		var _p1 = _p0;
+		return A3(
+			_elm_lang$core$Dict$foldr,
+			F3(
+				function (k, _p2, b) {
+					return A2(f, k, b);
+				}),
+			b,
+			_p1._0);
+	});
+var _elm_lang$core$Set$foldl = F3(
+	function (f, b, _p3) {
+		var _p4 = _p3;
+		return A3(
+			_elm_lang$core$Dict$foldl,
+			F3(
+				function (k, _p5, b) {
+					return A2(f, k, b);
+				}),
+			b,
+			_p4._0);
+	});
+var _elm_lang$core$Set$toList = function (_p6) {
+	var _p7 = _p6;
+	return _elm_lang$core$Dict$keys(_p7._0);
+};
+var _elm_lang$core$Set$size = function (_p8) {
+	var _p9 = _p8;
+	return _elm_lang$core$Dict$size(_p9._0);
+};
+var _elm_lang$core$Set$member = F2(
+	function (k, _p10) {
+		var _p11 = _p10;
+		return A2(_elm_lang$core$Dict$member, k, _p11._0);
+	});
+var _elm_lang$core$Set$isEmpty = function (_p12) {
+	var _p13 = _p12;
+	return _elm_lang$core$Dict$isEmpty(_p13._0);
+};
+var _elm_lang$core$Set$Set_elm_builtin = function (a) {
+	return {ctor: 'Set_elm_builtin', _0: a};
+};
+var _elm_lang$core$Set$empty = _elm_lang$core$Set$Set_elm_builtin(_elm_lang$core$Dict$empty);
+var _elm_lang$core$Set$singleton = function (k) {
+	return _elm_lang$core$Set$Set_elm_builtin(
+		A2(
+			_elm_lang$core$Dict$singleton,
+			k,
+			{ctor: '_Tuple0'}));
+};
+var _elm_lang$core$Set$insert = F2(
+	function (k, _p14) {
+		var _p15 = _p14;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A3(
+				_elm_lang$core$Dict$insert,
+				k,
+				{ctor: '_Tuple0'},
+				_p15._0));
+	});
+var _elm_lang$core$Set$fromList = function (xs) {
+	return A3(_elm_lang$core$List$foldl, _elm_lang$core$Set$insert, _elm_lang$core$Set$empty, xs);
+};
+var _elm_lang$core$Set$map = F2(
+	function (f, s) {
+		return _elm_lang$core$Set$fromList(
+			A2(
+				_elm_lang$core$List$map,
+				f,
+				_elm_lang$core$Set$toList(s)));
+	});
+var _elm_lang$core$Set$remove = F2(
+	function (k, _p16) {
+		var _p17 = _p16;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$remove, k, _p17._0));
+	});
+var _elm_lang$core$Set$union = F2(
+	function (_p19, _p18) {
+		var _p20 = _p19;
+		var _p21 = _p18;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$union, _p20._0, _p21._0));
+	});
+var _elm_lang$core$Set$intersect = F2(
+	function (_p23, _p22) {
+		var _p24 = _p23;
+		var _p25 = _p22;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$intersect, _p24._0, _p25._0));
+	});
+var _elm_lang$core$Set$diff = F2(
+	function (_p27, _p26) {
+		var _p28 = _p27;
+		var _p29 = _p26;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(_elm_lang$core$Dict$diff, _p28._0, _p29._0));
+	});
+var _elm_lang$core$Set$filter = F2(
+	function (p, _p30) {
+		var _p31 = _p30;
+		return _elm_lang$core$Set$Set_elm_builtin(
+			A2(
+				_elm_lang$core$Dict$filter,
+				F2(
+					function (k, _p32) {
+						return p(k);
+					}),
+				_p31._0));
+	});
+var _elm_lang$core$Set$partition = F2(
+	function (p, _p33) {
+		var _p34 = _p33;
+		var _p35 = A2(
+			_elm_lang$core$Dict$partition,
+			F2(
+				function (k, _p36) {
+					return p(k);
+				}),
+			_p34._0);
+		var p1 = _p35._0;
+		var p2 = _p35._1;
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Set$Set_elm_builtin(p1),
+			_1: _elm_lang$core$Set$Set_elm_builtin(p2)
+		};
+	});
+
 var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
 var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
 var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
@@ -10265,21 +10396,6 @@ var _user$project$Utils$cssColor = function (color) {
 		A2(_elm_lang$core$Basics_ops['++'], tmp, ')'));
 };
 
-var _user$project$Layout$bestFit = F2(
-	function (numItems, aspectRatio) {
-		var fn = _elm_lang$core$Basics$toFloat(numItems);
-		var h = _elm_lang$core$Basics$sqrt(fn / aspectRatio);
-		var w = fn / h;
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Basics$floor(w),
-			_1: _elm_lang$core$Basics$floor(h)
-		};
-	});
-var _user$project$Layout$Blocked = {ctor: 'Blocked'};
-var _user$project$Layout$Corner = function (a) {
-	return {ctor: 'Corner', _0: a};
-};
 var _user$project$Layout$insertInGrid = F3(
 	function (grid, size, _p0) {
 		var _p1 = _p0;
@@ -10287,78 +10403,54 @@ var _user$project$Layout$insertInGrid = F3(
 		var _p3 = _p1._0;
 		var _p2 = size;
 		if (_p2 === 1) {
-			return A3(
-				_elm_lang$core$Dict$insert,
+			return A2(
+				_elm_lang$core$Set$remove,
 				{ctor: '_Tuple2', _0: _p3, _1: _p4},
-				_user$project$Layout$Corner(1),
 				grid);
 		} else {
-			return A3(
-				_elm_lang$core$Dict$insert,
-				{ctor: '_Tuple2', _0: _p3, _1: _p4},
-				_user$project$Layout$Corner(size),
-				A3(
-					_elm_lang$core$List$foldr,
-					function (p) {
-						return A2(_elm_lang$core$Dict$insert, p, _user$project$Layout$Blocked);
-					},
-					grid,
+			return A2(
+				_elm_lang$core$Set$diff,
+				grid,
+				_elm_lang$core$Set$fromList(
 					A2(
 						_user$project$Utils$pairRange,
 						{ctor: '_Tuple2', _0: _p3, _1: _p4},
 						{ctor: '_Tuple2', _0: (_p3 + size) - 1, _1: (_p4 + size) - 1})));
 		}
 	});
-var _user$project$Layout$Empty = {ctor: 'Empty'};
-var _user$project$Layout$makeGrid = function (_p5) {
-	var _p6 = _p5;
-	return _elm_lang$core$Dict$fromList(
-		A2(
-			_elm_lang$core$List$map,
-			function (x) {
-				return {ctor: '_Tuple2', _0: x, _1: _user$project$Layout$Empty};
-			},
-			A2(
-				_user$project$Utils$pairRange,
-				{ctor: '_Tuple2', _0: 0, _1: 0},
-				{ctor: '_Tuple2', _0: _p6._0 - 1, _1: _p6._1 - 1})));
-};
 var _user$project$Layout$freeCell = F3(
-	function (grid, size, _p7) {
-		var _p8 = _p7;
-		var _p11 = _p8._1;
-		var _p10 = _p8._0;
-		var _p9 = size;
-		if (_p9 === 1) {
-			return _elm_lang$core$Native_Utils.eq(
-				A2(
-					_elm_lang$core$Dict$get,
-					{ctor: '_Tuple2', _0: _p10, _1: _p11},
-					grid),
-				_elm_lang$core$Maybe$Just(_user$project$Layout$Empty));
+	function (grid, size, _p5) {
+		var _p6 = _p5;
+		var _p9 = _p6._1;
+		var _p8 = _p6._0;
+		var _p7 = size;
+		if (_p7 === 1) {
+			return A2(
+				_elm_lang$core$Set$member,
+				{ctor: '_Tuple2', _0: _p8, _1: _p9},
+				grid);
 		} else {
 			return A2(
 				_elm_lang$core$List$all,
-				F2(
-					function (x, y) {
-						return _elm_lang$core$Native_Utils.eq(x, y);
-					})(
-					_elm_lang$core$Maybe$Just(_user$project$Layout$Empty)),
+				A2(_elm_lang$core$Basics$flip, _elm_lang$core$Set$member, grid),
 				A2(
-					_elm_lang$core$List$map,
-					A2(_elm_lang$core$Basics$flip, _elm_lang$core$Dict$get, grid),
-					A2(
-						_user$project$Utils$pairRange,
-						{ctor: '_Tuple2', _0: _p10, _1: _p11},
-						{ctor: '_Tuple2', _0: (_p10 + size) - 1, _1: (_p11 + size) - 1})));
+					_user$project$Utils$pairRange,
+					{ctor: '_Tuple2', _0: _p8, _1: _p9},
+					{ctor: '_Tuple2', _0: (_p8 + size) - 1, _1: (_p9 + size) - 1}));
 		}
 	});
 var _user$project$Layout$freeCells = F2(
 	function (grid, size) {
-		return A2(
-			_elm_lang$core$List$filter,
-			A2(_user$project$Layout$freeCell, grid, size),
-			_elm_lang$core$Dict$keys(grid));
+		var list = _elm_lang$core$Set$toList(grid);
+		var _p10 = size;
+		if (_p10 === 1) {
+			return list;
+		} else {
+			return A2(
+				_elm_lang$core$List$filter,
+				A2(_user$project$Layout$freeCell, grid, size),
+				list);
+		}
 	});
 var _user$project$Layout$randomFill = F3(
 	function (emptyGrid, items, initialSeed) {
@@ -10366,26 +10458,26 @@ var _user$project$Layout$randomFill = F3(
 			function (grid, items, seed, result) {
 				rec:
 				while (true) {
-					var _p12 = items;
-					if (_p12.ctor === '[]') {
+					var _p11 = items;
+					if (_p11.ctor === '[]') {
 						return result;
 					} else {
-						var _p16 = _p12._0._1;
-						var spots = A2(_user$project$Layout$freeCells, grid, _p16);
-						var _p13 = A2(_user$project$Utils$randomListElement, spots, seed);
-						var spot = _p13._0;
-						var newSeed = _p13._1;
-						var _p14 = spot;
-						if (_p14.ctor === 'Nothing') {
+						var _p15 = _p11._0._1;
+						var spots = A2(_user$project$Layout$freeCells, grid, _p15);
+						var _p12 = A2(_user$project$Utils$randomListElement, spots, seed);
+						var spot = _p12._0;
+						var newSeed = _p12._1;
+						var _p13 = spot;
+						if (_p13.ctor === 'Nothing') {
 							return result;
 						} else {
-							var _p15 = _p14._0;
-							var _v7 = A3(_user$project$Layout$insertInGrid, grid, _p16, _p15),
-								_v8 = _p12._1,
+							var _p14 = _p13._0;
+							var _v7 = A3(_user$project$Layout$insertInGrid, grid, _p15, _p14),
+								_v8 = _p11._1,
 								_v9 = newSeed,
 								_v10 = {
 								ctor: '::',
-								_0: {ctor: '_Tuple3', _0: _p12._0._0, _1: _p16, _2: _p15},
+								_0: {ctor: '_Tuple3', _0: _p11._0._0, _1: _p15, _2: _p14},
 								_1: result
 							};
 							grid = _v7;
@@ -10404,23 +10496,55 @@ var _user$project$Layout$randomFill = F3(
 			initialSeed,
 			{ctor: '[]'});
 	});
+var _user$project$Layout$makeGrid = function (_p16) {
+	var _p17 = _p16;
+	return _elm_lang$core$Set$fromList(
+		A2(
+			_user$project$Utils$pairRange,
+			{ctor: '_Tuple2', _0: 0, _1: 0},
+			{ctor: '_Tuple2', _0: _p17._0 - 1, _1: _p17._1 - 1}));
+};
+var _user$project$Layout$bestFit = F2(
+	function (numItems, aspectRatio) {
+		var fn = _elm_lang$core$Basics$toFloat(numItems);
+		var h = _elm_lang$core$Basics$sqrt(fn / aspectRatio);
+		var w = fn / h;
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Basics$floor(w),
+			_1: _elm_lang$core$Basics$floor(h)
+		};
+	});
 var _user$project$Layout$computeLayout = F3(
 	function (items, aspectRatio, seed) {
-		var sorted = _elm_lang$core$List$reverse(
-			A2(_elm_lang$core$List$sortBy, _elm_lang$core$Tuple$second, items));
+		var decreasingSize = F2(
+			function (_p19, _p18) {
+				var _p20 = _p19;
+				var _p21 = _p18;
+				var _p22 = A2(_elm_lang$core$Basics$compare, _p20._1, _p21._1);
+				switch (_p22.ctor) {
+					case 'LT':
+						return _elm_lang$core$Basics$GT;
+					case 'EQ':
+						return _elm_lang$core$Basics$EQ;
+					default:
+						return _elm_lang$core$Basics$LT;
+				}
+			});
+		var sorted = A2(_elm_lang$core$List$sortWith, decreasingSize, items);
 		var surface = _elm_lang$core$List$sum(
 			A2(
 				_elm_lang$core$List$map,
-				function (_p17) {
+				function (_p23) {
 					return function (n) {
 						return n * n;
 					}(
-						_elm_lang$core$Tuple$second(_p17));
+						_elm_lang$core$Tuple$second(_p23));
 				},
 				items));
-		var _p18 = A2(_user$project$Layout$bestFit, surface, aspectRatio);
-		var w = _p18._0;
-		var h = _p18._1;
+		var _p24 = A2(_user$project$Layout$bestFit, surface, aspectRatio);
+		var w = _p24._0;
+		var h = _p24._1;
 		var grid = _user$project$Layout$makeGrid(
 			{ctor: '_Tuple2', _0: w, _1: h});
 		return {

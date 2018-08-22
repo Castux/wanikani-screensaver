@@ -1,18 +1,15 @@
 module Layout exposing (computeLayout)
 
-import Dict exposing (Dict)
 import Random
+import Set exposing (Set)
 import Utils exposing (pairMap, pairRange, randomListElement)
 
 
-type Cell
-    = Empty
-    | Corner Int
-    | Blocked
+-- Grid represents all the remaining free cells
 
 
 type alias Grid =
-    Dict ( Int, Int ) Cell
+    Set ( Int, Int )
 
 
 bestFit : Int -> Float -> ( Int, Int )
@@ -33,38 +30,44 @@ bestFit numItems aspectRatio =
 makeGrid : ( Int, Int ) -> Grid
 makeGrid ( w, h ) =
     pairRange ( 0, 0 ) ( w - 1, h - 1 )
-        |> List.map (\x -> ( x, Empty ))
-        |> Dict.fromList
+        |> Set.fromList
 
 
 freeCell : Grid -> Int -> ( Int, Int ) -> Bool
 freeCell grid size ( x, y ) =
     case size of
         1 ->
-            Dict.get ( x, y ) grid == Just Empty
+            Set.member ( x, y ) grid
 
         _ ->
             pairRange ( x, y ) ( x + size - 1, y + size - 1 )
-                |> List.map (flip Dict.get grid)
-                |> List.all ((==) (Just Empty))
+                |> List.all (flip Set.member grid)
 
 
 freeCells : Grid -> Int -> List ( Int, Int )
 freeCells grid size =
-    Dict.keys grid
-        |> List.filter (freeCell grid size)
+    let
+        list =
+            Set.toList grid
+    in
+    case size of
+        1 ->
+            list
+
+        _ ->
+            List.filter (freeCell grid size) list
 
 
 insertInGrid : Grid -> Int -> ( Int, Int ) -> Grid
 insertInGrid grid size ( x, y ) =
     case size of
         1 ->
-            Dict.insert ( x, y ) (Corner 1) grid
+            Set.remove ( x, y ) grid
 
         _ ->
             pairRange ( x, y ) ( x + size - 1, y + size - 1 )
-                |> List.foldr (\p -> Dict.insert p Blocked) grid
-                |> Dict.insert ( x, y ) (Corner size)
+                |> Set.fromList
+                |> Set.diff grid
 
 
 randomFill : Grid -> List ( a, Int ) -> Random.Seed -> List ( a, Int, ( Int, Int ) )
@@ -102,8 +105,19 @@ computeLayout items aspectRatio seed =
         ( w, h ) =
             bestFit surface aspectRatio
 
+        decreasingSize ( a, sa ) ( b, sb ) =
+            case compare sa sb of
+                LT ->
+                    GT
+
+                EQ ->
+                    EQ
+
+                GT ->
+                    LT
+
         sorted =
-            List.sortBy Tuple.second items |> List.reverse
+            List.sortWith decreasingSize items
 
         grid =
             makeGrid ( w, h )
