@@ -2,11 +2,11 @@ module Api exposing (getData)
 
 import Http
 import Json.Decode exposing (..)
-import Types exposing (..)
+import KanjiData exposing (KanjiData)
 
 
 kanjiDecode =
-    map6 Kanji
+    map6 KanjiData
         (field "level" int)
         (field "character" string)
         (field "meaning" string)
@@ -23,8 +23,8 @@ allLevels =
     List.range 1 60 |> List.map toString |> String.join ","
 
 
-getData : Cmd Message
-getData =
+getData : (Result Http.Error (List KanjiData) -> msg) -> Cmd msg
+getData msg =
     let
         url =
             "https://www.wanikani.com/api/user/5e63183f2d2d844f0aef5c0665676a71/kanji/" ++ allLevels
@@ -32,4 +32,4 @@ getData =
         req =
             Http.get url requestDecode
     in
-    Http.send HttpAnswer req
+    Http.send msg req
