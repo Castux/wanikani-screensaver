@@ -1,4 +1,4 @@
-module KanjiScreen exposing (Model, Msg, init, subscriptions, view)
+module KanjiScreen exposing (Model, Msg, init, subscriptions, update, view)
 
 import Html
 import Html.Attributes
@@ -32,6 +32,12 @@ sizing srs =
 
         Nothing ->
             1
+
+
+update model msg =
+    case msg of
+        WindowResize size ->
+            { model | aspect = toFloat size.width / toFloat size.height } ! []
 
 
 viewKanjis kanjis aspect =

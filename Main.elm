@@ -47,6 +47,9 @@ update msg screen =
             in
             ( nextState, Cmd.none )
 
+        ( KanjiMsg msg, Kanji model ) ->
+            wrap Kanji KanjiMsg ( KanjiScreen.update model msg )
+
         _ ->
             ( screen, Cmd.none )
 
