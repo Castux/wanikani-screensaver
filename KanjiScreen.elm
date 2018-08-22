@@ -78,9 +78,6 @@ viewKanjis kanjis aspect =
         |> List.map viewKanji
         |> g
             [ fontSize "32px"
-            , dominantBaseline "hanging"
-
-            --            , textAnchor "middle"
             ]
         |> List.singleton
         |> svg
@@ -114,6 +111,7 @@ viewKanji ( data, size, ( x, y ) ) =
     text_
         [ fill (kanjiColor data)
         , transform trans
+        , dy "0.875em"
         ]
         [ text data.character ]
 
