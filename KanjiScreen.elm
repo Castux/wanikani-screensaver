@@ -35,9 +35,19 @@ sizing srs =
 
 
 viewKanjis kanjis aspect =
-    kanjis
-        |> List.map (\kd -> ( kd, sizing kd.srs ))
-        |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
+    let
+        ( tiles, ( w, h ) ) =
+            kanjis
+                |> List.map (\kd -> ( kd, sizing kd.srs ))
+                |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
+
+        tw =
+            toString <| 32 * w
+
+        th =
+            toString <| 32 * h
+    in
+    tiles
         |> List.map viewKanji
         |> g
             [ fontFamily "Noto Sans CJK JP"
@@ -48,7 +58,7 @@ viewKanjis kanjis aspect =
             ]
         |> List.singleton
         |> svg
-            [ viewBox "-60 -60 3000 1500"
+            [ viewBox <| "0 0 " ++ tw ++ " " ++ th
             , Html.Attributes.style [ ( "margin", "auto" ), ( "width", "100%" ), ( "height", "100%" ) ]
             ]
 

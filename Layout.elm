@@ -22,27 +22,31 @@ bestFit numItems aspectRatio =
             toFloat numItems
 
         h =
-            fn / aspectRatio |> sqrt |> floor
+            fn / aspectRatio |> sqrt
 
         w =
-            fn / toFloat h |> floor
+            fn / h
     in
-    ( w, h )
+    ( floor w, floor h )
 
 
 makeGrid : ( Int, Int ) -> Grid
 makeGrid ( w, h ) =
-    pairRange ( 0, 0 ) ( w, h )
+    pairRange ( 0, 0 ) ( w - 1, h - 1 )
         |> List.map (\x -> ( x, Empty ))
         |> Dict.fromList
 
 
 freeCell : Grid -> Int -> ( Int, Int ) -> Bool
 freeCell grid size ( x, y ) =
-    pairRange ( 0, 0 ) ( size - 1, size - 1 )
-        |> List.map (pairMap ((+) x) ((+) y))
-        |> List.map (flip Dict.get grid)
-        |> List.all ((==) (Just Empty))
+    case size of
+        1 ->
+            Dict.get ( x, y ) grid == Just Empty
+
+        _ ->
+            pairRange ( x, y ) ( x + size - 1, y + size - 1 )
+                |> List.map (flip Dict.get grid)
+                |> List.all ((==) (Just Empty))
 
 
 freeCells : Grid -> Int -> List ( Int, Int )
@@ -53,10 +57,14 @@ freeCells grid size =
 
 insertInGrid : Grid -> Int -> ( Int, Int ) -> Grid
 insertInGrid grid size ( x, y ) =
-    pairRange ( 0, 0 ) ( size - 1, size - 1 )
-        |> List.map (pairMap ((+) x) ((+) y))
-        |> List.foldr (\p -> Dict.insert p Blocked) grid
-        |> Dict.insert ( x, y ) (Corner size)
+    case size of
+        1 ->
+            Dict.insert ( x, y ) (Corner 1) grid
+
+        _ ->
+            pairRange ( x, y ) ( x + size - 1, y + size - 1 )
+                |> List.foldr (\p -> Dict.insert p Blocked) grid
+                |> Dict.insert ( x, y ) (Corner size)
 
 
 randomFill : Grid -> List ( a, Int ) -> Random.Seed -> List ( a, Int, ( Int, Int ) )
@@ -85,7 +93,7 @@ randomFill emptyGrid items initialSeed =
     rec emptyGrid items initialSeed []
 
 
-computeLayout : List ( a, Int ) -> Float -> Random.Seed -> List ( a, Int, ( Int, Int ) )
+computeLayout : List ( a, Int ) -> Float -> Random.Seed -> ( List ( a, Int, ( Int, Int ) ), ( Int, Int ) )
 computeLayout items aspectRatio seed =
     let
         surface =
@@ -100,4 +108,4 @@ computeLayout items aspectRatio seed =
         grid =
             makeGrid ( w, h )
     in
-    randomFill grid sorted seed
+    ( randomFill grid sorted seed, ( w, h ) )
