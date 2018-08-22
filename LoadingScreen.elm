@@ -64,7 +64,6 @@ view state =
             [ Html.Attributes.style
                 [ ( "color", "white" )
                 , ( "font-size", "20vmin" )
-                , ( "font-family", "Noto Sans CJK JP" )
                 , ( "margin", "auto" )
                 ]
             ]
