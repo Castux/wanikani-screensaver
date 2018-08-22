@@ -77,8 +77,7 @@ viewKanjis kanjis aspect =
     tiles
         |> List.map viewKanji
         |> g
-            [ fontFamily "Noto Sans CJK JP"
-            , fontSize "32px"
+            [ fontSize "32px"
             , dominantBaseline "hanging"
 
             --            , textAnchor "middle"
