@@ -5873,305 +5873,6 @@ var _elm_lang$core$Random$cmdMap = F2(
 _elm_lang$core$Native_Platform.effectManagers['Random'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Random$init, onEffects: _elm_lang$core$Random$onEffects, onSelfMsg: _elm_lang$core$Random$onSelfMsg, tag: 'cmd', cmdMap: _elm_lang$core$Random$cmdMap};
 var _elm_lang$core$Debug$crash = _elm_lang$core$Native_Debug.crash;
 var _elm_lang$core$Debug$log = _elm_lang$core$Native_Debug.log;
-var _elm_community$random_extra$Random_Extra$andThen6 = F7(
-	function (constructor, generatorA, generatorB, generatorC, generatorD, generatorE, generatorF) {
-		return A2(
-			_elm_lang$core$Random$andThen,
-			function (a) {
-				return A2(
-					_elm_lang$core$Random$andThen,
-					function (b) {
-						return A2(
-							_elm_lang$core$Random$andThen,
-							function (c) {
-								return A2(
-									_elm_lang$core$Random$andThen,
-									function (d) {
-										return A2(
-											_elm_lang$core$Random$andThen,
-											function (e) {
-												return A2(
-													_elm_lang$core$Random$andThen,
-													function (f) {
-														return A6(constructor, a, b, c, d, e, f);
-													},
-													generatorF);
-											},
-											generatorE);
-									},
-									generatorD);
-							},
-							generatorC);
-					},
-					generatorB);
-			},
-			generatorA);
-	});
-var _elm_community$random_extra$Random_Extra$andThen5 = F6(
-	function (constructor, generatorA, generatorB, generatorC, generatorD, generatorE) {
-		return A2(
-			_elm_lang$core$Random$andThen,
-			function (a) {
-				return A2(
-					_elm_lang$core$Random$andThen,
-					function (b) {
-						return A2(
-							_elm_lang$core$Random$andThen,
-							function (c) {
-								return A2(
-									_elm_lang$core$Random$andThen,
-									function (d) {
-										return A2(
-											_elm_lang$core$Random$andThen,
-											function (e) {
-												return A5(constructor, a, b, c, d, e);
-											},
-											generatorE);
-									},
-									generatorD);
-							},
-							generatorC);
-					},
-					generatorB);
-			},
-			generatorA);
-	});
-var _elm_community$random_extra$Random_Extra$andThen4 = F5(
-	function (constructor, generatorA, generatorB, generatorC, generatorD) {
-		return A2(
-			_elm_lang$core$Random$andThen,
-			function (a) {
-				return A2(
-					_elm_lang$core$Random$andThen,
-					function (b) {
-						return A2(
-							_elm_lang$core$Random$andThen,
-							function (c) {
-								return A2(
-									_elm_lang$core$Random$andThen,
-									function (d) {
-										return A4(constructor, a, b, c, d);
-									},
-									generatorD);
-							},
-							generatorC);
-					},
-					generatorB);
-			},
-			generatorA);
-	});
-var _elm_community$random_extra$Random_Extra$andThen3 = F4(
-	function (constructor, generatorA, generatorB, generatorC) {
-		return A2(
-			_elm_lang$core$Random$andThen,
-			function (a) {
-				return A2(
-					_elm_lang$core$Random$andThen,
-					function (b) {
-						return A2(
-							_elm_lang$core$Random$andThen,
-							function (c) {
-								return A3(constructor, a, b, c);
-							},
-							generatorC);
-					},
-					generatorB);
-			},
-			generatorA);
-	});
-var _elm_community$random_extra$Random_Extra$andThen2 = F3(
-	function (constructor, generatorA, generatorB) {
-		return A2(
-			_elm_lang$core$Random$andThen,
-			function (a) {
-				return A2(
-					_elm_lang$core$Random$andThen,
-					function (b) {
-						return A2(constructor, a, b);
-					},
-					generatorB);
-			},
-			generatorA);
-	});
-var _elm_community$random_extra$Random_Extra$rangeLengthList = F3(
-	function (minLength, maxLength, generator) {
-		return A2(
-			_elm_lang$core$Random$andThen,
-			function (len) {
-				return A2(_elm_lang$core$Random$list, len, generator);
-			},
-			A2(_elm_lang$core$Random$int, minLength, maxLength));
-	});
-var _elm_community$random_extra$Random_Extra$result = F3(
-	function (genBool, genErr, genVal) {
-		return A2(
-			_elm_lang$core$Random$andThen,
-			function (b) {
-				return b ? A2(_elm_lang$core$Random$map, _elm_lang$core$Result$Ok, genVal) : A2(_elm_lang$core$Random$map, _elm_lang$core$Result$Err, genErr);
-			},
-			genBool);
-	});
-var _elm_community$random_extra$Random_Extra$sample = function () {
-	var find = F2(
-		function (k, ys) {
-			find:
-			while (true) {
-				var _p0 = ys;
-				if (_p0.ctor === '[]') {
-					return _elm_lang$core$Maybe$Nothing;
-				} else {
-					if (_elm_lang$core$Native_Utils.eq(k, 0)) {
-						return _elm_lang$core$Maybe$Just(_p0._0);
-					} else {
-						var _v1 = k - 1,
-							_v2 = _p0._1;
-						k = _v1;
-						ys = _v2;
-						continue find;
-					}
-				}
-			}
-		});
-	return function (xs) {
-		return A2(
-			_elm_lang$core$Random$map,
-			function (i) {
-				return A2(find, i, xs);
-			},
-			A2(
-				_elm_lang$core$Random$int,
-				0,
-				_elm_lang$core$List$length(xs) - 1));
-	};
-}();
-var _elm_community$random_extra$Random_Extra$frequency = function (pairs) {
-	var pick = F2(
-		function (choices, n) {
-			pick:
-			while (true) {
-				var _p1 = choices;
-				if ((_p1.ctor === '::') && (_p1._0.ctor === '_Tuple2')) {
-					var _p2 = _p1._0._0;
-					if (_elm_lang$core$Native_Utils.cmp(n, _p2) < 1) {
-						return _p1._0._1;
-					} else {
-						var _v4 = _p1._1,
-							_v5 = n - _p2;
-						choices = _v4;
-						n = _v5;
-						continue pick;
-					}
-				} else {
-					return _elm_lang$core$Native_Utils.crashCase(
-						'Random.Extra',
-						{
-							start: {line: 154, column: 13},
-							end: {line: 162, column: 79}
-						},
-						_p1)('Empty list passed to Random.Extra.frequency!');
-				}
-			}
-		});
-	var total = _elm_lang$core$List$sum(
-		A2(
-			_elm_lang$core$List$map,
-			function (_p4) {
-				return _elm_lang$core$Basics$abs(
-					_elm_lang$core$Tuple$first(_p4));
-			},
-			pairs));
-	return A2(
-		_elm_lang$core$Random$andThen,
-		pick(pairs),
-		A2(_elm_lang$core$Random$float, 0, total));
-};
-var _elm_community$random_extra$Random_Extra$choices = function (gens) {
-	return _elm_community$random_extra$Random_Extra$frequency(
-		A2(
-			_elm_lang$core$List$map,
-			function (g) {
-				return {ctor: '_Tuple2', _0: 1, _1: g};
-			},
-			gens));
-};
-var _elm_community$random_extra$Random_Extra$choice = F2(
-	function (x, y) {
-		return A2(
-			_elm_lang$core$Random$map,
-			function (b) {
-				return b ? x : y;
-			},
-			_elm_lang$core$Random$bool);
-	});
-var _elm_community$random_extra$Random_Extra$oneIn = function (n) {
-	return A2(
-		_elm_lang$core$Random$map,
-		F2(
-			function (x, y) {
-				return _elm_lang$core$Native_Utils.eq(x, y);
-			})(1),
-		A2(_elm_lang$core$Random$int, 1, n));
-};
-var _elm_community$random_extra$Random_Extra$andMap = F2(
-	function (generator, funcGenerator) {
-		return A3(
-			_elm_lang$core$Random$map2,
-			F2(
-				function (x, y) {
-					return x(y);
-				}),
-			funcGenerator,
-			generator);
-	});
-var _elm_community$random_extra$Random_Extra$map6 = F7(
-	function (f, generatorA, generatorB, generatorC, generatorD, generatorE, generatorF) {
-		return A2(
-			_elm_community$random_extra$Random_Extra$andMap,
-			generatorF,
-			A6(_elm_lang$core$Random$map5, f, generatorA, generatorB, generatorC, generatorD, generatorE));
-	});
-var _elm_community$random_extra$Random_Extra$constant = function (value) {
-	return A2(
-		_elm_lang$core$Random$map,
-		function (_p5) {
-			return value;
-		},
-		_elm_lang$core$Random$bool);
-};
-var _elm_community$random_extra$Random_Extra$filter = F2(
-	function (predicate, generator) {
-		return A2(
-			_elm_lang$core$Random$andThen,
-			function (a) {
-				return predicate(a) ? _elm_community$random_extra$Random_Extra$constant(a) : A2(_elm_community$random_extra$Random_Extra$filter, predicate, generator);
-			},
-			generator);
-	});
-var _elm_community$random_extra$Random_Extra$combine = function (generators) {
-	var _p6 = generators;
-	if (_p6.ctor === '[]') {
-		return _elm_community$random_extra$Random_Extra$constant(
-			{ctor: '[]'});
-	} else {
-		return A3(
-			_elm_lang$core$Random$map2,
-			F2(
-				function (x, y) {
-					return {ctor: '::', _0: x, _1: y};
-				}),
-			_p6._0,
-			_elm_community$random_extra$Random_Extra$combine(_p6._1));
-	}
-};
-var _elm_community$random_extra$Random_Extra$maybe = F2(
-	function (genBool, genA) {
-		return A2(
-			_elm_lang$core$Random$andThen,
-			function (b) {
-				return b ? A2(_elm_lang$core$Random$map, _elm_lang$core$Maybe$Just, genA) : _elm_community$random_extra$Random_Extra$constant(_elm_lang$core$Maybe$Nothing);
-			},
-			genBool);
-	});
 var _elm_lang$core$Color$fmod = F2(
 	function (f, n) {
 		var integer = _elm_lang$core$Basics$floor(f);
@@ -6337,243 +6038,9 @@ var _elm_lang$core$Color$Linear = F3(
 		return {ctor: 'Linear', _0: a, _1: b, _2: c};
 	});
 var _elm_lang$core$Color$linear = _elm_lang$core$Color$Linear;
-var _elm_community$random_extra$Random_List$get = F2(
-	function (index, list) {
-		return _elm_lang$core$List$head(
-			A2(_elm_lang$core$List$drop, index, list));
-	});
-var _elm_community$random_extra$Random_List$choose = function (list) {
-	if (_elm_lang$core$List$isEmpty(list)) {
-		return _elm_community$random_extra$Random_Extra$constant(
-			{ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: list});
-	} else {
-		var back = function (i) {
-			return A2(_elm_lang$core$List$drop, i + 1, list);
-		};
-		var front = function (i) {
-			return A2(_elm_lang$core$List$take, i, list);
-		};
-		var lastIndex = _elm_lang$core$List$length(list) - 1;
-		var gen = A2(_elm_lang$core$Random$int, 0, lastIndex);
-		return A2(
-			_elm_lang$core$Random$map,
-			function (index) {
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_elm_community$random_extra$Random_List$get, index, list),
-					_1: A2(
-						_elm_lang$core$List$append,
-						front(index),
-						back(index))
-				};
-			},
-			gen);
-	}
-};
-var _elm_community$random_extra$Random_List$shuffle = function (list) {
-	if (_elm_lang$core$List$isEmpty(list)) {
-		return _elm_community$random_extra$Random_Extra$constant(list);
-	} else {
-		var helper = function (_p0) {
-			var _p1 = _p0;
-			var _p6 = _p1._0;
-			return A2(
-				_elm_lang$core$Random$andThen,
-				function (_p2) {
-					var _p3 = _p2;
-					var _p5 = _p3._1;
-					var _p4 = _p3._0;
-					if (_p4.ctor === 'Nothing') {
-						return _elm_community$random_extra$Random_Extra$constant(
-							{ctor: '_Tuple2', _0: _p6, _1: _p5});
-					} else {
-						return helper(
-							{
-								ctor: '_Tuple2',
-								_0: {ctor: '::', _0: _p4._0, _1: _p6},
-								_1: _p5
-							});
-					}
-				},
-				_elm_community$random_extra$Random_List$choose(_p1._1));
-		};
-		return A2(
-			_elm_lang$core$Random$map,
-			_elm_lang$core$Tuple$first,
-			helper(
-				{
-					ctor: '_Tuple2',
-					_0: {ctor: '[]'},
-					_1: list
-				}));
-	}
-};
-var _elm_lang$animation_frame$Native_AnimationFrame = function()
-{
-
-function create()
-{
-	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
-	{
-		var id = requestAnimationFrame(function() {
-			callback(_elm_lang$core$Native_Scheduler.succeed(Date.now()));
-		});
-
-		return function() {
-			cancelAnimationFrame(id);
-		};
-	});
-}
-
-return {
-	create: create
-};
-
-}();
 var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
 var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
 var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
-var _elm_lang$animation_frame$AnimationFrame$rAF = _elm_lang$animation_frame$Native_AnimationFrame.create(
-	{ctor: '_Tuple0'});
-var _elm_lang$animation_frame$AnimationFrame$subscription = _elm_lang$core$Native_Platform.leaf('AnimationFrame');
-var _elm_lang$animation_frame$AnimationFrame$State = F3(
-	function (a, b, c) {
-		return {subs: a, request: b, oldTime: c};
-	});
-var _elm_lang$animation_frame$AnimationFrame$init = _elm_lang$core$Task$succeed(
-	A3(
-		_elm_lang$animation_frame$AnimationFrame$State,
-		{ctor: '[]'},
-		_elm_lang$core$Maybe$Nothing,
-		0));
-var _elm_lang$animation_frame$AnimationFrame$onEffects = F3(
-	function (router, subs, _p0) {
-		var _p1 = _p0;
-		var _p5 = _p1.request;
-		var _p4 = _p1.oldTime;
-		var _p2 = {ctor: '_Tuple2', _0: _p5, _1: subs};
-		if (_p2._0.ctor === 'Nothing') {
-			if (_p2._1.ctor === '[]') {
-				return _elm_lang$core$Task$succeed(
-					A3(
-						_elm_lang$animation_frame$AnimationFrame$State,
-						{ctor: '[]'},
-						_elm_lang$core$Maybe$Nothing,
-						_p4));
-			} else {
-				return A2(
-					_elm_lang$core$Task$andThen,
-					function (pid) {
-						return A2(
-							_elm_lang$core$Task$andThen,
-							function (time) {
-								return _elm_lang$core$Task$succeed(
-									A3(
-										_elm_lang$animation_frame$AnimationFrame$State,
-										subs,
-										_elm_lang$core$Maybe$Just(pid),
-										time));
-							},
-							_elm_lang$core$Time$now);
-					},
-					_elm_lang$core$Process$spawn(
-						A2(
-							_elm_lang$core$Task$andThen,
-							_elm_lang$core$Platform$sendToSelf(router),
-							_elm_lang$animation_frame$AnimationFrame$rAF)));
-			}
-		} else {
-			if (_p2._1.ctor === '[]') {
-				return A2(
-					_elm_lang$core$Task$andThen,
-					function (_p3) {
-						return _elm_lang$core$Task$succeed(
-							A3(
-								_elm_lang$animation_frame$AnimationFrame$State,
-								{ctor: '[]'},
-								_elm_lang$core$Maybe$Nothing,
-								_p4));
-					},
-					_elm_lang$core$Process$kill(_p2._0._0));
-			} else {
-				return _elm_lang$core$Task$succeed(
-					A3(_elm_lang$animation_frame$AnimationFrame$State, subs, _p5, _p4));
-			}
-		}
-	});
-var _elm_lang$animation_frame$AnimationFrame$onSelfMsg = F3(
-	function (router, newTime, _p6) {
-		var _p7 = _p6;
-		var _p10 = _p7.subs;
-		var diff = newTime - _p7.oldTime;
-		var send = function (sub) {
-			var _p8 = sub;
-			if (_p8.ctor === 'Time') {
-				return A2(
-					_elm_lang$core$Platform$sendToApp,
-					router,
-					_p8._0(newTime));
-			} else {
-				return A2(
-					_elm_lang$core$Platform$sendToApp,
-					router,
-					_p8._0(diff));
-			}
-		};
-		return A2(
-			_elm_lang$core$Task$andThen,
-			function (pid) {
-				return A2(
-					_elm_lang$core$Task$andThen,
-					function (_p9) {
-						return _elm_lang$core$Task$succeed(
-							A3(
-								_elm_lang$animation_frame$AnimationFrame$State,
-								_p10,
-								_elm_lang$core$Maybe$Just(pid),
-								newTime));
-					},
-					_elm_lang$core$Task$sequence(
-						A2(_elm_lang$core$List$map, send, _p10)));
-			},
-			_elm_lang$core$Process$spawn(
-				A2(
-					_elm_lang$core$Task$andThen,
-					_elm_lang$core$Platform$sendToSelf(router),
-					_elm_lang$animation_frame$AnimationFrame$rAF)));
-	});
-var _elm_lang$animation_frame$AnimationFrame$Diff = function (a) {
-	return {ctor: 'Diff', _0: a};
-};
-var _elm_lang$animation_frame$AnimationFrame$diffs = function (tagger) {
-	return _elm_lang$animation_frame$AnimationFrame$subscription(
-		_elm_lang$animation_frame$AnimationFrame$Diff(tagger));
-};
-var _elm_lang$animation_frame$AnimationFrame$Time = function (a) {
-	return {ctor: 'Time', _0: a};
-};
-var _elm_lang$animation_frame$AnimationFrame$times = function (tagger) {
-	return _elm_lang$animation_frame$AnimationFrame$subscription(
-		_elm_lang$animation_frame$AnimationFrame$Time(tagger));
-};
-var _elm_lang$animation_frame$AnimationFrame$subMap = F2(
-	function (func, sub) {
-		var _p11 = sub;
-		if (_p11.ctor === 'Time') {
-			return _elm_lang$animation_frame$AnimationFrame$Time(
-				function (_p12) {
-					return func(
-						_p11._0(_p12));
-				});
-		} else {
-			return _elm_lang$animation_frame$AnimationFrame$Diff(
-				function (_p13) {
-					return func(
-						_p11._0(_p13));
-				});
-		}
-	});
-_elm_lang$core$Native_Platform.effectManagers['AnimationFrame'] = {pkg: 'elm-lang/animation-frame', init: _elm_lang$animation_frame$AnimationFrame$init, onEffects: _elm_lang$animation_frame$AnimationFrame$onEffects, onSelfMsg: _elm_lang$animation_frame$AnimationFrame$onSelfMsg, tag: 'sub', subMap: _elm_lang$animation_frame$AnimationFrame$subMap};
 //import Maybe, Native.Array, Native.List, Native.Utils, Result //
 
 var _elm_lang$core$Native_Json = function() {
@@ -10606,41 +10073,10 @@ var _elm_lang$window$Window$subMap = F2(
 			});
 	});
 _elm_lang$core$Native_Platform.effectManagers['Window'] = {pkg: 'elm-lang/window', init: _elm_lang$window$Window$init, onEffects: _elm_lang$window$Window$onEffects, onSelfMsg: _elm_lang$window$Window$onSelfMsg, tag: 'sub', subMap: _elm_lang$window$Window$subMap};
-var _user$project$Types$Kanji = F6(
+var _user$project$KanjiData$KanjiData = F6(
 	function (a, b, c, d, e, f) {
 		return {level: a, character: b, meaning: c, onyomi: d, kunyomi: e, srs: f};
 	});
-var _user$project$Types$Tile = F2(
-	function (a, b) {
-		return {realPos: a, kanji: b};
-	});
-var _user$project$Types$Layout = F4(
-	function (a, b, c, d) {
-		return {w: a, h: b, tileSize: c, delta: d};
-	});
-var _user$project$Types$State = F2(
-	function (a, b) {
-		return {windowSize: a, tiles: b};
-	});
-var _user$project$Types$SetTiles = function (a) {
-	return {ctor: 'SetTiles', _0: a};
-};
-var _user$project$Types$SwapTiles = function (a) {
-	return {ctor: 'SwapTiles', _0: a};
-};
-var _user$project$Types$Tock = function (a) {
-	return {ctor: 'Tock', _0: a};
-};
-var _user$project$Types$Tick = function (a) {
-	return {ctor: 'Tick', _0: a};
-};
-var _user$project$Types$WindowResize = function (a) {
-	return {ctor: 'WindowResize', _0: a};
-};
-var _user$project$Types$HttpAnswer = function (a) {
-	return {ctor: 'HttpAnswer', _0: a};
-};
-var _user$project$Types$Nop = {ctor: 'Nop'};
 var _user$project$Api$allLevels = A2(
 	_elm_lang$core$String$join,
 	',',
@@ -10650,7 +10086,7 @@ var _user$project$Api$allLevels = A2(
 		A2(_elm_lang$core$List$range, 1, 60)));
 var _user$project$Api$kanjiDecode = A7(
 	_elm_lang$core$Json_Decode$map6,
-	_user$project$Types$Kanji,
+	_user$project$KanjiData$KanjiData,
 	A2(_elm_lang$core$Json_Decode$field, 'level', _elm_lang$core$Json_Decode$int),
 	A2(_elm_lang$core$Json_Decode$field, 'character', _elm_lang$core$Json_Decode$string),
 	A2(_elm_lang$core$Json_Decode$field, 'meaning', _elm_lang$core$Json_Decode$string),
@@ -10675,11 +10111,54 @@ var _user$project$Api$requestDecode = A2(
 	_elm_lang$core$Json_Decode$field,
 	'requested_information',
 	_elm_lang$core$Json_Decode$list(_user$project$Api$kanjiDecode));
-var _user$project$Api$getData = function () {
+var _user$project$Api$getData = function (msg) {
 	var url = A2(_elm_lang$core$Basics_ops['++'], 'https://www.wanikani.com/api/user/5e63183f2d2d844f0aef5c0665676a71/kanji/', _user$project$Api$allLevels);
 	var req = A2(_elm_lang$http$Http$get, url, _user$project$Api$requestDecode);
-	return A2(_elm_lang$http$Http$send, _user$project$Types$HttpAnswer, req);
-}();
+	return A2(_elm_lang$http$Http$send, msg, req);
+};
+var _user$project$Utils$randomListElement = F2(
+	function (list, seed) {
+		var _p0 = list;
+		if (_p0.ctor === '[]') {
+			return {ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: seed};
+		} else {
+			var gen = A2(
+				_elm_lang$core$Random$int,
+				0,
+				_elm_lang$core$List$length(list) - 1);
+			var _p1 = A2(_elm_lang$core$Random$step, gen, seed);
+			var index = _p1._0;
+			var newSeed = _p1._1;
+			var element = _elm_lang$core$List$head(
+				A2(_elm_lang$core$List$drop, index, list));
+			return {ctor: '_Tuple2', _0: element, _1: newSeed};
+		}
+	});
+var _user$project$Utils$pairMap = F3(
+	function (f1, f2, _p2) {
+		var _p3 = _p2;
+		return {
+			ctor: '_Tuple2',
+			_0: f1(_p3._0),
+			_1: f2(_p3._1)
+		};
+	});
+var _user$project$Utils$pairRange = F2(
+	function (_p5, _p4) {
+		var _p6 = _p5;
+		var _p7 = _p4;
+		return A2(
+			_elm_lang$core$List$concatMap,
+			function (x) {
+				return A2(
+					_elm_lang$core$List$map,
+					function (y) {
+						return {ctor: '_Tuple2', _0: x, _1: y};
+					},
+					A2(_elm_lang$core$List$range, _p6._1, _p7._1));
+			},
+			A2(_elm_lang$core$List$range, _p6._0, _p7._0));
+	});
 var _user$project$Utils$arraySwap = F3(
 	function (i1, i2, array) {
 		return A2(
@@ -10699,12 +10178,12 @@ var _user$project$Utils$arraySwap = F3(
 				A2(_elm_lang$core$Array$get, i2, array)));
 	});
 var _user$project$Utils$applyFuncs = _elm_lang$core$Basics$flip(
-	function (_p0) {
+	function (_p8) {
 		return _elm_lang$core$List$map(
 			F2(
 				function (x, y) {
 					return y(x);
-				})(_p0));
+				})(_p8));
 	});
 var _user$project$Utils$cssColor = function (color) {
 	var tmp = A2(
@@ -10740,10 +10219,174 @@ var _user$project$Utils$cssColor = function (color) {
 		'rgb(',
 		A2(_elm_lang$core$Basics_ops['++'], tmp, ')'));
 };
+var _user$project$Layout$bestFit = F2(
+	function (numItems, aspectRatio) {
+		var fn = _elm_lang$core$Basics$toFloat(numItems);
+		var h = _elm_lang$core$Basics$sqrt(fn / aspectRatio);
+		var w = fn / h;
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Basics$floor(w),
+			_1: _elm_lang$core$Basics$floor(h)
+		};
+	});
+var _user$project$Layout$Blocked = {ctor: 'Blocked'};
+var _user$project$Layout$Corner = function (a) {
+	return {ctor: 'Corner', _0: a};
+};
+var _user$project$Layout$insertInGrid = F3(
+	function (grid, size, _p0) {
+		var _p1 = _p0;
+		var _p4 = _p1._1;
+		var _p3 = _p1._0;
+		var _p2 = size;
+		if (_p2 === 1) {
+			return A3(
+				_elm_lang$core$Dict$insert,
+				{ctor: '_Tuple2', _0: _p3, _1: _p4},
+				_user$project$Layout$Corner(1),
+				grid);
+		} else {
+			return A3(
+				_elm_lang$core$Dict$insert,
+				{ctor: '_Tuple2', _0: _p3, _1: _p4},
+				_user$project$Layout$Corner(size),
+				A3(
+					_elm_lang$core$List$foldr,
+					function (p) {
+						return A2(_elm_lang$core$Dict$insert, p, _user$project$Layout$Blocked);
+					},
+					grid,
+					A2(
+						_user$project$Utils$pairRange,
+						{ctor: '_Tuple2', _0: _p3, _1: _p4},
+						{ctor: '_Tuple2', _0: (_p3 + size) - 1, _1: (_p4 + size) - 1})));
+		}
+	});
+var _user$project$Layout$Empty = {ctor: 'Empty'};
+var _user$project$Layout$makeGrid = function (_p5) {
+	var _p6 = _p5;
+	return _elm_lang$core$Dict$fromList(
+		A2(
+			_elm_lang$core$List$map,
+			function (x) {
+				return {ctor: '_Tuple2', _0: x, _1: _user$project$Layout$Empty};
+			},
+			A2(
+				_user$project$Utils$pairRange,
+				{ctor: '_Tuple2', _0: 0, _1: 0},
+				{ctor: '_Tuple2', _0: _p6._0 - 1, _1: _p6._1 - 1})));
+};
+var _user$project$Layout$freeCell = F3(
+	function (grid, size, _p7) {
+		var _p8 = _p7;
+		var _p11 = _p8._1;
+		var _p10 = _p8._0;
+		var _p9 = size;
+		if (_p9 === 1) {
+			return _elm_lang$core$Native_Utils.eq(
+				A2(
+					_elm_lang$core$Dict$get,
+					{ctor: '_Tuple2', _0: _p10, _1: _p11},
+					grid),
+				_elm_lang$core$Maybe$Just(_user$project$Layout$Empty));
+		} else {
+			return A2(
+				_elm_lang$core$List$all,
+				F2(
+					function (x, y) {
+						return _elm_lang$core$Native_Utils.eq(x, y);
+					})(
+					_elm_lang$core$Maybe$Just(_user$project$Layout$Empty)),
+				A2(
+					_elm_lang$core$List$map,
+					A2(_elm_lang$core$Basics$flip, _elm_lang$core$Dict$get, grid),
+					A2(
+						_user$project$Utils$pairRange,
+						{ctor: '_Tuple2', _0: _p10, _1: _p11},
+						{ctor: '_Tuple2', _0: (_p10 + size) - 1, _1: (_p11 + size) - 1})));
+		}
+	});
+var _user$project$Layout$freeCells = F2(
+	function (grid, size) {
+		return A2(
+			_elm_lang$core$List$filter,
+			A2(_user$project$Layout$freeCell, grid, size),
+			_elm_lang$core$Dict$keys(grid));
+	});
+var _user$project$Layout$randomFill = F3(
+	function (emptyGrid, items, initialSeed) {
+		var rec = F4(
+			function (grid, items, seed, result) {
+				rec:
+				while (true) {
+					var _p12 = items;
+					if (_p12.ctor === '[]') {
+						return result;
+					} else {
+						var _p16 = _p12._0._1;
+						var spots = A2(_user$project$Layout$freeCells, grid, _p16);
+						var _p13 = A2(_user$project$Utils$randomListElement, spots, seed);
+						var spot = _p13._0;
+						var newSeed = _p13._1;
+						var _p14 = spot;
+						if (_p14.ctor === 'Nothing') {
+							return result;
+						} else {
+							var _p15 = _p14._0;
+							var _v7 = A3(_user$project$Layout$insertInGrid, grid, _p16, _p15),
+								_v8 = _p12._1,
+								_v9 = newSeed,
+								_v10 = {
+								ctor: '::',
+								_0: {ctor: '_Tuple3', _0: _p12._0._0, _1: _p16, _2: _p15},
+								_1: result
+							};
+							grid = _v7;
+							items = _v8;
+							seed = _v9;
+							result = _v10;
+							continue rec;
+						}
+					}
+				}
+			});
+		return A4(
+			rec,
+			emptyGrid,
+			items,
+			initialSeed,
+			{ctor: '[]'});
+	});
+var _user$project$Layout$computeLayout = F3(
+	function (items, aspectRatio, seed) {
+		var sorted = _elm_lang$core$List$reverse(
+			A2(_elm_lang$core$List$sortBy, _elm_lang$core$Tuple$second, items));
+		var surface = _elm_lang$core$List$sum(
+			A2(
+				_elm_lang$core$List$map,
+				function (_p17) {
+					return function (n) {
+						return n * n;
+					}(
+						_elm_lang$core$Tuple$second(_p17));
+				},
+				items));
+		var _p18 = A2(_user$project$Layout$bestFit, surface, aspectRatio);
+		var w = _p18._0;
+		var h = _p18._1;
+		var grid = _user$project$Layout$makeGrid(
+			{ctor: '_Tuple2', _0: w, _1: h});
+		return {
+			ctor: '_Tuple2',
+			_0: A3(_user$project$Layout$randomFill, grid, sorted, seed),
+			_1: {ctor: '_Tuple2', _0: w, _1: h}
+		};
+	});
 var _user$project$Palettes$grayscale = function (level) {
 	return _user$project$Utils$cssColor(
 		_elm_lang$core$Color$grayscale(
-			1 - (_elm_lang$core$Basics$toFloat(level) / 8.0)));
+			_elm_lang$core$Basics$toFloat(level) / 8.0));
 };
 var _user$project$Palettes$wanikani = function (level) {
 	return A2(
@@ -10791,444 +10434,442 @@ var _user$project$Palettes$wanikani = function (level) {
 					}
 				})));
 };
-var _user$project$View$bestFit = F2(
-	function (ratio, n) {
-		var fn = _elm_lang$core$Basics$toFloat(n);
-		var h = _elm_lang$core$Basics$floor(
-			_elm_lang$core$Basics$sqrt(fn / ratio));
-		var w = _elm_lang$core$Basics$ceiling(
-			fn / _elm_lang$core$Basics$toFloat(h));
-		return {ctor: '_Tuple2', _0: w, _1: h};
-	});
-var _user$project$View$computeRealPos = F2(
-	function (layout, _p0) {
-		var _p1 = _p0;
-		var _p2 = layout.delta;
-		var dx = _p2._0;
-		var dy = _p2._1;
-		var sx = A2(
-			F2(
-				function (x, y) {
-					return x + y;
-				}),
-			dx,
-			A2(
-				F2(
-					function (x, y) {
-						return x * y;
-					}),
-				layout.tileSize,
-				A2(
-					F2(
-						function (x, y) {
-							return x + y;
-						}),
-					0.5,
-					_elm_lang$core$Basics$toFloat(_p1._0))));
-		var sy = A2(
-			F2(
-				function (x, y) {
-					return x + y;
-				}),
-			dy,
-			A2(
-				F2(
-					function (x, y) {
-						return x * y;
-					}),
-				layout.tileSize,
-				A2(
-					F2(
-						function (x, y) {
-							return x + y;
-						}),
-					0.5,
-					_elm_lang$core$Basics$toFloat(_p1._1))));
-		return {ctor: '_Tuple2', _0: sx, _1: sy};
-	});
-var _user$project$View$computeGridPos = F2(
-	function (layout, index) {
-		return {
-			ctor: '_Tuple2',
-			_0: A2(_elm_lang$core$Basics_ops['%'], index, layout.w),
-			_1: (index / layout.w) | 0
-		};
-	});
-var _user$project$View$updateTile = F4(
-	function (dt, layout, index, tile) {
-		var speed = 1.0e-3;
-		var _p3 = A2(
-			_user$project$View$computeRealPos,
-			layout,
-			A2(_user$project$View$computeGridPos, layout, index));
-		var tx = _p3._0;
-		var ty = _p3._1;
-		var newPos = function () {
-			var _p4 = tile.realPos;
-			if (_p4.ctor === 'Just') {
-				var _p6 = _p4._0._1;
-				var _p5 = _p4._0._0;
-				return {ctor: '_Tuple2', _0: _p5 + (((tx - _p5) * speed) * dt), _1: _p6 + (((ty - _p6) * speed) * dt)};
-			} else {
-				return {ctor: '_Tuple2', _0: tx, _1: ty};
-			}
-		}();
-		return _elm_lang$core$Native_Utils.update(
-			tile,
-			{
-				realPos: _elm_lang$core$Maybe$Just(newPos)
-			});
-	});
-var _user$project$View$kanjiColor = function (k) {
-	var _p7 = k.srs;
-	if (_p7.ctor === 'Nothing') {
+var _user$project$KanjiScreen$kanjiColor = function (k) {
+	var _p0 = k.srs;
+	if (_p0.ctor === 'Nothing') {
 		return '#202020';
 	} else {
-		return _user$project$Palettes$wanikani(_p7._0);
+		return _user$project$Palettes$wanikani(_p0._0);
 	}
 };
-var _user$project$View$viewTile = function (tile) {
-	var _p8 = tile.realPos;
-	if (_p8.ctor === 'Just') {
-		var _p9 = A2(
-			_elm_lang$core$Tuple$mapSecond,
-			_elm_lang$core$Basics$toString,
-			A2(_elm_lang$core$Tuple$mapFirst, _elm_lang$core$Basics$toString, _p8._0));
-		var cx = _p9._0;
-		var cy = _p9._1;
-		return A2(
-			_elm_lang$svg$Svg$text_,
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$x(cx),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$y(cy),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$fill(
-							_user$project$View$kanjiColor(tile.kanji)),
-						_1: {ctor: '[]'}
-					}
-				}
-			},
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg$text(tile.kanji.character),
-				_1: {ctor: '[]'}
-			});
-	} else {
-		return A2(
-			_elm_lang$svg$Svg$text_,
-			{ctor: '[]'},
-			{ctor: '[]'});
-	}
-};
-var _user$project$View$computeLayout = F2(
-	function (windowSize, numTiles) {
-		var margin = 10.0;
-		var _p10 = {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Basics$toFloat(windowSize.width) - (2 * margin),
-			_1: _elm_lang$core$Basics$toFloat(windowSize.height) - (2 * margin)
-		};
-		var ww = _p10._0;
-		var wh = _p10._1;
-		var _p11 = A2(_user$project$View$bestFit, ww / wh, numTiles);
-		var w = _p11._0;
-		var h = _p11._1;
-		var tileSize = ww / _elm_lang$core$Basics$toFloat(w);
-		var delta = {
-			ctor: '_Tuple2',
-			_0: ((ww - (_elm_lang$core$Basics$toFloat(w) * tileSize)) / 2.0) + margin,
-			_1: ((wh - (_elm_lang$core$Basics$toFloat(h) * tileSize)) / 2.0) + margin
-		};
-		return A4(_user$project$Types$Layout, w, h, tileSize, delta);
-	});
-var _user$project$View$updateTiles = F2(
-	function (dt, state) {
-		var layout = A2(
-			_user$project$View$computeLayout,
-			state.windowSize,
-			_elm_lang$core$List$length(state.tiles));
-		return A2(
-			_elm_lang$core$List$indexedMap,
-			A2(_user$project$View$updateTile, dt, layout),
-			state.tiles);
-	});
-var _user$project$View$svgWrap = function (windowSize) {
-	var h = _elm_lang$core$Basics$toString(windowSize.height);
-	var w = _elm_lang$core$Basics$toString(windowSize.width);
-	return _elm_lang$svg$Svg$svg(
-		{
-			ctor: '::',
-			_0: _elm_lang$svg$Svg_Attributes$viewBox(
+var _user$project$KanjiScreen$viewKanji = function (_p1) {
+	var _p2 = _p1;
+	var _p3 = _p2._0;
+	var trans = A2(
+		_elm_lang$core$Basics_ops['++'],
+		'translate(',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(_p2._2._0 * 32),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				' ',
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					'0 0 ',
+					_elm_lang$core$Basics$toString(_p2._2._1 * 32),
 					A2(
 						_elm_lang$core$Basics_ops['++'],
-						w,
-						A2(_elm_lang$core$Basics_ops['++'], ' ', h)))),
+						')',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							' scale(',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(_p2._1),
+								') ')))))));
+	return A2(
+		_elm_lang$svg$Svg$text_,
+		{
+			ctor: '::',
+			_0: _elm_lang$svg$Svg_Attributes$fill(
+				_user$project$KanjiScreen$kanjiColor(_p3)),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$style(
-					{
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'margin', _1: 'auto'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
-							_1: {
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
-								_1: {ctor: '[]'}
-							}
-						}
-					}),
+				_0: _elm_lang$svg$Svg_Attributes$transform(trans),
 				_1: {ctor: '[]'}
 			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$svg$Svg$text(_p3.character),
+			_1: {ctor: '[]'}
 		});
 };
-var _user$project$View$background = function (windowSize) {
-	return A2(
-		_elm_lang$svg$Svg$rect,
-		{
-			ctor: '::',
-			_0: _elm_lang$svg$Svg_Attributes$x('0'),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$y('0'),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$fill('black'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$width(
-							_elm_lang$core$Basics$toString(windowSize.width)),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$height(
-								_elm_lang$core$Basics$toString(windowSize.height)),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
+var _user$project$KanjiScreen$update = F2(
+	function (model, msg) {
+		var _p4 = msg;
+		var _p5 = _p4._0;
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{
+					aspect: _elm_lang$core$Basics$toFloat(_p5.width) / _elm_lang$core$Basics$toFloat(_p5.height)
+				}),
+			{ctor: '[]'});
+	});
+var _user$project$KanjiScreen$sizing = function (srs) {
+	var _p6 = srs;
+	_v3_8:
+	do {
+		if (_p6.ctor === 'Just') {
+			switch (_p6._0) {
+				case 1:
+					return 5;
+				case 2:
+					return 4;
+				case 3:
+					return 3;
+				case 4:
+					return 3;
+				case 5:
+					return 2;
+				case 6:
+					return 2;
+				case 7:
+					return 1;
+				case 8:
+					return 1;
+				default:
+					break _v3_8;
 			}
-		},
-		{ctor: '[]'});
+		} else {
+			break _v3_8;
+		}
+	} while(false);
+	return 1;
 };
-var _user$project$View$view = function (state) {
-	var layout = A2(
-		_user$project$View$computeLayout,
-		state.windowSize,
-		_elm_lang$core$List$length(state.tiles));
-	var font = _elm_lang$core$Basics$toString(
-		_elm_lang$core$Basics$floor(layout.tileSize) - 1);
-	return A2(
-		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$svg$Svg_Attributes$width('100%'),
-			_1: {
+var _user$project$KanjiScreen$viewKanjis = F2(
+	function (kanjis, aspect) {
+		var _p7 = function (l) {
+			return A3(
+				_user$project$Layout$computeLayout,
+				l,
+				aspect,
+				_elm_lang$core$Random$initialSeed(0));
+		}(
+			A2(
+				_elm_lang$core$List$map,
+				function (kd) {
+					return {
+						ctor: '_Tuple2',
+						_0: kd,
+						_1: _user$project$KanjiScreen$sizing(kd.srs)
+					};
+				},
+				kanjis));
+		var tiles = _p7._0;
+		var w = _p7._1._0;
+		var h = _p7._1._1;
+		var tw = _elm_lang$core$Basics$toString(32 * w);
+		var th = _elm_lang$core$Basics$toString(32 * h);
+		return A2(
+			_elm_lang$svg$Svg$svg,
+			{
 				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$height('100%'),
+				_0: _elm_lang$svg$Svg_Attributes$viewBox(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'0 0 ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							tw,
+							A2(_elm_lang$core$Basics_ops['++'], ' ', th)))),
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$style(
 						{
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+							_0: {ctor: '_Tuple2', _0: 'margin', _1: 'auto'},
 							_1: {
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'min-height', _1: '100%'},
+								_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'background', _1: 'black'},
+									_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
 									_1: {ctor: '[]'}
 								}
 							}
 						}),
 					_1: {ctor: '[]'}
 				}
-			}
-		},
-		_elm_lang$core$List$singleton(
-			A2(
-				_user$project$View$svgWrap,
-				state.windowSize,
+			},
+			_elm_lang$core$List$singleton(
 				A2(
-					F2(
-						function (x, y) {
-							return A2(_elm_lang$core$Basics_ops['++'], x, y);
-						}),
+					_elm_lang$svg$Svg$g,
 					{
 						ctor: '::',
-						_0: _user$project$View$background(state.windowSize),
-						_1: {ctor: '[]'}
-					},
-					_elm_lang$core$List$singleton(
-						A2(
-							_elm_lang$svg$Svg$g,
-							{
+						_0: _elm_lang$svg$Svg_Attributes$fontFamily('Noto Sans CJK JP'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fontSize('32px'),
+							_1: {
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$fontFamily('Noto Sans CJK JP'),
+								_0: _elm_lang$svg$Svg_Attributes$dominantBaseline('hanging'),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					A2(_elm_lang$core$List$map, _user$project$KanjiScreen$viewKanji, tiles))));
+	});
+var _user$project$KanjiScreen$view = function (state) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'min-height', _1: '100%'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'background', _1: 'black'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$fontSize(font),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$dominantBaseline('middle'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$textAnchor('middle'),
-											_1: {ctor: '[]'}
-										}
-									}
+									_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+									_1: {ctor: '[]'}
 								}
-							},
-							A2(_elm_lang$core$List$map, _user$project$View$viewTile, state.tiles)))))));
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(_user$project$KanjiScreen$viewKanjis, state.kanjis, state.aspect),
+			_1: {ctor: '[]'}
+		});
 };
-var _user$project$View$third = function (_p12) {
-	var _p13 = _p12;
-	return _p13._2;
+var _user$project$KanjiScreen$Model = F2(
+	function (a, b) {
+		return {aspect: a, kanjis: b};
+	});
+var _user$project$KanjiScreen$init = _user$project$KanjiScreen$Model;
+var _user$project$KanjiScreen$WindowResize = function (a) {
+	return {ctor: 'WindowResize', _0: a};
 };
-var _user$project$Main$subscriptions = function (state) {
+var _user$project$KanjiScreen$subscriptions = function (state) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
-			_0: _elm_lang$window$Window$resizes(_user$project$Types$WindowResize),
-			_1: {
-				ctor: '::',
-				_0: _elm_lang$animation_frame$AnimationFrame$diffs(_user$project$Types$Tick),
-				_1: {
-					ctor: '::',
-					_0: A2(_elm_lang$core$Time$every, 8 * _elm_lang$core$Time$second, _user$project$Types$Tock),
-					_1: {ctor: '[]'}
-				}
-			}
+			_0: _elm_lang$window$Window$resizes(_user$project$KanjiScreen$WindowResize),
+			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Main$init = function () {
-	var initCommands = _elm_lang$core$Platform_Cmd$batch(
+var _user$project$LoadingScreen$view = function (state) {
+	return A2(
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _user$project$Api$getData,
-			_1: {
-				ctor: '::',
-				_0: A2(_elm_lang$core$Task$perform, _user$project$Types$WindowResize, _elm_lang$window$Window$size),
-				_1: {ctor: '[]'}
-			}
-		});
-	var initState = {
-		windowSize: A2(_elm_lang$window$Window$Size, 800, 600),
-		tiles: {ctor: '[]'}
-	};
-	return {ctor: '_Tuple2', _0: initState, _1: initCommands};
-}();
-var _user$project$Main$shuffleTiles = function (tiles) {
-	return A2(
-		_elm_lang$core$Random$generate,
-		_user$project$Types$SetTiles,
-		_elm_community$random_extra$Random_List$shuffle(tiles));
-};
-var _user$project$Main$swapRandomPair = function (tiles) {
-	var intGen = A2(
-		_elm_lang$core$Random$int,
-		0,
-		_elm_lang$core$List$length(tiles) - 1);
-	return A2(
-		_elm_lang$core$Random$generate,
-		_user$project$Types$SwapTiles,
-		A2(_elm_lang$core$Random$pair, intGen, intGen));
-};
-var _user$project$Main$swapTiles = F2(
-	function (_p0, tiles) {
-		var _p1 = _p0;
-		return _elm_lang$core$Array$toList(
-			A3(
-				_user$project$Utils$arraySwap,
-				_p1._0,
-				_p1._1,
-				_elm_lang$core$Array$fromList(tiles)));
-	});
-var _user$project$Main$initTiles = function (kanjis) {
-	return A2(
-		_elm_lang$core$List$map,
-		_user$project$Types$Tile(_elm_lang$core$Maybe$Nothing),
-		kanjis);
-};
-var _user$project$Main$update = F2(
-	function (msg, state) {
-		var _p2 = msg;
-		switch (_p2.ctor) {
-			case 'Nop':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					state,
-					{ctor: '[]'});
-			case 'HttpAnswer':
-				if (_p2._0.ctor === 'Ok') {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						state,
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'min-height', _1: '100%'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'background', _1: 'black'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
 						{
 							ctor: '::',
-							_0: _user$project$Main$shuffleTiles(
-								_user$project$Main$initTiles(_p2._0._0)),
-							_1: {ctor: '[]'}
-						});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						state,
-						{ctor: '[]'});
-				}
-			case 'WindowResize':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						state,
-						{windowSize: _p2._0}),
-					{ctor: '[]'});
-			case 'Tick':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						state,
-						{
-							tiles: A2(_user$project$View$updateTiles, _p2._0, state)
+							_0: {ctor: '_Tuple2', _0: 'color', _1: 'white'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'font-size', _1: '20vmin'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Noto Sans CJK JP'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'margin', _1: 'auto'},
+										_1: {ctor: '[]'}
+									}
+								}
+							}
 						}),
-					{ctor: '[]'});
-			case 'Tock':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('ロード中'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$LoadingScreen$update = F2(
+	function (msg, state) {
+		var _p0 = msg;
+		if (_p0.ctor === 'ReceivedKanjis') {
+			if (_p0._0.ctor === 'Ok') {
+				return _elm_lang$core$Native_Utils.update(
 					state,
 					{
-						ctor: '::',
-						_0: _user$project$Main$shuffleTiles(state.tiles),
-						_1: {ctor: '[]'}
+						kanjis: _elm_lang$core$Maybe$Just(_p0._0._0)
 					});
-			case 'SwapTiles':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						state,
-						{
-							tiles: A2(_user$project$Main$swapTiles, _p2._0, state.tiles)
-						}),
-					{ctor: '[]'});
-			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						state,
-						{tiles: _p2._0}),
-					{ctor: '[]'});
+			} else {
+				return state;
+			}
+		} else {
+			var _p1 = _p0._0;
+			return _elm_lang$core$Native_Utils.update(
+				state,
+				{
+					aspect: _elm_lang$core$Maybe$Just(
+						_elm_lang$core$Basics$toFloat(_p1.width) / _elm_lang$core$Basics$toFloat(_p1.height))
+				});
 		}
 	});
+var _user$project$LoadingScreen$initState = {kanjis: _elm_lang$core$Maybe$Nothing, aspect: _elm_lang$core$Maybe$Nothing};
+var _user$project$LoadingScreen$Model = F2(
+	function (a, b) {
+		return {kanjis: a, aspect: b};
+	});
+var _user$project$LoadingScreen$WindowResize = function (a) {
+	return {ctor: 'WindowResize', _0: a};
+};
+var _user$project$LoadingScreen$subscriptions = function (state) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$window$Window$resizes(_user$project$LoadingScreen$WindowResize),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$LoadingScreen$ReceivedKanjis = function (a) {
+	return {ctor: 'ReceivedKanjis', _0: a};
+};
+var _user$project$LoadingScreen$initCommands = _elm_lang$core$Platform_Cmd$batch(
+	{
+		ctor: '::',
+		_0: _user$project$Api$getData(_user$project$LoadingScreen$ReceivedKanjis),
+		_1: {
+			ctor: '::',
+			_0: A2(_elm_lang$core$Task$perform, _user$project$LoadingScreen$WindowResize, _elm_lang$window$Window$size),
+			_1: {ctor: '[]'}
+		}
+	});
+var _user$project$LoadingScreen$init = {ctor: '_Tuple2', _0: _user$project$LoadingScreen$initState, _1: _user$project$LoadingScreen$initCommands};
+var _user$project$Main$view = function (screen) {
+	var _p0 = screen;
+	if (_p0.ctor === 'Loading') {
+		return _user$project$LoadingScreen$view(_p0._0);
+	} else {
+		return _user$project$KanjiScreen$view(_p0._0);
+	}
+};
+var _user$project$Main$wrap = F3(
+	function (pageCon, msgCon, _p1) {
+		var _p2 = _p1;
+		return {
+			ctor: '_Tuple2',
+			_0: pageCon(_p2._0),
+			_1: A2(_elm_lang$core$Platform_Cmd$map, msgCon, _p2._1)
+		};
+	});
+var _user$project$Main_ops = _user$project$Main_ops || {};
+_user$project$Main_ops['<<<'] = function (_p3) {
+	return F2(
+		function (x, y) {
+			return function (_p4) {
+				return x(
+					y(_p4));
+			};
+		})(
+		F2(
+			function (x, y) {
+				return function (_p5) {
+					return x(
+						y(_p5));
+				};
+			})(_p3));
+};
+var _user$project$Main$Kanji = function (a) {
+	return {ctor: 'Kanji', _0: a};
+};
+var _user$project$Main$Loading = function (a) {
+	return {ctor: 'Loading', _0: a};
+};
+var _user$project$Main$KanjiMsg = function (a) {
+	return {ctor: 'KanjiMsg', _0: a};
+};
+var _user$project$Main$update = F2(
+	function (msg, screen) {
+		var _p6 = {ctor: '_Tuple2', _0: msg, _1: screen};
+		_v2_2:
+		do {
+			if (_p6.ctor === '_Tuple2') {
+				if (_p6._0.ctor === 'LoadingMsg') {
+					if (_p6._1.ctor === 'Loading') {
+						var newState = A2(_user$project$LoadingScreen$update, _p6._0._0, _p6._1._0);
+						var nextState = A2(
+							_elm_lang$core$Maybe$withDefault,
+							_user$project$Main$Loading(newState),
+							A3(
+								_elm_lang$core$Maybe$map2,
+								A2(_user$project$Main_ops['<<<'], _user$project$Main$Kanji, _user$project$KanjiScreen$init),
+								newState.aspect,
+								newState.kanjis));
+						return {ctor: '_Tuple2', _0: nextState, _1: _elm_lang$core$Platform_Cmd$none};
+					} else {
+						break _v2_2;
+					}
+				} else {
+					if (_p6._1.ctor === 'Kanji') {
+						return A3(
+							_user$project$Main$wrap,
+							_user$project$Main$Kanji,
+							_user$project$Main$KanjiMsg,
+							A2(_user$project$KanjiScreen$update, _p6._1._0, _p6._0._0));
+					} else {
+						break _v2_2;
+					}
+				}
+			} else {
+				break _v2_2;
+			}
+		} while(false);
+		return {ctor: '_Tuple2', _0: screen, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Main$LoadingMsg = function (a) {
+	return {ctor: 'LoadingMsg', _0: a};
+};
+var _user$project$Main$init = A3(_user$project$Main$wrap, _user$project$Main$Loading, _user$project$Main$LoadingMsg, _user$project$LoadingScreen$init);
+var _user$project$Main$subscriptions = function (screen) {
+	var _p7 = screen;
+	if (_p7.ctor === 'Loading') {
+		return A2(
+			_elm_lang$core$Platform_Sub$map,
+			_user$project$Main$LoadingMsg,
+			_user$project$LoadingScreen$subscriptions(_p7._0));
+	} else {
+		return A2(
+			_elm_lang$core$Platform_Sub$map,
+			_user$project$Main$KanjiMsg,
+			_user$project$KanjiScreen$subscriptions(_p7._0));
+	}
+};
 var _user$project$Main$main = _elm_lang$html$Html$program(
-	{init: _user$project$Main$init, view: _user$project$View$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
+	{init: _user$project$Main$init, update: _user$project$Main$update, view: _user$project$Main$view, subscriptions: _user$project$Main$subscriptions})();
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
