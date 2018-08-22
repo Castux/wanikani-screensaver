@@ -1,8 +1,9 @@
 module Layout exposing (computeLayout)
 
 import Random
+import Random.List
 import Set exposing (Set)
-import Utils exposing (pairMap, pairRange, randomListElement)
+import Utils exposing (pairMap, pairRange)
 
 
 -- Grid represents all the remaining free cells
@@ -83,8 +84,8 @@ randomFill emptyGrid items initialSeed =
                         spots =
                             freeCells grid size
 
-                        ( spot, newSeed ) =
-                            randomListElement spots seed
+                        ( ( spot, _ ), newSeed ) =
+                            Random.step (Random.List.choose spots) seed
                     in
                     case spot of
                         Nothing ->
