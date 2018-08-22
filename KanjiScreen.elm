@@ -27,10 +27,31 @@ init =
 
 sizing srs =
     case srs of
-        Just level ->
-            8 - level
+        Just 1 ->
+            5
 
-        Nothing ->
+        Just 2 ->
+            4
+
+        Just 3 ->
+            3
+
+        Just 4 ->
+            3
+
+        Just 5 ->
+            2
+
+        Just 6 ->
+            2
+
+        Just 7 ->
+            1
+
+        Just 8 ->
+            1
+
+        _ ->
             1
 
 
@@ -75,7 +96,7 @@ kanjiColor k =
             "#202020"
 
         Just level ->
-            Palettes.grayscale level
+            Palettes.wanikani level
 
 
 viewKanji : ( KanjiData, Int, ( Int, Int ) ) -> Svg msg
