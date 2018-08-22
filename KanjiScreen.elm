@@ -8,21 +8,24 @@ import Palettes
 import Random
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Time exposing (Time)
 import Window
 
 
 type Msg
     = WindowResize Window.Size
+    | Tick Time
 
 
 type alias Model =
     { aspect : Float
     , kanjis : List KanjiData
+    , seed : Random.Seed
     }
 
 
-init =
-    Model
+init aspect kanjis =
+    Model aspect kanjis (Random.initialSeed 0)
 
 
 sizing srs =
@@ -60,13 +63,16 @@ update model msg =
         WindowResize size ->
             { model | aspect = toFloat size.width / toFloat size.height } ! []
 
+        Tick time ->
+            { model | seed = time |> Time.inSeconds |> floor |> Random.initialSeed } ! []
 
-viewKanjis kanjis aspect =
+
+viewKanjis kanjis aspect seed =
     let
         ( tiles, ( w, h ) ) =
             kanjis
                 |> List.map (\kd -> ( kd, sizing kd.srs ))
-                |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
+                |> (\l -> Layout.computeLayout l aspect seed)
 
         tw =
             toString <| 32 * w
@@ -126,9 +132,11 @@ view state =
             , ( "height", "100%" )
             ]
         ]
-        [ viewKanjis state.kanjis state.aspect ]
+        [ viewKanjis state.kanjis state.aspect state.seed ]
 
 
 subscriptions state =
     Sub.batch
-        [ Window.resizes WindowResize ]
+        [ Window.resizes WindowResize
+        , Time.every (10 * Time.second) Tick
+        ]
