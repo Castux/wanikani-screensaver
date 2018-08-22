@@ -96,11 +96,29 @@ randomFill emptyGrid items initialSeed =
     rec emptyGrid items initialSeed []
 
 
+
+-- Items with size 0 are considered filling: they take size 1,
+-- but are placed after all the others
+
+
 computeLayout : List ( a, Int ) -> Float -> Random.Seed -> ( List ( a, Int, ( Int, Int ) ), ( Int, Int ) )
 computeLayout items aspectRatio seed =
     let
+        sorted =
+            items
+                |> List.sortWith decreasingSize
+                |> (List.map << Tuple.mapSecond)
+                    (\s ->
+                        if s == 0 then
+                            1
+                        else
+                            s
+                    )
+
         surface =
-            items |> List.map (Tuple.second >> (\n -> n * n)) |> List.sum
+            sorted
+                |> List.map (Tuple.second >> (\n -> n * n))
+                |> List.sum
 
         ( w, h ) =
             bestFit surface aspectRatio
@@ -115,9 +133,6 @@ computeLayout items aspectRatio seed =
 
                 GT ->
                     LT
-
-        sorted =
-            List.sortWith decreasingSize items
 
         grid =
             makeGrid ( w, h )

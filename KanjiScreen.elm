@@ -52,7 +52,7 @@ sizing srs =
             1
 
         _ ->
-            1
+            0
 
 
 update model msg =
