@@ -18,7 +18,7 @@ type alias Model =
 
 type Msg
     = ReceivedKanjis (Result Http.Error (List KanjiData))
-    | WindowResize Int Int
+    | WindowResize Float Float
 
 
 initState =
@@ -29,8 +29,8 @@ initState =
 
 viewportToSize vp =
     WindowResize
-        (floor vp.viewport.width)
-        (floor vp.viewport.height)
+        vp.viewport.width
+        vp.viewport.height
 
 
 initCommands =
@@ -54,7 +54,7 @@ update msg state =
             state
 
         WindowResize width height ->
-            { state | aspect = Just (toFloat width / toFloat height) }
+            { state | aspect = Just (width / height) }
 
 
 view state =
@@ -76,4 +76,4 @@ view state =
 
 subscriptions state =
     Sub.batch
-        [ Browser.Events.onResize WindowResize ]
+        [ Browser.Events.onResize (\w h -> WindowResize (toFloat w) (toFloat h)) ]
