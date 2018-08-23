@@ -42,7 +42,7 @@ freeCell grid size ( x, y ) =
 
         _ ->
             pairRange ( x, y ) ( x + size - 1, y + size - 1 )
-                |> List.all (flip Set.member grid)
+                |> List.all (\pos -> Set.member pos grid)
 
 
 freeCells : Grid -> Int -> List ( Int, Int )
@@ -72,7 +72,7 @@ insertInGrid grid size ( x, y ) =
 
 
 randomFill : Grid -> List ( a, Int ) -> Random.Seed -> List ( a, Int, ( Int, Int ) )
-randomFill emptyGrid items initialSeed =
+randomFill emptyGrid allItems initialSeed =
     let
         rec grid items seed result =
             case items of
@@ -84,17 +84,22 @@ randomFill emptyGrid items initialSeed =
                         spots =
                             freeCells grid size
 
+<<<<<<< HEAD:Layout.elm
                         ( ( spot, _ ), newSeed ) =
                             Random.step (Random.List.choose spots) seed
+=======
+                        ( maybeSpot, newSeed ) =
+                            randomListElement spots seed
+>>>>>>> b5222a95d4f5d0cf7acafd76e9e072647e474658:src/Layout.elm
                     in
-                    case spot of
+                    case maybeSpot of
                         Nothing ->
                             result
 
                         Just spot ->
                             rec (insertInGrid grid size spot) rest newSeed (( item, size, spot ) :: result)
     in
-    rec emptyGrid items initialSeed []
+    rec emptyGrid allItems initialSeed []
 
 
 
