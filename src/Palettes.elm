@@ -1,7 +1,6 @@
 module Palettes exposing (..)
 
 import Array
-import Color
 import Utils
 
 
@@ -22,4 +21,4 @@ wanikani level =
 
 
 grayscale level =
-    toFloat level / 8.0 |> Color.grayscale |> Utils.cssColor
+    "grey"

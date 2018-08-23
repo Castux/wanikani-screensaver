@@ -20,7 +20,7 @@ requestDecode =
 
 
 allLevels =
-    List.range 1 60 |> List.map toString |> String.join ","
+    List.range 1 60 |> List.map String.fromInt |> String.join ","
 
 
 getData : (Result Http.Error (List KanjiData) -> msg) -> Cmd msg
