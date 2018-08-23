@@ -1,4 +1,6 @@
 @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+@import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c');
+@import url('https://fonts.googleapis.com/css?family=Sawarabi+Mincho');
 
 html,head,body
 {
@@ -9,4 +11,6 @@ html,head,body
 body
 {
     font-family: "Noto Sans Japanese", sans-serif;
+//    font-family: "M PLUS Rounded 1c", sans-serif;
+//    font-family: 'Sawarabi Mincho', serif;
 }
