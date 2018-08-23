@@ -1,12 +1,12 @@
 module LoadingScreen exposing (Model, Msg, init, subscriptions, update, view)
 
 import Api
+import Browser.Events
 import Html
-import Html.Attributes
+import Html.Attributes exposing (style)
 import Http
 import KanjiData exposing (KanjiData)
 import Task
-import Window
 
 
 type alias Model =
@@ -17,7 +17,7 @@ type alias Model =
 
 type Msg
     = ReceivedKanjis (Result Http.Error (List KanjiData))
-    | WindowResize Window.Size
+    | WindowResize Int Int
 
 
 initState =
@@ -29,7 +29,6 @@ initState =
 initCommands =
     Cmd.batch
         [ Api.getData ReceivedKanjis
-        , Task.perform WindowResize Window.size
         ]
 
 
@@ -46,26 +45,22 @@ update msg state =
         ReceivedKanjis (Err error) ->
             state
 
-        WindowResize size ->
-            { state | aspect = Just (toFloat size.width / toFloat size.height) }
+        WindowResize width height ->
+            { state | aspect = Just (toFloat width / toFloat height) }
 
 
 view state =
     Html.div
-        [ Html.Attributes.style
-            [ ( "display", "flex" )
-            , ( "min-height", "100%" )
-            , ( "background", "black" )
-            , ( "width", "100%" )
-            , ( "height", "100%" )
-            ]
+        [ style "display" "flex"
+        , style "min-height" "100%"
+        , style "background" "black"
+        , style "width" "100%"
+        , style "height" "100%"
         ]
         [ Html.div
-            [ Html.Attributes.style
-                [ ( "color", "white" )
-                , ( "font-size", "20vmin" )
-                , ( "margin", "auto" )
-                ]
+            [ style "color" "white"
+            , style "font-size" "20vmin"
+            , style "margin" "auto"
             ]
             [ Html.text "ロード中" ]
         ]
@@ -73,4 +68,4 @@ view state =
 
 subscriptions state =
     Sub.batch
-        [ Window.resizes WindowResize ]
+        [ Browser.Events.onResize WindowResize ]

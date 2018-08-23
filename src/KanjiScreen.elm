@@ -1,18 +1,18 @@
 module KanjiScreen exposing (Model, Msg, init, subscriptions, update, view)
 
+import Browser.Events
 import Html
 import Html.Attributes
 import KanjiData exposing (KanjiData)
 import Layout
 import Palettes
 import Random
-import Svg exposing (..)
+import Svg exposing (Svg)
 import Svg.Attributes exposing (..)
-import Window
 
 
 type Msg
-    = WindowResize Window.Size
+    = WindowResize Int Int
 
 
 type alias Model =
@@ -57,8 +57,8 @@ sizing srs =
 
 update model msg =
     case msg of
-        WindowResize size ->
-            { model | aspect = toFloat size.width / toFloat size.height } ! []
+        WindowResize width height ->
+            ( { model | aspect = toFloat width / toFloat height }, Cmd.none )
 
 
 viewKanjis kanjis aspect =
@@ -69,20 +69,20 @@ viewKanjis kanjis aspect =
                 |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
 
         tw =
-            toString <| 32 * w
+            String.fromInt <| 32 * w
 
         th =
-            toString <| 32 * h
+            String.fromInt <| 32 * h
     in
     tiles
         |> List.map viewKanji
-        |> g
+        |> Svg.g
             [ fontSize "32px"
             ]
         |> List.singleton
-        |> svg
+        |> Svg.svg
             [ viewBox <| "0 0 " ++ tw ++ " " ++ th
-            , Html.Attributes.style [ ( "margin", "auto" ), ( "width", "100%" ), ( "height", "100%" ) ]
+            , style "margin:auto; width: 100%; height: 100%;"
             ]
 
 
@@ -100,35 +100,33 @@ viewKanji ( data, size, ( x, y ) ) =
     let
         trans =
             "translate("
-                ++ toString (x * 32)
+                ++ String.fromInt (x * 32)
                 ++ " "
-                ++ toString (y * 32)
+                ++ String.fromInt (y * 32)
                 ++ ")"
                 ++ " scale("
-                ++ toString size
+                ++ String.fromInt size
                 ++ ") "
     in
-    text_
+    Svg.text_
         [ fill (kanjiColor data)
         , transform trans
         , dy "0.875em"
         ]
-        [ text data.character ]
+        [ Svg.text data.character ]
 
 
 view state =
     Html.div
-        [ Html.Attributes.style
-            [ ( "display", "flex" )
-            , ( "min-height", "100%" )
-            , ( "background", "black" )
-            , ( "width", "100%" )
-            , ( "height", "100%" )
-            ]
+        [ Html.Attributes.style "display" "flex"
+        , Html.Attributes.style "min-height" "100%"
+        , Html.Attributes.style "background" "black"
+        , Html.Attributes.style "width" "100%"
+        , Html.Attributes.style "height" "100%"
         ]
         [ viewKanjis state.kanjis state.aspect ]
 
 
 subscriptions state =
     Sub.batch
-        [ Window.resizes WindowResize ]
+        [ Browser.Events.onResize WindowResize ]
