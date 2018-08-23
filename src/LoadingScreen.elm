@@ -21,18 +21,21 @@ type Msg
     | WindowResize Float Float
 
 
+initState : Model
 initState =
     { kanjis = Nothing
     , aspect = Nothing
     }
 
 
+viewportToSize : Browser.Dom.Viewport -> Msg
 viewportToSize vp =
     WindowResize
         vp.viewport.width
         vp.viewport.height
 
 
+initCommands : Cmd Msg
 initCommands =
     Cmd.batch
         [ Api.getData ReceivedKanjis
@@ -40,6 +43,7 @@ initCommands =
         ]
 
 
+init : ( Model, Cmd Msg )
 init =
     ( initState, initCommands )
 
@@ -57,6 +61,7 @@ update msg state =
             { state | aspect = Just (width / height) }
 
 
+view : Model -> Html.Html Msg
 view state =
     Html.div
         [ style "display" "flex"
@@ -74,6 +79,7 @@ view state =
         ]
 
 
+subscriptions : Model -> Sub Msg
 subscriptions state =
     Sub.batch
         [ Browser.Events.onResize (\w h -> WindowResize (toFloat w) (toFloat h)) ]

@@ -1,4 +1,4 @@
-module Utils exposing (..)
+module Utils exposing (applyFuncs, arraySwap, pairMap, pairRange, randomListElement)
 
 import Array exposing (Array)
 import Random
@@ -18,6 +18,7 @@ arraySwap i1 i2 array =
         |> Maybe.withDefault array
 
 
+pairRange : ( Int, Int ) -> ( Int, Int ) -> List ( Int, Int )
 pairRange ( s1, s2 ) ( e1, e2 ) =
     List.range s1 e1
         |> List.concatMap

@@ -141,6 +141,7 @@ view state =
         [ viewKanjis state.kanjis state.aspect state.seed ]
 
 
+subscriptions : Model -> Sub Msg
 subscriptions state =
     Sub.batch
         [ Browser.Events.onResize (\w h -> WindowResize (toFloat w) (toFloat h))

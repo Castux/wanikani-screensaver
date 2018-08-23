@@ -66,6 +66,7 @@ view screen =
             Html.map KanjiMsg (KanjiScreen.view model)
 
 
+subscriptions : Screen -> Sub Msg
 subscriptions screen =
     case screen of
         Loading model ->
