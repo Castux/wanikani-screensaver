@@ -92,7 +92,7 @@ kanjiColor k =
             "#202020"
 
         Just level ->
-            Palettes.wanikani level
+            "rgb(238, 238, 236)"
 
 
 viewKanji : ( KanjiData, Int, ( Int, Int ) ) -> Svg msg
