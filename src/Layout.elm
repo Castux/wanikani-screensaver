@@ -6,6 +6,7 @@ import Set exposing (Set)
 import Utils exposing (pairMap, pairRange)
 
 
+
 -- Grid represents all the remaining free cells
 
 
@@ -84,13 +85,8 @@ randomFill emptyGrid allItems initialSeed =
                         spots =
                             freeCells grid size
 
-<<<<<<< HEAD:Layout.elm
-                        ( ( spot, _ ), newSeed ) =
+                        ( ( maybeSpot, _ ), newSeed ) =
                             Random.step (Random.List.choose spots) seed
-=======
-                        ( maybeSpot, newSeed ) =
-                            randomListElement spots seed
->>>>>>> b5222a95d4f5d0cf7acafd76e9e072647e474658:src/Layout.elm
                     in
                     case maybeSpot of
                         Nothing ->
@@ -117,6 +113,7 @@ computeLayout items aspectRatio seed =
                     (\s ->
                         if s == 0 then
                             1
+
                         else
                             s
                     )

@@ -49,13 +49,8 @@ update msg screen =
             in
             ( nextState, Cmd.none )
 
-<<<<<<< HEAD:Main.elm
-        ( KanjiMsg msg, Kanji model ) ->
-            wrap Kanji KanjiMsg (KanjiScreen.update model msg)
-=======
         ( KanjiMsg submsg, Kanji model ) ->
             wrap Kanji KanjiMsg (KanjiScreen.update model submsg)
->>>>>>> b5222a95d4f5d0cf7acafd76e9e072647e474658:src/Main.elm
 
         _ ->
             ( screen, Cmd.none )

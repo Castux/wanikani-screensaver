@@ -9,20 +9,12 @@ import Palettes
 import Random
 import Svg exposing (Svg)
 import Svg.Attributes exposing (..)
-<<<<<<< HEAD:KanjiScreen.elm
-import Time exposing (Time)
-import Window
+import Time exposing (Posix)
 
 
 type Msg
-    = WindowResize Window.Size
-    | Tick Time
-=======
-
-
-type Msg
-    = WindowResize Int Int
->>>>>>> b5222a95d4f5d0cf7acafd76e9e072647e474658:src/KanjiScreen.elm
+    = WindowResize Float Float
+    | Tick Posix
 
 
 type alias Model =
@@ -32,19 +24,13 @@ type alias Model =
     }
 
 
-<<<<<<< HEAD:KanjiScreen.elm
 init aspect kanjis =
     Model aspect kanjis (Random.initialSeed 0)
-=======
+
+
 referenceScale : Int
 referenceScale =
     100
-
-
-init : Float -> List KanjiData -> Model
-init =
-    Model
->>>>>>> b5222a95d4f5d0cf7acafd76e9e072647e474658:src/KanjiScreen.elm
 
 
 sizing : Maybe Int -> Int
@@ -82,18 +68,14 @@ update : Model -> Msg -> ( Model, Cmd Msg )
 update model msg =
     case msg of
         WindowResize width height ->
-            ( { model | aspect = toFloat width / toFloat height }, Cmd.none )
+            ( { model | aspect = width / height }, Cmd.none )
 
         Tick time ->
-            { model | seed = time |> Time.inSeconds |> floor |> Random.initialSeed } ! []
+            ( { model | seed = time |> Time.posixToMillis |> Random.initialSeed }, Cmd.none )
 
-<<<<<<< HEAD:KanjiScreen.elm
 
+viewKanjis : List KanjiData -> Float -> Random.Seed -> Svg Msg
 viewKanjis kanjis aspect seed =
-=======
-viewKanjis : List KanjiData -> Float -> Svg ()
-viewKanjis kanjis aspect =
->>>>>>> b5222a95d4f5d0cf7acafd76e9e072647e474658:src/KanjiScreen.elm
     let
         ( tiles, ( w, h ) ) =
             kanjis
@@ -161,10 +143,6 @@ view state =
 
 subscriptions state =
     Sub.batch
-<<<<<<< HEAD:KanjiScreen.elm
-        [ Window.resizes WindowResize
-        , Time.every (10 * Time.second) Tick
+        [ Browser.Events.onResize (\w h -> WindowResize (toFloat w) (toFloat h))
+        , Time.every (10.0 * 1000) Tick
         ]
-=======
-        [ Browser.Events.onResize WindowResize ]
->>>>>>> b5222a95d4f5d0cf7acafd76e9e072647e474658:src/KanjiScreen.elm
