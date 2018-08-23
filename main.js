@@ -6418,8 +6418,8 @@ var author$project$Main$update = F2(
 		var _n0 = _Utils_Tuple2(msg, screen);
 		_n0$2:
 		while (true) {
-			if (!_n0.a.$) {
-				if (!_n0.b.$) {
+			if (!_n0.b.$) {
+				if (!_n0.a.$) {
 					var submsg = _n0.a.a;
 					var model = _n0.b.a;
 					var newState = A2(author$project$LoadingScreen$update, submsg, model);
@@ -6436,7 +6436,7 @@ var author$project$Main$update = F2(
 					break _n0$2;
 				}
 			} else {
-				if (_n0.b.$ === 1) {
+				if (_n0.a.$ === 1) {
 					var submsg = _n0.a.a;
 					var model = _n0.b.a;
 					return A3(
@@ -6451,6 +6451,7 @@ var author$project$Main$update = F2(
 		}
 		return _Utils_Tuple2(screen, elm$core$Platform$Cmd$none);
 	});
+var author$project$KanjiScreen$referenceScale = 100;
 var author$project$KanjiScreen$sizing = function (srs) {
 	_n0$8:
 	while (true) {
@@ -6503,7 +6504,7 @@ var author$project$KanjiScreen$viewKanji = function (_n0) {
 	var _n1 = _n0.c;
 	var x = _n1.a;
 	var y = _n1.b;
-	var trans = 'translate(' + (elm$core$String$fromInt(x * 32) + (' ' + (elm$core$String$fromInt(y * 32) + (')' + (' scale(' + (elm$core$String$fromInt(size) + ') '))))));
+	var trans = 'translate(' + (elm$core$String$fromInt(x * author$project$KanjiScreen$referenceScale) + (' ' + (elm$core$String$fromInt(y * author$project$KanjiScreen$referenceScale) + (')' + (' scale(' + (elm$core$String$fromInt(size) + ') '))))));
 	return A2(
 		elm$svg$Svg$text_,
 		_List_fromArray(
@@ -6956,8 +6957,8 @@ var author$project$KanjiScreen$viewKanjis = F2(
 		var _n1 = _n0.b;
 		var w = _n1.a;
 		var h = _n1.b;
-		var th = elm$core$String$fromInt(32 * h);
-		var tw = elm$core$String$fromInt(32 * w);
+		var th = elm$core$String$fromInt(author$project$KanjiScreen$referenceScale * h);
+		var tw = elm$core$String$fromInt(author$project$KanjiScreen$referenceScale * w);
 		return A2(
 			elm$svg$Svg$svg,
 			_List_fromArray(
@@ -6970,7 +6971,8 @@ var author$project$KanjiScreen$viewKanjis = F2(
 					elm$svg$Svg$g,
 					_List_fromArray(
 						[
-							elm$svg$Svg$Attributes$fontSize('32px')
+							elm$svg$Svg$Attributes$fontSize(
+							elm$core$String$fromInt(author$project$KanjiScreen$referenceScale) + 'px')
 						]),
 					A2(elm$core$List$map, author$project$KanjiScreen$viewKanji, tiles))));
 	});
@@ -7021,14 +7023,25 @@ var author$project$LoadingScreen$view = function (state) {
 					]))
 			]));
 };
+var author$project$Main$Nop = {$: 2};
+var elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
+var elm$html$Html$map = elm$virtual_dom$VirtualDom$map;
 var author$project$Main$view = function (screen) {
-	if (!screen.$) {
-		var model = screen.a;
-		return author$project$LoadingScreen$view(model);
-	} else {
-		var model = screen.a;
-		return author$project$KanjiScreen$view(model);
-	}
+	var html = function () {
+		if (!screen.$) {
+			var model = screen.a;
+			return author$project$LoadingScreen$view(model);
+		} else {
+			var model = screen.a;
+			return author$project$KanjiScreen$view(model);
+		}
+	}();
+	return A2(
+		elm$html$Html$map,
+		function (_n0) {
+			return author$project$Main$Nop;
+		},
+		html);
 };
 var elm$browser$Browser$element = _Browser_element;
 var author$project$Main$main = elm$browser$Browser$element(

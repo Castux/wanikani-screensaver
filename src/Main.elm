@@ -6,6 +6,7 @@ import KanjiScreen
 import LoadingScreen
 
 
+
 --(<<<) f g x y =
 --    f (g x y)
 
@@ -59,10 +60,10 @@ view : Screen -> Html.Html Msg
 view screen =
     case screen of
         Loading model ->
-            LoadingScreen.view model
+            Html.map LoadingMsg (LoadingScreen.view model)
 
         Kanji model ->
-            KanjiScreen.view model
+            Html.map KanjiMsg (KanjiScreen.view model)
 
 
 subscriptions screen =

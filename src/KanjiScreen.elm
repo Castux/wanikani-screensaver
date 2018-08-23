@@ -1,7 +1,7 @@
 module KanjiScreen exposing (Model, Msg, init, subscriptions, update, view)
 
 import Browser.Events
-import Html
+import Html exposing (Html)
 import Html.Attributes
 import KanjiData exposing (KanjiData)
 import Layout
@@ -21,10 +21,17 @@ type alias Model =
     }
 
 
+referenceScale : Int
+referenceScale =
+    100
+
+
+init : Float -> List KanjiData -> Model
 init =
     Model
 
 
+sizing : Maybe Int -> Int
 sizing srs =
     case srs of
         Just 1 ->
@@ -55,12 +62,14 @@ sizing srs =
             0
 
 
+update : Model -> Msg -> ( Model, Cmd Msg )
 update model msg =
     case msg of
         WindowResize width height ->
             ( { model | aspect = toFloat width / toFloat height }, Cmd.none )
 
 
+viewKanjis : List KanjiData -> Float -> Svg ()
 viewKanjis kanjis aspect =
     let
         ( tiles, ( w, h ) ) =
@@ -69,16 +78,14 @@ viewKanjis kanjis aspect =
                 |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
 
         tw =
-            String.fromInt <| 32 * w
+            String.fromInt <| referenceScale * w
 
         th =
-            String.fromInt <| 32 * h
+            String.fromInt <| referenceScale * h
     in
     tiles
         |> List.map viewKanji
-        |> Svg.g
-            [ fontSize "32px"
-            ]
+        |> Svg.g [ fontSize <| String.fromInt referenceScale ++ "px" ]
         |> List.singleton
         |> Svg.svg
             [ viewBox <| "0 0 " ++ tw ++ " " ++ th
@@ -86,6 +93,7 @@ viewKanjis kanjis aspect =
             ]
 
 
+kanjiColor : KanjiData -> String
 kanjiColor k =
     case k.srs of
         Nothing ->
@@ -95,14 +103,14 @@ kanjiColor k =
             "rgb(238, 238, 236)"
 
 
-viewKanji : ( KanjiData, Int, ( Int, Int ) ) -> Svg msg
+viewKanji : ( KanjiData, Int, ( Int, Int ) ) -> Svg Msg
 viewKanji ( data, size, ( x, y ) ) =
     let
         trans =
             "translate("
-                ++ String.fromInt (x * 32)
+                ++ String.fromInt (x * referenceScale)
                 ++ " "
-                ++ String.fromInt (y * 32)
+                ++ String.fromInt (y * referenceScale)
                 ++ ")"
                 ++ " scale("
                 ++ String.fromInt size
@@ -116,6 +124,7 @@ viewKanji ( data, size, ( x, y ) ) =
         [ Svg.text data.character ]
 
 
+view : Model -> Html Msg
 view state =
     Html.div
         [ Html.Attributes.style "display" "flex"
