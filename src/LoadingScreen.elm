@@ -1,6 +1,7 @@
 module LoadingScreen exposing (Model, Msg, init, subscriptions, update, view)
 
 import Api
+import Browser.Dom
 import Browser.Events
 import Html
 import Html.Attributes exposing (style)
@@ -26,9 +27,16 @@ initState =
     }
 
 
+viewportToSize vp =
+    WindowResize
+        (floor vp.viewport.width)
+        (floor vp.viewport.height)
+
+
 initCommands =
     Cmd.batch
         [ Api.getData ReceivedKanjis
+        , Task.perform viewportToSize Browser.Dom.getViewport
         ]
 
 
