@@ -93,7 +93,11 @@ randomFill emptyGrid allItems initialSeed =
                             result
 
                         Just spot ->
-                            rec (insertInGrid grid size spot) rest newSeed (( item, size, spot ) :: result)
+                            rec
+                                (insertInGrid grid size spot)
+                                rest
+                                newSeed
+                                (( item, size, spot ) :: result)
     in
     rec emptyGrid allItems initialSeed []
 
