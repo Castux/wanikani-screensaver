@@ -6853,6 +6853,31 @@ var author$project$KanjiScreen$Model = F5(
 	function (aspect, tiles, gridSize, time, iterTime) {
 		return {Z: aspect, P: gridSize, y: iterTime, C: tiles, D: time};
 	});
+var author$project$KanjiScreen$kanjiOrder = F2(
+	function (ka, kb) {
+		var _n0 = _Utils_Tuple2(ka.aT, kb.aT);
+		if (!_n0.a.$) {
+			if (!_n0.b.$) {
+				var sa = _n0.a.a;
+				var sb = _n0.b.a;
+				return A2(elm$core$Basics$compare, sa, sb);
+			} else {
+				var sa = _n0.a.a;
+				var _n2 = _n0.b;
+				return 2;
+			}
+		} else {
+			if (!_n0.b.$) {
+				var _n1 = _n0.a;
+				var sb = _n0.b.a;
+				return 0;
+			} else {
+				var _n3 = _n0.a;
+				var _n4 = _n0.b;
+				return 1;
+			}
+		}
+	});
 var author$project$KanjiScreen$sizing = function (srs) {
 	_n0$8:
 	while (true) {
@@ -6881,7 +6906,7 @@ var author$project$KanjiScreen$sizing = function (srs) {
 			break _n0$8;
 		}
 	}
-	return 0;
+	return 1;
 };
 var elm$core$Basics$sqrt = _Basics_sqrt;
 var author$project$Layout$bestFit = F2(
@@ -7375,46 +7400,15 @@ var elm$core$Basics$composeR = F3(
 		return g(
 			f(x));
 	});
-var elm$core$List$sortWith = _List_sortWith;
 var elm$core$List$sum = function (numbers) {
 	return A3(elm$core$List$foldl, elm$core$Basics$add, 0, numbers);
 };
-var elm$core$Tuple$mapSecond = F2(
-	function (func, _n0) {
-		var x = _n0.a;
-		var y = _n0.b;
-		return _Utils_Tuple2(
-			x,
-			func(y));
-	});
 var elm$core$Tuple$second = function (_n0) {
 	var y = _n0.b;
 	return y;
 };
 var author$project$Layout$computeLayout = F3(
 	function (items, aspectRatio, seed) {
-		var decreasingSize = F2(
-			function (_n2, _n3) {
-				var a = _n2.a;
-				var sa = _n2.b;
-				var b = _n3.a;
-				var sb = _n3.b;
-				var _n1 = A2(elm$core$Basics$compare, sa, sb);
-				switch (_n1) {
-					case 0:
-						return 2;
-					case 1:
-						return 1;
-					default:
-						return 0;
-				}
-			});
-		var sorted = A2(
-			A2(elm$core$Basics$composeL, elm$core$List$map, elm$core$Tuple$mapSecond),
-			function (s) {
-				return (!s) ? 1 : s;
-			},
-			A2(elm$core$List$sortWith, decreasingSize, items));
 		var surface = elm$core$List$sum(
 			A2(
 				elm$core$List$map,
@@ -7424,16 +7418,17 @@ var author$project$Layout$computeLayout = F3(
 					function (n) {
 						return n * n;
 					}),
-				sorted));
+				items));
 		var _n0 = A2(author$project$Layout$bestFit, surface, aspectRatio);
 		var w = _n0.a;
 		var h = _n0.b;
 		var grid = author$project$Layout$makeGrid(
 			_Utils_Tuple2(w, h));
 		return _Utils_Tuple2(
-			A3(author$project$Layout$randomFill, grid, sorted, seed),
+			A3(author$project$Layout$randomFill, grid, items, seed),
 			_Utils_Tuple2(w, h));
 	});
+var elm$core$List$sortWith = _List_sortWith;
 var elm$random$Random$initialSeed = function (x) {
 	var _n0 = elm$random$Random$next(
 		A2(elm$random$Random$Seed, 0, 1013904223));
@@ -7459,7 +7454,8 @@ var author$project$KanjiScreen$init = F2(
 						kd,
 						author$project$KanjiScreen$sizing(kd.aT));
 				},
-				kanjis));
+				elm$core$List$reverse(
+					A2(elm$core$List$sortWith, author$project$KanjiScreen$kanjiOrder, kanjis))));
 		var tiles = _n0.a;
 		var gridSize = _n0.b;
 		return A5(author$project$KanjiScreen$Model, aspect, tiles, gridSize, 0.0, 0.0);
@@ -7478,7 +7474,7 @@ var author$project$KanjiScreen$shuffle = F2(
 					var size = _n1.b;
 					return _Utils_Tuple2(data, size);
 				},
-				model.C));
+				elm$core$List$reverse(model.C)));
 		var shuffled = _n0.a;
 		var gridSize = _n0.b;
 		return _Utils_update(
