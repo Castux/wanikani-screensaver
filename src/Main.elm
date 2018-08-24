@@ -4,6 +4,9 @@ import Browser
 import Html
 import KanjiScreen
 import LoadingScreen
+import Url
+import Url.Parser
+import Url.Parser.Query
 
 
 type Screen
@@ -16,9 +19,28 @@ type Msg
     | KanjiMsg KanjiScreen.Msg
 
 
-init : () -> ( Screen, Cmd Msg )
+parseUrl : String -> Maybe String
+parseUrl stringUrl =
+    let
+        parser =
+            Url.Parser.query (Url.Parser.Query.string "key")
+
+        parse url =
+            case Url.Parser.parse parser url of
+                Just (Just key) ->
+                    Just key
+
+                _ ->
+                    Nothing
+    in
+    stringUrl
+        |> Url.fromString
+        |> Maybe.andThen parse
+
+
+init : String -> ( Screen, Cmd Msg )
 init flags =
-    wrap Loading LoadingMsg LoadingScreen.init
+    wrap Loading LoadingMsg (LoadingScreen.init (parseUrl flags))
 
 
 wrap pageCon msgCon ( state, msg ) =

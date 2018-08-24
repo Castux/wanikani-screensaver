@@ -13,6 +13,7 @@ import Task
 type alias Model =
     { kanjis : Maybe (List KanjiData)
     , aspect : Maybe Float
+    , errorMsg : Maybe String
     }
 
 
@@ -25,6 +26,7 @@ initState : Model
 initState =
     { kanjis = Nothing
     , aspect = Nothing
+    , errorMsg = Nothing
     }
 
 
@@ -43,8 +45,8 @@ initCommands =
         ]
 
 
-init : ( Model, Cmd Msg )
-init =
+init : Maybe String -> ( Model, Cmd Msg )
+init maybeKey =
     ( initState, initCommands )
 
 
