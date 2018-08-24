@@ -505,11 +505,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.T.y === region.aa.y)
+	if (region.S.y === region.aa.y)
 	{
-		return 'on line ' + region.T.y;
+		return 'on line ' + region.S.y;
 	}
-	return 'on lines ' + region.T.y + ' through ' + region.aa.y;
+	return 'on lines ' + region.S.y + ' through ' + region.aa.y;
 }
 
 
@@ -1836,12 +1836,12 @@ var _Http_toTask = F2(function(request, maybeProgress)
 			callback(_Scheduler_fail(elm$http$Http$Timeout));
 		});
 		xhr.addEventListener('load', function() {
-			callback(_Http_handleResponse(xhr, request.N.a));
+			callback(_Http_handleResponse(xhr, request.M.a));
 		});
 
 		try
 		{
-			xhr.open(request.Q, request.aX, true);
+			xhr.open(request.P, request.aX, true);
 		}
 		catch (e)
 		{
@@ -1886,7 +1886,7 @@ function _Http_configureRequest(xhr, request)
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
 
-	xhr.responseType = request.N.b;
+	xhr.responseType = request.M.b;
 	xhr.withCredentials = request.W;
 
 	elm$core$Maybe$isJust(request.V) && (xhr.timeout = request.V.a);
@@ -2826,8 +2826,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		k: func(record.k),
-		U: record.U,
-		S: record.S
+		T: record.T,
+		R: record.R
 	}
 });
 
@@ -3096,10 +3096,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.k;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.U;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.T;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.S) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.R) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -4346,8 +4346,8 @@ function _Browser_getViewport()
 	return {
 		aq: _Browser_getScene(),
 		at: {
-			L: _Browser_window.pageXOffset,
-			M: _Browser_window.pageYOffset,
+			K: _Browser_window.pageXOffset,
+			L: _Browser_window.pageYOffset,
 			aZ: _Browser_doc.documentElement.clientWidth,
 			aF: _Browser_doc.documentElement.clientHeight
 		}
@@ -4388,8 +4388,8 @@ function _Browser_getViewportOf(id)
 				aF: node.scrollHeight
 			},
 			at: {
-				L: node.scrollLeft,
-				M: node.scrollTop,
+				K: node.scrollLeft,
+				L: node.scrollTop,
 				aZ: node.clientWidth,
 				aF: node.clientHeight
 			}
@@ -4423,14 +4423,14 @@ function _Browser_getElement(id)
 		return {
 			aq: _Browser_getScene(),
 			at: {
-				L: x,
-				M: y,
+				K: x,
+				L: y,
 				aZ: _Browser_doc.documentElement.clientWidth,
 				aF: _Browser_doc.documentElement.clientHeight
 			},
 			aC: {
-				L: x + rect.left,
-				M: y + rect.top,
+				K: x + rect.left,
+				L: y + rect.top,
 				aZ: rect.width,
 				aF: rect.height
 			}
@@ -5752,9 +5752,9 @@ var elm$http$Http$get = F2(
 		return elm$http$Http$request(
 			{
 				aw: elm$http$Http$emptyBody,
-				N: elm$http$Http$expectJson(decoder),
+				M: elm$http$Http$expectJson(decoder),
 				I: _List_Nil,
-				Q: 'GET',
+				P: 'GET',
 				V: elm$core$Maybe$Nothing,
 				aX: url,
 				W: false
@@ -6427,12 +6427,12 @@ var author$project$KanjiScreen$WindowResize = F2(
 	function (a, b) {
 		return {$: 0, a: a, b: b};
 	});
-var elm$browser$Browser$AnimationManager$Delta = function (a) {
-	return {$: 1, a: a};
+var elm$browser$Browser$AnimationManager$Time = function (a) {
+	return {$: 0, a: a};
 };
 var elm$browser$Browser$AnimationManager$State = F3(
 	function (subs, request, oldTime) {
-		return {R: oldTime, ap: request, ar: subs};
+		return {Q: oldTime, ap: request, ar: subs};
 	});
 var elm$browser$Browser$AnimationManager$init = elm$core$Task$succeed(
 	A3(elm$browser$Browser$AnimationManager$State, _List_Nil, elm$core$Maybe$Nothing, 0));
@@ -6444,7 +6444,7 @@ var elm$core$Process$spawn = _Scheduler_spawn;
 var elm$browser$Browser$AnimationManager$onEffects = F3(
 	function (router, subs, _n0) {
 		var request = _n0.ap;
-		var oldTime = _n0.R;
+		var oldTime = _n0.Q;
 		var _n1 = _Utils_Tuple2(request, subs);
 		if (_n1.a.$ === 1) {
 			if (!_n1.b.b) {
@@ -6493,7 +6493,7 @@ var elm$time$Time$millisToPosix = elm$core$Basics$identity;
 var elm$browser$Browser$AnimationManager$onSelfMsg = F3(
 	function (router, newTime, _n0) {
 		var subs = _n0.ar;
-		var oldTime = _n0.R;
+		var oldTime = _n0.Q;
 		var send = function (sub) {
 			if (!sub.$) {
 				var tagger = sub.a;
@@ -6532,8 +6532,8 @@ var elm$browser$Browser$AnimationManager$onSelfMsg = F3(
 					elm$core$Platform$sendToSelf(router),
 					elm$browser$Browser$AnimationManager$rAF)));
 	});
-var elm$browser$Browser$AnimationManager$Time = function (a) {
-	return {$: 0, a: a};
+var elm$browser$Browser$AnimationManager$Delta = function (a) {
+	return {$: 1, a: a};
 };
 var elm$browser$Browser$AnimationManager$subMap = F2(
 	function (func, sub) {
@@ -6549,11 +6549,11 @@ var elm$browser$Browser$AnimationManager$subMap = F2(
 	});
 _Platform_effectManagers['Browser.AnimationManager'] = _Platform_createManager(elm$browser$Browser$AnimationManager$init, elm$browser$Browser$AnimationManager$onEffects, elm$browser$Browser$AnimationManager$onSelfMsg, 0, elm$browser$Browser$AnimationManager$subMap);
 var elm$browser$Browser$AnimationManager$subscription = _Platform_leaf('Browser.AnimationManager');
-var elm$browser$Browser$AnimationManager$onAnimationFrameDelta = function (tagger) {
+var elm$browser$Browser$AnimationManager$onAnimationFrame = function (tagger) {
 	return elm$browser$Browser$AnimationManager$subscription(
-		elm$browser$Browser$AnimationManager$Delta(tagger));
+		elm$browser$Browser$AnimationManager$Time(tagger));
 };
-var elm$browser$Browser$Events$onAnimationFrameDelta = elm$browser$Browser$AnimationManager$onAnimationFrameDelta;
+var elm$browser$Browser$Events$onAnimationFrame = elm$browser$Browser$AnimationManager$onAnimationFrame;
 var elm$browser$Browser$Events$Window = 1;
 var elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
@@ -7040,8 +7040,8 @@ var author$project$KanjiScreen$subscriptions = function (state) {
 					function (w, h) {
 						return A2(author$project$KanjiScreen$WindowResize, w, h);
 					})),
-				elm$browser$Browser$Events$onAnimationFrameDelta(author$project$KanjiScreen$Tick),
-				A2(elm$time$Time$every, 10.0 * 1000, author$project$KanjiScreen$ShuffleTime)
+				elm$browser$Browser$Events$onAnimationFrame(author$project$KanjiScreen$Tick),
+				A2(elm$time$Time$every, 15.0 * 1000, author$project$KanjiScreen$ShuffleTime)
 			]));
 };
 var author$project$LoadingScreen$subscriptions = function (state) {
@@ -7076,7 +7076,7 @@ var author$project$Main$subscriptions = function (screen) {
 };
 var author$project$KanjiScreen$Model = F4(
 	function (aspect, tiles, gridSize, time) {
-		return {Y: aspect, O: gridSize, B: tiles, K: time};
+		return {Y: aspect, N: gridSize, B: tiles, U: time};
 	});
 var author$project$KanjiScreen$sizing = function (srs) {
 	_n0$8:
@@ -7706,7 +7706,7 @@ var author$project$KanjiScreen$shuffle = F2(
 		var gridSize = _n0.b;
 		return _Utils_update(
 			model,
-			{O: gridSize, B: shuffled});
+			{N: gridSize, B: shuffled});
 	});
 var elm$time$Time$posixToMillis = function (_n0) {
 	var millis = _n0;
@@ -7738,11 +7738,13 @@ var author$project$KanjiScreen$update = F2(
 					A2(author$project$KanjiScreen$shuffle, model, seed),
 					elm$core$Platform$Cmd$none);
 			default:
-				var dt = msg.a;
+				var t = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{K: model.K + dt}),
+						{
+							U: elm$time$Time$posixToMillis(t)
+						}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
@@ -7818,10 +7820,30 @@ var author$project$KanjiScreen$referenceScale = 100;
 var author$project$Anim$grayscale = function (x) {
 	return _Utils_Tuple3(x, x, x);
 };
+var elm$core$Basics$cos = _Basics_cos;
+var elm$core$Basics$pi = _Basics_pi;
+var elm$core$Basics$turns = function (angleInTurns) {
+	return (2 * elm$core$Basics$pi) * angleInTurns;
+};
+var author$project$Anim$cose = function (x) {
+	return elm$core$Basics$cos(
+		elm$core$Basics$turns(x));
+};
 var elm$core$Basics$sin = _Basics_sin;
+var author$project$Anim$sine = function (x) {
+	return elm$core$Basics$sin(
+		elm$core$Basics$turns(x));
+};
 var author$project$Anim$plasma = F3(
 	function (x, y, t) {
-		return (elm$core$Basics$sin((x / 100.0) + (t / 1000.0)) + 1.0) / 2.0;
+		var components = _List_fromArray(
+			[
+				author$project$Anim$sine((x / 45.0) + (t / 8000.0)),
+				author$project$Anim$cose(
+				(((x * author$project$Anim$sine(t / 20000.0)) + (y * author$project$Anim$cose(t / 18000.0))) / 35.0) + (t / 10000.0))
+			]);
+		var avg = elm$core$List$sum(components) / elm$core$List$length(components);
+		return avg;
 	});
 var author$project$Anim$toCss = function (_n0) {
 	var r = _n0.a;
@@ -7840,10 +7862,14 @@ var author$project$KanjiScreen$kanjiColor = F3(
 		if (_n1.$ === 1) {
 			return author$project$Anim$toCss(
 				author$project$Anim$grayscale(
-					A3(author$project$Anim$plasma, x, y, time)));
+					function (u) {
+						return 0.15 + (u * 5.0e-2);
+					}(
+						A3(author$project$Anim$plasma, x, y, time))));
 		} else {
 			var level = _n1.a;
-			return 'rgb(238, 238, 236)';
+			return author$project$Anim$toCss(
+				author$project$Anim$grayscale(0.93));
 		}
 	});
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
@@ -7930,7 +7956,7 @@ var author$project$KanjiScreen$view = function (state) {
 			]),
 		_List_fromArray(
 			[
-				A3(author$project$KanjiScreen$viewKanjis, state.B, state.O, state.K)
+				A3(author$project$KanjiScreen$viewKanjis, state.B, state.N, state.U)
 			]));
 };
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;

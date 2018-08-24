@@ -16,7 +16,7 @@ import Time exposing (Posix)
 type Msg
     = WindowResize Float Float
     | ShuffleTime Posix
-    | Tick Float
+    | Tick Posix
 
 
 type alias Tile =
@@ -106,8 +106,8 @@ update model msg =
             in
             ( shuffle model seed, Cmd.none )
 
-        Tick dt ->
-            ( { model | time = model.time + dt }, Cmd.none )
+        Tick t ->
+            ( { model | time = Time.posixToMillis t |> toFloat }, Cmd.none )
 
 
 viewKanjis : List Tile -> ( Int, Int ) -> Float -> Svg Msg
@@ -134,11 +134,12 @@ kanjiColor k time ( x, y ) =
     case k.srs of
         Nothing ->
             Anim.plasma (toFloat x) (toFloat y) time
+                |> (\u -> 0.15 + u * 0.05)
                 |> Anim.grayscale
                 |> Anim.toCss
 
         Just level ->
-            "rgb(238, 238, 236)"
+            0.93 |> Anim.grayscale |> Anim.toCss
 
 
 viewKanji : Float -> Tile -> Svg Msg
@@ -178,6 +179,6 @@ subscriptions : Model -> Sub Msg
 subscriptions state =
     Sub.batch
         [ Browser.Events.onResize (\w h -> WindowResize (toFloat w) (toFloat h))
-        , Browser.Events.onAnimationFrameDelta Tick
-        , Time.every (10.0 * 1000) ShuffleTime
+        , Browser.Events.onAnimationFrame Tick
+        , Time.every (15.0 * 1000) ShuffleTime
         ]
