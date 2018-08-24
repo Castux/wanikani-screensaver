@@ -27,7 +27,7 @@ type alias Model =
     , tiles : List Tile
     , gridSize : ( Int, Int )
     , time : Float
-    , lastShuffle : Float
+    , iterTime : Float
     }
 
 
@@ -61,7 +61,7 @@ shuffle model time =
                 |> List.map (\( data, size, _ ) -> ( data, size ))
                 |> (\l -> Layout.computeLayout l model.aspect seed)
     in
-    { model | tiles = shuffled, gridSize = gridSize, time = time, lastShuffle = time }
+    { model | tiles = shuffled, gridSize = gridSize, time = time, iterTime = 0 }
 
 
 referenceScale : Int
@@ -115,18 +115,21 @@ update model msg =
                 newTime =
                     model.time + t / 1000
 
+                iterTime =
+                    model.iterTime + t / 1000
+
                 updated =
-                    if newTime > model.lastShuffle + shufflePeriod then
+                    if iterTime > shufflePeriod then
                         shuffle model newTime
 
                     else
-                        { model | time = newTime }
+                        { model | time = newTime, iterTime = iterTime }
             in
             ( updated, Cmd.none )
 
 
 viewKanjis : List Tile -> ( Int, Int ) -> Float -> Float -> Svg Msg
-viewKanjis tiles ( w, h ) time lastShuffle =
+viewKanjis tiles ( w, h ) time iterTime =
     let
         tw =
             String.fromInt <| referenceScale * w
@@ -135,7 +138,7 @@ viewKanjis tiles ( w, h ) time lastShuffle =
             String.fromInt <| referenceScale * h
     in
     tiles
-        |> List.indexedMap (viewKanji time lastShuffle (List.length tiles))
+        |> List.indexedMap (viewKanji time iterTime (List.length tiles))
         |> Svg.g [ fontSize <| String.fromInt referenceScale ++ "px" ]
         |> List.singleton
         |> Svg.svg
@@ -158,13 +161,13 @@ kanjiColor k time ( x, y ) =
 
 
 viewKanji : Float -> Float -> Int -> Int -> Tile -> Svg Msg
-viewKanji time lastShuffle numTiles index ( data, size, ( x, y ) ) =
+viewKanji time iterTime numTiles index ( data, size, ( x, y ) ) =
     let
         fade =
             toFloat index * fadeInTime / toFloat numTiles
 
         show =
-            time - lastShuffle > 1.0 + fade && time - lastShuffle < shufflePeriod - fadeInTime - 1.0 + fade
+            iterTime > 1.0 + fade && iterTime < shufflePeriod - fadeInTime - 1.0 + fade
 
         disp =
             if show then
@@ -198,7 +201,7 @@ view state =
         , Html.Attributes.style "width" "100%"
         , Html.Attributes.style "height" "100%"
         ]
-        [ viewKanjis state.tiles state.gridSize state.time state.lastShuffle ]
+        [ viewKanjis state.tiles state.gridSize state.time state.iterTime ]
 
 
 subscriptions : Model -> Sub Msg
