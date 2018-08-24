@@ -6855,28 +6855,10 @@ var author$project$KanjiScreen$Model = F5(
 	});
 var author$project$KanjiScreen$kanjiOrder = F2(
 	function (ka, kb) {
-		var _n0 = _Utils_Tuple2(ka.aT, kb.aT);
-		if (!_n0.a.$) {
-			if (!_n0.b.$) {
-				var sa = _n0.a.a;
-				var sb = _n0.b.a;
-				return A2(elm$core$Basics$compare, sa, sb);
-			} else {
-				var sa = _n0.a.a;
-				var _n2 = _n0.b;
-				return 2;
-			}
-		} else {
-			if (!_n0.b.$) {
-				var _n1 = _n0.a;
-				var sb = _n0.b.a;
-				return 0;
-			} else {
-				var _n3 = _n0.a;
-				var _n4 = _n0.b;
-				return 1;
-			}
-		}
+		return A2(
+			elm$core$Basics$compare,
+			A2(elm$core$Maybe$withDefault, 100, ka.aT),
+			A2(elm$core$Maybe$withDefault, 100, kb.aT));
 	});
 var author$project$KanjiScreen$sizing = function (srs) {
 	_n0$8:
@@ -7454,8 +7436,7 @@ var author$project$KanjiScreen$init = F2(
 						kd,
 						author$project$KanjiScreen$sizing(kd.aT));
 				},
-				elm$core$List$reverse(
-					A2(elm$core$List$sortWith, author$project$KanjiScreen$kanjiOrder, kanjis))));
+				A2(elm$core$List$sortWith, author$project$KanjiScreen$kanjiOrder, kanjis)));
 		var tiles = _n0.a;
 		var gridSize = _n0.b;
 		return A5(author$project$KanjiScreen$Model, aspect, tiles, gridSize, 0.0, 0.0);
@@ -7469,12 +7450,20 @@ var author$project$KanjiScreen$shuffle = F2(
 		}(
 			A2(
 				elm$core$List$map,
-				function (_n1) {
-					var data = _n1.a;
-					var size = _n1.b;
+				function (_n3) {
+					var data = _n3.a;
+					var size = _n3.b;
 					return _Utils_Tuple2(data, size);
 				},
-				elm$core$List$reverse(model.C)));
+				A2(
+					elm$core$List$sortWith,
+					F2(
+						function (_n1, _n2) {
+							var ka = _n1.a;
+							var kb = _n2.a;
+							return A2(author$project$KanjiScreen$kanjiOrder, ka, kb);
+						}),
+					model.C)));
 		var shuffled = _n0.a;
 		var gridSize = _n0.b;
 		return _Utils_update(
