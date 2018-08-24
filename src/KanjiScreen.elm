@@ -1,5 +1,6 @@
 module KanjiScreen exposing (Model, Msg, init, subscriptions, update, view)
 
+import Anim exposing (grayscale, plasma, toCss)
 import Browser.Events
 import Html exposing (Html)
 import Html.Attributes
@@ -15,6 +16,7 @@ import Time exposing (Posix)
 type Msg
     = WindowResize Float Float
     | ShuffleTime Posix
+    | Tick Float
 
 
 type alias Tile =
@@ -25,21 +27,30 @@ type alias Model =
     { aspect : Float
     , tiles : List Tile
     , gridSize : ( Int, Int )
+    , time : Float
     }
 
 
-init : Float -> List KanjiData -> Maybe Random.Seed -> Model
-init aspect kanjis maybeSeed =
+init : Float -> List KanjiData -> Model
+init aspect kanjis =
     let
-        seed =
-            Maybe.withDefault (Random.initialSeed 0) maybeSeed
-
         ( tiles, gridSize ) =
             kanjis
                 |> List.map (\kd -> ( kd, sizing kd.srs ))
-                |> (\l -> Layout.computeLayout l aspect seed)
+                |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
     in
-    Model aspect tiles gridSize
+    Model aspect tiles gridSize 0.0
+
+
+shuffle : Model -> Random.Seed -> Model
+shuffle model seed =
+    let
+        ( shuffled, gridSize ) =
+            model.tiles
+                |> List.map (\( data, size, _ ) -> ( data, size ))
+                |> (\l -> Layout.computeLayout l model.aspect seed)
+    in
+    { model | tiles = shuffled, gridSize = gridSize }
 
 
 referenceScale : Int
@@ -86,18 +97,21 @@ update model msg =
     in
     case msg of
         WindowResize width height ->
-            ( init (width / height) kanjis Nothing, Cmd.none )
+            ( init (width / height) kanjis, Cmd.none )
 
         ShuffleTime time ->
             let
                 seed =
-                    Just <| Random.initialSeed (Time.posixToMillis time)
+                    Random.initialSeed (Time.posixToMillis time)
             in
-            ( init model.aspect kanjis seed, Cmd.none )
+            ( shuffle model seed, Cmd.none )
+
+        Tick dt ->
+            ( { model | time = model.time + dt }, Cmd.none )
 
 
-viewKanjis : List Tile -> ( Int, Int ) -> Svg Msg
-viewKanjis tiles ( w, h ) =
+viewKanjis : List Tile -> ( Int, Int ) -> Float -> Svg Msg
+viewKanjis tiles ( w, h ) time =
     let
         tw =
             String.fromInt <| referenceScale * w
@@ -106,7 +120,7 @@ viewKanjis tiles ( w, h ) =
             String.fromInt <| referenceScale * h
     in
     tiles
-        |> List.map viewKanji
+        |> List.map (viewKanji time)
         |> Svg.g [ fontSize <| String.fromInt referenceScale ++ "px" ]
         |> List.singleton
         |> Svg.svg
@@ -115,18 +129,20 @@ viewKanjis tiles ( w, h ) =
             ]
 
 
-kanjiColor : KanjiData -> String
-kanjiColor k =
+kanjiColor : KanjiData -> Float -> ( Int, Int ) -> String
+kanjiColor k time ( x, y ) =
     case k.srs of
         Nothing ->
-            "#202020"
+            Anim.plasma (toFloat x) (toFloat y) time
+                |> Anim.grayscale
+                |> Anim.toCss
 
         Just level ->
             "rgb(238, 238, 236)"
 
 
-viewKanji : Tile -> Svg Msg
-viewKanji ( data, size, ( x, y ) ) =
+viewKanji : Float -> Tile -> Svg Msg
+viewKanji time ( data, size, ( x, y ) ) =
     let
         trans =
             "translate("
@@ -139,7 +155,7 @@ viewKanji ( data, size, ( x, y ) ) =
                 ++ ") "
     in
     Svg.text_
-        [ fill (kanjiColor data)
+        [ fill (kanjiColor data time ( x, y ))
         , transform trans
         , dy "0.875em"
         ]
@@ -155,12 +171,13 @@ view state =
         , Html.Attributes.style "width" "100%"
         , Html.Attributes.style "height" "100%"
         ]
-        [ viewKanjis state.tiles state.gridSize ]
+        [ viewKanjis state.tiles state.gridSize state.time ]
 
 
 subscriptions : Model -> Sub Msg
 subscriptions state =
     Sub.batch
         [ Browser.Events.onResize (\w h -> WindowResize (toFloat w) (toFloat h))
+        , Browser.Events.onAnimationFrameDelta Tick
         , Time.every (10.0 * 1000) ShuffleTime
         ]

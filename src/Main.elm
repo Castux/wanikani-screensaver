@@ -66,7 +66,7 @@ update msg screen =
                 nextState =
                     case ( updatedState.aspect, updatedState.kanjis ) of
                         ( Just aspect, Just kanjis ) ->
-                            Kanji (KanjiScreen.init aspect kanjis Nothing)
+                            Kanji (KanjiScreen.init aspect kanjis)
 
                         _ ->
                             Loading updatedState
