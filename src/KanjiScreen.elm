@@ -17,15 +17,24 @@ type Msg
     | Tick Posix
 
 
+type alias Tile =
+    ( KanjiData, Int, ( Int, Int ) )
+
+
 type alias Model =
     { aspect : Float
-    , kanjis : List KanjiData
-    , seed : Random.Seed
+    , tiles : List Tile
+    , gridSize : ( Int, Int )
     }
 
 
-init aspect kanjis =
-    Model aspect kanjis (Random.initialSeed 0)
+init : Float -> List KanjiData -> Maybe Random.Seed -> Model
+init aspect kanjis maybeSeed =
+    let
+        ( tiles, gridSize ) =
+            shuffle kanjis aspect (Maybe.withDefault (Random.initialSeed 0) maybeSeed)
+    in
+    Model aspect tiles gridSize
 
 
 referenceScale : Int
@@ -64,24 +73,34 @@ sizing srs =
             0
 
 
+shuffle : List KanjiData -> Float -> Random.Seed -> ( List Tile, ( Int, Int ) )
+shuffle kanjis aspect seed =
+    kanjis
+        |> List.map (\kd -> ( kd, sizing kd.srs ))
+        |> (\l -> Layout.computeLayout l aspect seed)
+
+
 update : Model -> Msg -> ( Model, Cmd Msg )
 update model msg =
+    let
+        kanjis =
+            List.map (\( a, b, c ) -> a) model.tiles
+    in
     case msg of
         WindowResize width height ->
-            ( { model | aspect = width / height }, Cmd.none )
+            ( init (width / height) kanjis Nothing, Cmd.none )
 
         Tick time ->
-            ( { model | seed = time |> Time.posixToMillis |> Random.initialSeed }, Cmd.none )
+            let
+                seed =
+                    Just <| Random.initialSeed (Time.posixToMillis time)
+            in
+            ( init model.aspect kanjis seed, Cmd.none )
 
 
-viewKanjis : List KanjiData -> Float -> Random.Seed -> Svg Msg
-viewKanjis kanjis aspect seed =
+viewKanjis : List Tile -> ( Int, Int ) -> Svg Msg
+viewKanjis tiles ( w, h ) =
     let
-        ( tiles, ( w, h ) ) =
-            kanjis
-                |> List.map (\kd -> ( kd, sizing kd.srs ))
-                |> (\l -> Layout.computeLayout l aspect seed)
-
         tw =
             String.fromInt <| referenceScale * w
 
@@ -108,7 +127,7 @@ kanjiColor k =
             "rgb(238, 238, 236)"
 
 
-viewKanji : ( KanjiData, Int, ( Int, Int ) ) -> Svg Msg
+viewKanji : Tile -> Svg Msg
 viewKanji ( data, size, ( x, y ) ) =
     let
         trans =
@@ -138,7 +157,7 @@ view state =
         , Html.Attributes.style "width" "100%"
         , Html.Attributes.style "height" "100%"
         ]
-        [ viewKanjis state.kanjis state.aspect state.seed ]
+        [ viewKanjis state.tiles state.gridSize ]
 
 
 subscriptions : Model -> Sub Msg

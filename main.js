@@ -505,11 +505,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.Q.y === region.X.y)
+	if (region.P.y === region.Y.y)
 	{
-		return 'on line ' + region.Q.y;
+		return 'on line ' + region.P.y;
 	}
-	return 'on lines ' + region.Q.y + ' through ' + region.X.y;
+	return 'on lines ' + region.P.y + ' through ' + region.Y.y;
 }
 
 
@@ -1836,21 +1836,21 @@ var _Http_toTask = F2(function(request, maybeProgress)
 			callback(_Scheduler_fail(elm$http$Http$Timeout));
 		});
 		xhr.addEventListener('load', function() {
-			callback(_Http_handleResponse(xhr, request.K.a));
+			callback(_Http_handleResponse(xhr, request.J.a));
 		});
 
 		try
 		{
-			xhr.open(request.M, request.aU, true);
+			xhr.open(request.M, request.aV, true);
 		}
 		catch (e)
 		{
-			return callback(_Scheduler_fail(elm$http$Http$BadUrl(request.aU)));
+			return callback(_Scheduler_fail(elm$http$Http$BadUrl(request.aV)));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		var body = request.at;
+		var body = request.au;
 		xhr.send(elm$http$Http$Internal$isStringBody(body)
 			? (xhr.setRequestHeader('Content-Type', body.a), body.b)
 			: body.a
@@ -1873,8 +1873,8 @@ function _Http_configureProgress(xhr, maybeProgress)
 			return;
 		}
 		_Scheduler_rawSpawn(maybeProgress.a({
-			au: event.loaded,
-			av: event.total
+			av: event.loaded,
+			aw: event.total
 		}));
 	});
 }
@@ -1886,7 +1886,7 @@ function _Http_configureRequest(xhr, request)
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
 
-	xhr.responseType = request.K.b;
+	xhr.responseType = request.J.b;
 	xhr.withCredentials = request.T;
 
 	elm$core$Maybe$isJust(request.S) && (xhr.timeout = request.S.a);
@@ -1921,10 +1921,10 @@ function _Http_handleResponse(xhr, responseToResult)
 function _Http_toResponse(xhr)
 {
 	return {
-		aU: xhr.responseURL,
-		aQ: { ay: xhr.status, k: xhr.statusText },
+		aV: xhr.responseURL,
+		aR: { az: xhr.status, k: xhr.statusText },
 		G: _Http_parseHeaders(xhr.getAllResponseHeaders()),
-		at: xhr.response
+		au: xhr.response
 	};
 }
 
@@ -2023,9 +2023,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aF,
-		impl.aT,
-		impl.aR,
+		impl.aG,
+		impl.aU,
+		impl.aS,
 		function() { return function() {} }
 	);
 });
@@ -2826,7 +2826,7 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		k: func(record.k),
-		R: record.R,
+		Q: record.Q,
 		O: record.O
 	}
 });
@@ -3096,7 +3096,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.k;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.R;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.Q;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
 			(tag == 2 ? value.b : tag == 3 && value.O) && event.preventDefault(),
@@ -4045,11 +4045,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aF,
-		impl.aT,
-		impl.aR,
+		impl.aG,
+		impl.aU,
+		impl.aS,
 		function(sendToApp, initialModel) {
-			var view = impl.aV;
+			var view = impl.aW;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -4081,12 +4081,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aF,
-		impl.aT,
-		impl.aR,
+		impl.aG,
+		impl.aU,
+		impl.aS,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.z && impl.z(sendToApp)
-			var view = impl.aV;
+			var view = impl.aW;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4094,12 +4094,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.at);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.au);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aS) && (_VirtualDom_doc.title = title = doc.aS);
+				(title !== doc.aT) && (_VirtualDom_doc.title = title = doc.aT);
 			});
 		}
 	);
@@ -4150,8 +4150,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aK;
-	var onUrlRequest = impl.aL;
+	var onUrlChange = impl.aL;
+	var onUrlRequest = impl.aM;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -4171,9 +4171,9 @@ function _Browser_application(impl)
 					var next = elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aj === next.aj
-							&& curr._ === next._
-							&& curr.ag.a === next.ag.a
+							&& curr.ak === next.ak
+							&& curr.ab === next.ab
+							&& curr.ah.a === next.ah.a
 						)
 							? elm$browser$Browser$Internal(next)
 							: elm$browser$Browser$External(href)
@@ -4181,13 +4181,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aF: function(flags)
+		aG: function(flags)
 		{
-			return A3(impl.aF, flags, _Browser_getUrl(), key);
+			return A3(impl.aG, flags, _Browser_getUrl(), key);
 		},
-		aV: impl.aV,
-		aT: impl.aT,
-		aR: impl.aR
+		aW: impl.aW,
+		aU: impl.aU,
+		aS: impl.aS
 	});
 }
 
@@ -4253,17 +4253,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aD: 'hidden', x: 'visibilitychange' }
+		? { aE: 'hidden', x: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aD: 'mozHidden', x: 'mozvisibilitychange' }
+		? { aE: 'mozHidden', x: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aD: 'msHidden', x: 'msvisibilitychange' }
+		? { aE: 'msHidden', x: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aD: 'webkitHidden', x: 'webkitvisibilitychange' }
-		: { aD: 'hidden', x: 'visibilitychange' };
+		? { aE: 'webkitHidden', x: 'webkitvisibilitychange' }
+		: { aE: 'hidden', x: 'visibilitychange' };
 }
 
 
@@ -4344,12 +4344,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		an: _Browser_getScene(),
-		aq: {
+		ao: _Browser_getScene(),
+		ar: {
 			H: _Browser_window.pageXOffset,
 			I: _Browser_window.pageYOffset,
-			aW: _Browser_doc.documentElement.clientWidth,
-			aC: _Browser_doc.documentElement.clientHeight
+			aX: _Browser_doc.documentElement.clientWidth,
+			aD: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4359,8 +4359,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aW: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		aC: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aX: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		aD: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4383,15 +4383,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			an: {
-				aW: node.scrollWidth,
-				aC: node.scrollHeight
+			ao: {
+				aX: node.scrollWidth,
+				aD: node.scrollHeight
 			},
-			aq: {
+			ar: {
 				H: node.scrollLeft,
 				I: node.scrollTop,
-				aW: node.clientWidth,
-				aC: node.clientHeight
+				aX: node.clientWidth,
+				aD: node.clientHeight
 			}
 		};
 	});
@@ -4421,18 +4421,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			an: _Browser_getScene(),
-			aq: {
+			ao: _Browser_getScene(),
+			ar: {
 				H: x,
 				I: y,
-				aW: _Browser_doc.documentElement.clientWidth,
-				aC: _Browser_doc.documentElement.clientHeight
+				aX: _Browser_doc.documentElement.clientWidth,
+				aD: _Browser_doc.documentElement.clientHeight
 			},
-			az: {
+			aA: {
 				H: x + rect.left,
 				I: y + rect.top,
-				aW: rect.width,
-				aC: rect.height
+				aX: rect.width,
+				aD: rect.height
 			}
 		};
 	});
@@ -4771,7 +4771,7 @@ var author$project$Api$allLevels = A2(
 		A2(elm$core$List$range, 1, 60)));
 var author$project$KanjiData$KanjiData = F6(
 	function (level, character, meaning, onyomi, kunyomi, srs) {
-		return {ax: character, aG: kunyomi, aH: level, aI: meaning, aM: onyomi, aP: srs};
+		return {ay: character, aH: kunyomi, aI: level, aJ: meaning, aN: onyomi, aQ: srs};
 	});
 var elm$core$Array$branchFactor = 32;
 var elm$core$Array$Array_elm_builtin = F4(
@@ -5707,7 +5707,7 @@ var elm$json$Json$Decode$decodeString = _Json_runOnString;
 var elm$http$Http$expectJson = function (decoder) {
 	return elm$http$Http$expectStringResponse(
 		function (response) {
-			var _n0 = A2(elm$json$Json$Decode$decodeString, decoder, response.at);
+			var _n0 = A2(elm$json$Json$Decode$decodeString, decoder, response.au);
 			if (_n0.$ === 1) {
 				var decodeError = _n0.a;
 				return elm$core$Result$Err(
@@ -5727,12 +5727,12 @@ var elm$http$Http$get = F2(
 	function (url, decoder) {
 		return elm$http$Http$request(
 			{
-				at: elm$http$Http$emptyBody,
-				K: elm$http$Http$expectJson(decoder),
+				au: elm$http$Http$emptyBody,
+				J: elm$http$Http$expectJson(decoder),
 				G: _List_Nil,
 				M: 'GET',
 				S: elm$core$Maybe$Nothing,
-				aU: url,
+				aV: url,
 				T: false
 			});
 	});
@@ -5853,7 +5853,7 @@ var author$project$LoadingScreen$WindowResize = F2(
 		return {$: 1, a: a, b: b};
 	});
 var author$project$LoadingScreen$viewportToSize = function (vp) {
-	return A2(author$project$LoadingScreen$WindowResize, vp.aq.aW, vp.aq.aC);
+	return A2(author$project$LoadingScreen$WindowResize, vp.ar.aX, vp.ar.aD);
 };
 var elm$browser$Browser$External = function (a) {
 	return {$: 1, a: a};
@@ -5914,7 +5914,7 @@ var elm$core$String$contains = _String_contains;
 var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {Z: fragment, _: host, ae: path, ag: port_, aj: protocol, ak: query};
+		return {_: fragment, ab: host, af: path, ah: port_, ak: protocol, al: query};
 	});
 var elm$url$Url$chompBeforePath = F5(
 	function (protocol, path, params, frag, str) {
@@ -6026,7 +6026,7 @@ var author$project$LoadingScreen$initCommands = elm$core$Platform$Cmd$batch(
 			author$project$Api$getData(author$project$LoadingScreen$ReceivedKanjis),
 			A2(elm$core$Task$perform, author$project$LoadingScreen$viewportToSize, elm$browser$Browser$Dom$getViewport)
 		]));
-var author$project$LoadingScreen$initState = {J: elm$core$Maybe$Nothing, aa: elm$core$Maybe$Nothing};
+var author$project$LoadingScreen$initState = {V: elm$core$Maybe$Nothing, K: elm$core$Maybe$Nothing};
 var author$project$LoadingScreen$init = _Utils_Tuple2(author$project$LoadingScreen$initState, author$project$LoadingScreen$initCommands);
 var author$project$Main$Loading = function (a) {
 	return {$: 0, a: a};
@@ -6060,7 +6060,7 @@ var elm$browser$Browser$Events$MySub = F3(
 	});
 var elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {af: pids, ao: subs};
+		return {ag: pids, ap: subs};
 	});
 var elm$browser$Browser$Events$init = elm$core$Task$succeed(
 	A2(elm$browser$Browser$Events$State, _List_Nil, elm$core$Dict$empty));
@@ -6082,7 +6082,7 @@ var elm$browser$Browser$Events$addKey = function (sub) {
 };
 var elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
-		return {Y: event, ab: key};
+		return {Z: event, ac: key};
 	});
 var elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var elm$browser$Browser$Events$spawn = F3(
@@ -6256,7 +6256,7 @@ var elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.af,
+			state.ag,
 			elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, elm$core$Dict$empty, _List_Nil));
 		var deadPids = _n0.a;
@@ -6302,8 +6302,8 @@ var elm$core$List$filterMap = F2(
 	});
 var elm$browser$Browser$Events$onSelfMsg = F3(
 	function (router, _n0, state) {
-		var key = _n0.ab;
-		var event = _n0.Y;
+		var key = _n0.ac;
+		var event = _n0.Z;
 		var toMessage = function (_n2) {
 			var subKey = _n2.a;
 			var _n3 = _n2.b;
@@ -6312,7 +6312,7 @@ var elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _n3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : elm$core$Maybe$Nothing;
 		};
-		var messages = A2(elm$core$List$filterMap, toMessage, state.ao);
+		var messages = A2(elm$core$List$filterMap, toMessage, state.ap);
 		return A2(
 			elm$core$Task$andThen,
 			function (_n1) {
@@ -6363,7 +6363,7 @@ var elm$time$Time$Every = F2(
 	});
 var elm$time$Time$State = F2(
 	function (taggers, processes) {
-		return {ai: processes, ap: taggers};
+		return {aj: processes, aq: taggers};
 	});
 var elm$time$Time$init = elm$core$Task$succeed(
 	A2(elm$time$Time$State, elm$core$Dict$empty, elm$core$Dict$empty));
@@ -6425,7 +6425,7 @@ var elm$time$Time$spawnHelp = F3(
 	});
 var elm$time$Time$onEffects = F3(
 	function (router, subs, _n0) {
-		var processes = _n0.ai;
+		var processes = _n0.aj;
 		var rightStep = F3(
 			function (_n6, id, _n7) {
 				var spawns = _n7.a;
@@ -6494,7 +6494,7 @@ var elm$time$Time$millisToPosix = elm$core$Basics$identity;
 var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
 var elm$time$Time$onSelfMsg = F3(
 	function (router, interval, state) {
-		var _n0 = A2(elm$core$Dict$get, interval, state.ap);
+		var _n0 = A2(elm$core$Dict$get, interval, state.aq);
 		if (_n0.$ === 1) {
 			return elm$core$Task$succeed(state);
 		} else {
@@ -6578,132 +6578,9 @@ var author$project$Main$subscriptions = function (screen) {
 	}
 };
 var author$project$KanjiScreen$Model = F3(
-	function (aspect, kanjis, seed) {
-		return {J: aspect, aa: kanjis, P: seed};
+	function (aspect, tiles, gridSize) {
+		return {V: aspect, aa: gridSize, R: tiles};
 	});
-var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var elm$random$Random$next = function (_n0) {
-	var state0 = _n0.a;
-	var incr = _n0.b;
-	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
-};
-var elm$random$Random$initialSeed = function (x) {
-	var _n0 = elm$random$Random$next(
-		A2(elm$random$Random$Seed, 0, 1013904223));
-	var state1 = _n0.a;
-	var incr = _n0.b;
-	var state2 = (state1 + x) >>> 0;
-	return elm$random$Random$next(
-		A2(elm$random$Random$Seed, state2, incr));
-};
-var author$project$KanjiScreen$init = F2(
-	function (aspect, kanjis) {
-		return A3(
-			author$project$KanjiScreen$Model,
-			aspect,
-			kanjis,
-			elm$random$Random$initialSeed(0));
-	});
-var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
-var elm$time$Time$posixToMillis = function (_n0) {
-	var millis = _n0;
-	return millis;
-};
-var author$project$KanjiScreen$update = F2(
-	function (model, msg) {
-		if (!msg.$) {
-			var width = msg.a;
-			var height = msg.b;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{J: width / height}),
-				elm$core$Platform$Cmd$none);
-		} else {
-			var time = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{
-						P: elm$random$Random$initialSeed(
-							elm$time$Time$posixToMillis(time))
-					}),
-				elm$core$Platform$Cmd$none);
-		}
-	});
-var author$project$LoadingScreen$update = F2(
-	function (msg, state) {
-		if (!msg.$) {
-			if (!msg.a.$) {
-				var kanjis = msg.a.a;
-				return _Utils_update(
-					state,
-					{
-						aa: elm$core$Maybe$Just(kanjis)
-					});
-			} else {
-				var error = msg.a.a;
-				return state;
-			}
-		} else {
-			var width = msg.a;
-			var height = msg.b;
-			return _Utils_update(
-				state,
-				{
-					J: elm$core$Maybe$Just(width / height)
-				});
-		}
-	});
-var author$project$Main$Kanji = function (a) {
-	return {$: 1, a: a};
-};
-var author$project$Main$update = F2(
-	function (msg, screen) {
-		var _n0 = _Utils_Tuple2(msg, screen);
-		_n0$2:
-		while (true) {
-			if (!_n0.a.$) {
-				if (!_n0.b.$) {
-					var submsg = _n0.a.a;
-					var model = _n0.b.a;
-					var updatedState = A2(author$project$LoadingScreen$update, submsg, model);
-					var nextState = function () {
-						var _n1 = _Utils_Tuple2(updatedState.J, updatedState.aa);
-						if ((!_n1.a.$) && (!_n1.b.$)) {
-							var aspect = _n1.a.a;
-							var kanjis = _n1.b.a;
-							return author$project$Main$Kanji(
-								A2(author$project$KanjiScreen$init, aspect, kanjis));
-						} else {
-							return author$project$Main$Loading(updatedState);
-						}
-					}();
-					return _Utils_Tuple2(nextState, elm$core$Platform$Cmd$none);
-				} else {
-					break _n0$2;
-				}
-			} else {
-				if (_n0.b.$ === 1) {
-					var submsg = _n0.a.a;
-					var model = _n0.b.a;
-					return A3(
-						author$project$Main$wrap,
-						author$project$Main$Kanji,
-						author$project$Main$KanjiMsg,
-						A2(author$project$KanjiScreen$update, model, submsg));
-				} else {
-					break _n0$2;
-				}
-			}
-		}
-		return _Utils_Tuple2(screen, elm$core$Platform$Cmd$none);
-	});
-var author$project$KanjiScreen$referenceScale = 100;
 var author$project$KanjiScreen$sizing = function (srs) {
 	_n0$8:
 	while (true) {
@@ -6733,43 +6610,6 @@ var author$project$KanjiScreen$sizing = function (srs) {
 		}
 	}
 	return 0;
-};
-var author$project$KanjiScreen$kanjiColor = function (k) {
-	var _n0 = k.aP;
-	if (_n0.$ === 1) {
-		return '#202020';
-	} else {
-		var level = _n0.a;
-		return 'rgb(238, 238, 236)';
-	}
-};
-var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var elm$svg$Svg$text = elm$virtual_dom$VirtualDom$text;
-var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
-var elm$svg$Svg$text_ = elm$svg$Svg$trustedNode('text');
-var elm$svg$Svg$Attributes$dy = _VirtualDom_attribute('dy');
-var elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
-var elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
-var author$project$KanjiScreen$viewKanji = function (_n0) {
-	var data = _n0.a;
-	var size = _n0.b;
-	var _n1 = _n0.c;
-	var x = _n1.a;
-	var y = _n1.b;
-	var trans = 'translate(' + (elm$core$String$fromInt(x * author$project$KanjiScreen$referenceScale) + (' ' + (elm$core$String$fromInt(y * author$project$KanjiScreen$referenceScale) + (')' + (' scale(' + (elm$core$String$fromInt(size) + ') '))))));
-	return A2(
-		elm$svg$Svg$text_,
-		_List_fromArray(
-			[
-				elm$svg$Svg$Attributes$fill(
-				author$project$KanjiScreen$kanjiColor(data)),
-				elm$svg$Svg$Attributes$transform(trans),
-				elm$svg$Svg$Attributes$dy('0.875em')
-			]),
-		_List_fromArray(
-			[
-				elm$svg$Svg$text(data.ax)
-			]));
 };
 var elm$core$Basics$sqrt = _Basics_sqrt;
 var author$project$Layout$bestFit = F2(
@@ -7132,6 +6972,16 @@ var elm$core$Basics$negate = function (n) {
 	return -n;
 };
 var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var elm$random$Random$next = function (_n0) {
+	var state0 = _n0.a;
+	var incr = _n0.b;
+	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
 var elm$core$Bitwise$xor = _Bitwise_xor;
 var elm$random$Random$peel = function (_n0) {
 	var state = _n0.a;
@@ -7328,6 +7178,190 @@ var author$project$Layout$computeLayout = F3(
 			A3(author$project$Layout$randomFill, grid, sorted, seed),
 			_Utils_Tuple2(w, h));
 	});
+var author$project$KanjiScreen$shuffle = F3(
+	function (kanjis, aspect, seed) {
+		return function (l) {
+			return A3(author$project$Layout$computeLayout, l, aspect, seed);
+		}(
+			A2(
+				elm$core$List$map,
+				function (kd) {
+					return _Utils_Tuple2(
+						kd,
+						author$project$KanjiScreen$sizing(kd.aQ));
+				},
+				kanjis));
+	});
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (!maybe.$) {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var elm$random$Random$initialSeed = function (x) {
+	var _n0 = elm$random$Random$next(
+		A2(elm$random$Random$Seed, 0, 1013904223));
+	var state1 = _n0.a;
+	var incr = _n0.b;
+	var state2 = (state1 + x) >>> 0;
+	return elm$random$Random$next(
+		A2(elm$random$Random$Seed, state2, incr));
+};
+var author$project$KanjiScreen$init = F3(
+	function (aspect, kanjis, maybeSeed) {
+		var _n0 = A3(
+			author$project$KanjiScreen$shuffle,
+			kanjis,
+			aspect,
+			A2(
+				elm$core$Maybe$withDefault,
+				elm$random$Random$initialSeed(0),
+				maybeSeed));
+		var tiles = _n0.a;
+		var gridSize = _n0.b;
+		return A3(author$project$KanjiScreen$Model, aspect, tiles, gridSize);
+	});
+var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
+var elm$time$Time$posixToMillis = function (_n0) {
+	var millis = _n0;
+	return millis;
+};
+var author$project$KanjiScreen$update = F2(
+	function (model, msg) {
+		var kanjis = A2(
+			elm$core$List$map,
+			function (_n1) {
+				var a = _n1.a;
+				var b = _n1.b;
+				var c = _n1.c;
+				return a;
+			},
+			model.R);
+		if (!msg.$) {
+			var width = msg.a;
+			var height = msg.b;
+			return _Utils_Tuple2(
+				A3(author$project$KanjiScreen$init, width / height, kanjis, elm$core$Maybe$Nothing),
+				elm$core$Platform$Cmd$none);
+		} else {
+			var time = msg.a;
+			var seed = elm$core$Maybe$Just(
+				elm$random$Random$initialSeed(
+					elm$time$Time$posixToMillis(time)));
+			return _Utils_Tuple2(
+				A3(author$project$KanjiScreen$init, model.V, kanjis, seed),
+				elm$core$Platform$Cmd$none);
+		}
+	});
+var author$project$LoadingScreen$update = F2(
+	function (msg, state) {
+		if (!msg.$) {
+			if (!msg.a.$) {
+				var kanjis = msg.a.a;
+				return _Utils_update(
+					state,
+					{
+						K: elm$core$Maybe$Just(kanjis)
+					});
+			} else {
+				var error = msg.a.a;
+				return state;
+			}
+		} else {
+			var width = msg.a;
+			var height = msg.b;
+			return _Utils_update(
+				state,
+				{
+					V: elm$core$Maybe$Just(width / height)
+				});
+		}
+	});
+var author$project$Main$Kanji = function (a) {
+	return {$: 1, a: a};
+};
+var author$project$Main$update = F2(
+	function (msg, screen) {
+		var _n0 = _Utils_Tuple2(msg, screen);
+		_n0$2:
+		while (true) {
+			if (!_n0.a.$) {
+				if (!_n0.b.$) {
+					var submsg = _n0.a.a;
+					var model = _n0.b.a;
+					var updatedState = A2(author$project$LoadingScreen$update, submsg, model);
+					var nextState = function () {
+						var _n1 = _Utils_Tuple2(updatedState.V, updatedState.K);
+						if ((!_n1.a.$) && (!_n1.b.$)) {
+							var aspect = _n1.a.a;
+							var kanjis = _n1.b.a;
+							return author$project$Main$Kanji(
+								A3(author$project$KanjiScreen$init, aspect, kanjis, elm$core$Maybe$Nothing));
+						} else {
+							return author$project$Main$Loading(updatedState);
+						}
+					}();
+					return _Utils_Tuple2(nextState, elm$core$Platform$Cmd$none);
+				} else {
+					break _n0$2;
+				}
+			} else {
+				if (_n0.b.$ === 1) {
+					var submsg = _n0.a.a;
+					var model = _n0.b.a;
+					return A3(
+						author$project$Main$wrap,
+						author$project$Main$Kanji,
+						author$project$Main$KanjiMsg,
+						A2(author$project$KanjiScreen$update, model, submsg));
+				} else {
+					break _n0$2;
+				}
+			}
+		}
+		return _Utils_Tuple2(screen, elm$core$Platform$Cmd$none);
+	});
+var author$project$KanjiScreen$referenceScale = 100;
+var author$project$KanjiScreen$kanjiColor = function (k) {
+	var _n0 = k.aQ;
+	if (_n0.$ === 1) {
+		return '#202020';
+	} else {
+		var level = _n0.a;
+		return 'rgb(238, 238, 236)';
+	}
+};
+var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var elm$svg$Svg$text = elm$virtual_dom$VirtualDom$text;
+var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var elm$svg$Svg$text_ = elm$svg$Svg$trustedNode('text');
+var elm$svg$Svg$Attributes$dy = _VirtualDom_attribute('dy');
+var elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
+var elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
+var author$project$KanjiScreen$viewKanji = function (_n0) {
+	var data = _n0.a;
+	var size = _n0.b;
+	var _n1 = _n0.c;
+	var x = _n1.a;
+	var y = _n1.b;
+	var trans = 'translate(' + (elm$core$String$fromInt(x * author$project$KanjiScreen$referenceScale) + (' ' + (elm$core$String$fromInt(y * author$project$KanjiScreen$referenceScale) + (')' + (' scale(' + (elm$core$String$fromInt(size) + ') '))))));
+	return A2(
+		elm$svg$Svg$text_,
+		_List_fromArray(
+			[
+				elm$svg$Svg$Attributes$fill(
+				author$project$KanjiScreen$kanjiColor(data)),
+				elm$svg$Svg$Attributes$transform(trans),
+				elm$svg$Svg$Attributes$dy('0.875em')
+			]),
+		_List_fromArray(
+			[
+				elm$svg$Svg$text(data.ay)
+			]));
+};
 var elm$core$List$singleton = function (value) {
 	return _List_fromArray(
 		[value]);
@@ -7337,25 +7371,12 @@ var elm$svg$Svg$svg = elm$svg$Svg$trustedNode('svg');
 var elm$svg$Svg$Attributes$fontSize = _VirtualDom_attribute('font-size');
 var elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
 var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
-var author$project$KanjiScreen$viewKanjis = F3(
-	function (kanjis, aspect, seed) {
-		var _n0 = function (l) {
-			return A3(author$project$Layout$computeLayout, l, aspect, seed);
-		}(
-			A2(
-				elm$core$List$map,
-				function (kd) {
-					return _Utils_Tuple2(
-						kd,
-						author$project$KanjiScreen$sizing(kd.aP));
-				},
-				kanjis));
-		var tiles = _n0.a;
-		var _n1 = _n0.b;
-		var w = _n1.a;
-		var h = _n1.b;
-		var th = elm$core$String$fromInt(author$project$KanjiScreen$referenceScale * h);
+var author$project$KanjiScreen$viewKanjis = F2(
+	function (tiles, _n0) {
+		var w = _n0.a;
+		var h = _n0.b;
 		var tw = elm$core$String$fromInt(author$project$KanjiScreen$referenceScale * w);
+		var th = elm$core$String$fromInt(author$project$KanjiScreen$referenceScale * h);
 		return A2(
 			elm$svg$Svg$svg,
 			_List_fromArray(
@@ -7389,7 +7410,7 @@ var author$project$KanjiScreen$view = function (state) {
 			]),
 		_List_fromArray(
 			[
-				A3(author$project$KanjiScreen$viewKanjis, state.aa, state.J, state.P)
+				A2(author$project$KanjiScreen$viewKanjis, state.R, state.aa)
 			]));
 };
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
@@ -7439,6 +7460,6 @@ var author$project$Main$view = function (screen) {
 };
 var elm$browser$Browser$element = _Browser_element;
 var author$project$Main$main = elm$browser$Browser$element(
-	{aF: author$project$Main$init, aR: author$project$Main$subscriptions, aT: author$project$Main$update, aV: author$project$Main$view});
+	{aG: author$project$Main$init, aS: author$project$Main$subscriptions, aU: author$project$Main$update, aW: author$project$Main$view});
 _Platform_export({'Main':{'init':author$project$Main$main(
 	elm$json$Json$Decode$succeed(0))(0)}});}(this));
