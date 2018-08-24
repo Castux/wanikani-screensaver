@@ -23,11 +23,11 @@ allLevels =
     List.range 1 60 |> List.map String.fromInt |> String.join ","
 
 
-getData : (Result Http.Error (List KanjiData) -> msg) -> Cmd msg
-getData msg =
+getData : (Result Http.Error (List KanjiData) -> msg) -> String -> Cmd msg
+getData msg key =
     let
         url =
-            "https://www.wanikani.com/api/user/5e63183f2d2d844f0aef5c0665676a71/kanji/" ++ allLevels
+            "https://www.wanikani.com/api/user/" ++ key ++ "/kanji/" ++ allLevels
 
         req =
             Http.get url requestDecode

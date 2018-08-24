@@ -37,17 +37,30 @@ viewportToSize vp =
         vp.viewport.height
 
 
-initCommands : Cmd Msg
-initCommands =
+initCommands : String -> Cmd Msg
+initCommands key =
     Cmd.batch
-        [ Api.getData ReceivedKanjis
+        [ Api.getData ReceivedKanjis key
         , Task.perform viewportToSize Browser.Dom.getViewport
         ]
 
 
+errorState : String -> Model
+errorState msg =
+    { kanjis = Nothing
+    , aspect = Nothing
+    , errorMsg = Just msg
+    }
+
+
 init : Maybe String -> ( Model, Cmd Msg )
 init maybeKey =
-    ( initState, initCommands )
+    case maybeKey of
+        Just key ->
+            ( initState, initCommands key )
+
+        Nothing ->
+            ( errorState "(屮｀∀´)屮", Cmd.none )
 
 
 update : Msg -> Model -> Model
@@ -57,7 +70,7 @@ update msg state =
             { state | kanjis = Just kanjis }
 
         ReceivedKanjis (Err error) ->
-            state
+            errorState "(◕︿◕✿)"
 
         WindowResize width height ->
             { state | aspect = Just (width / height) }
@@ -75,9 +88,10 @@ view state =
         [ Html.div
             [ style "color" "white"
             , style "font-size" "20vmin"
+            , style "text-align" "center"
             , style "margin" "auto"
             ]
-            [ Html.text "ロード中" ]
+            [ Html.text <| Maybe.withDefault "ロード中" state.errorMsg ]
         ]
 
 

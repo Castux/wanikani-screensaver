@@ -505,11 +505,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.P.y === region.Y.y)
+	if (region.Q.y === region.Z.y)
 	{
-		return 'on line ' + region.P.y;
+		return 'on line ' + region.Q.y;
 	}
-	return 'on lines ' + region.P.y + ' through ' + region.Y.y;
+	return 'on lines ' + region.Q.y + ' through ' + region.Z.y;
 }
 
 
@@ -1836,12 +1836,12 @@ var _Http_toTask = F2(function(request, maybeProgress)
 			callback(_Scheduler_fail(elm$http$Http$Timeout));
 		});
 		xhr.addEventListener('load', function() {
-			callback(_Http_handleResponse(xhr, request.J.a));
+			callback(_Http_handleResponse(xhr, request.L.a));
 		});
 
 		try
 		{
-			xhr.open(request.M, request.aW, true);
+			xhr.open(request.N, request.aW, true);
 		}
 		catch (e)
 		{
@@ -1881,15 +1881,15 @@ function _Http_configureProgress(xhr, maybeProgress)
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.G; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.H; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
 
-	xhr.responseType = request.J.b;
-	xhr.withCredentials = request.T;
+	xhr.responseType = request.L.b;
+	xhr.withCredentials = request.U;
 
-	elm$core$Maybe$isJust(request.S) && (xhr.timeout = request.S.a);
+	elm$core$Maybe$isJust(request.T) && (xhr.timeout = request.T.a);
 }
 
 
@@ -1923,7 +1923,7 @@ function _Http_toResponse(xhr)
 	return {
 		aW: xhr.responseURL,
 		aS: { aA: xhr.status, k: xhr.statusText },
-		G: _Http_parseHeaders(xhr.getAllResponseHeaders()),
+		H: _Http_parseHeaders(xhr.getAllResponseHeaders()),
 		av: xhr.response
 	};
 }
@@ -2826,8 +2826,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		k: func(record.k),
-		Q: record.Q,
-		O: record.O
+		R: record.R,
+		P: record.P
 	}
 });
 
@@ -3096,10 +3096,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.k;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.Q;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.R;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.O) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.P) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -4346,8 +4346,8 @@ function _Browser_getViewport()
 	return {
 		ap: _Browser_getScene(),
 		as: {
-			H: _Browser_window.pageXOffset,
-			I: _Browser_window.pageYOffset,
+			J: _Browser_window.pageXOffset,
+			K: _Browser_window.pageYOffset,
 			aY: _Browser_doc.documentElement.clientWidth,
 			aE: _Browser_doc.documentElement.clientHeight
 		}
@@ -4388,8 +4388,8 @@ function _Browser_getViewportOf(id)
 				aE: node.scrollHeight
 			},
 			as: {
-				H: node.scrollLeft,
-				I: node.scrollTop,
+				J: node.scrollLeft,
+				K: node.scrollTop,
 				aY: node.clientWidth,
 				aE: node.clientHeight
 			}
@@ -4423,14 +4423,14 @@ function _Browser_getElement(id)
 		return {
 			ap: _Browser_getScene(),
 			as: {
-				H: x,
-				I: y,
+				J: x,
+				K: y,
 				aY: _Browser_doc.documentElement.clientWidth,
 				aE: _Browser_doc.documentElement.clientHeight
 			},
 			aB: {
-				H: x + rect.left,
-				I: y + rect.top,
+				J: x + rect.left,
+				K: y + rect.top,
 				aY: rect.width,
 				aE: rect.height
 			}
@@ -4567,6 +4567,17 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 {
 	return a >>> offset;
 });
+var elm$core$Maybe$Just = function (a) {
+	return {$: 0, a: a};
+};
+var elm$core$Maybe$Nothing = {$: 1};
+var author$project$LoadingScreen$errorState = function (msg) {
+	return {
+		W: elm$core$Maybe$Nothing,
+		G: elm$core$Maybe$Just(msg),
+		I: elm$core$Maybe$Nothing
+	};
+};
 var elm$core$Basics$apR = F2(
 	function (x, f) {
 		return f(x);
@@ -4767,10 +4778,6 @@ var elm$core$List$range = F2(
 	function (lo, hi) {
 		return A3(elm$core$List$rangeHelp, lo, hi, _List_Nil);
 	});
-var elm$core$Maybe$Just = function (a) {
-	return {$: 0, a: a};
-};
-var elm$core$Maybe$Nothing = {$: 1};
 var elm$core$String$fromInt = _String_fromNumber;
 var elm$core$String$join = F2(
 	function (sep, chunks) {
@@ -5745,12 +5752,12 @@ var elm$http$Http$get = F2(
 		return elm$http$Http$request(
 			{
 				av: elm$http$Http$emptyBody,
-				J: elm$http$Http$expectJson(decoder),
-				G: _List_Nil,
-				M: 'GET',
-				S: elm$core$Maybe$Nothing,
+				L: elm$http$Http$expectJson(decoder),
+				H: _List_Nil,
+				N: 'GET',
+				T: elm$core$Maybe$Nothing,
 				aW: url,
-				T: false
+				U: false
 			});
 	});
 var elm$core$Basics$composeL = F3(
@@ -5857,11 +5864,12 @@ var elm$http$Http$send = F2(
 			resultToMessage,
 			elm$http$Http$toTask(request_));
 	});
-var author$project$Api$getData = function (msg) {
-	var url = 'https://www.wanikani.com/api/user/5e63183f2d2d844f0aef5c0665676a71/kanji/' + author$project$Api$allLevels;
-	var req = A2(elm$http$Http$get, url, author$project$Api$requestDecode);
-	return A2(elm$http$Http$send, msg, req);
-};
+var author$project$Api$getData = F2(
+	function (msg, key) {
+		var url = 'https://www.wanikani.com/api/user/' + (key + ('/kanji/' + author$project$Api$allLevels));
+		var req = A2(elm$http$Http$get, url, author$project$Api$requestDecode);
+		return A2(elm$http$Http$send, msg, req);
+	});
 var author$project$LoadingScreen$ReceivedKanjis = function (a) {
 	return {$: 0, a: a};
 };
@@ -6037,15 +6045,27 @@ var elm$url$Url$fromString = function (str) {
 };
 var elm$browser$Browser$Dom$getViewport = _Browser_withWindow(_Browser_getViewport);
 var elm$core$Platform$Cmd$batch = _Platform_batch;
-var author$project$LoadingScreen$initCommands = elm$core$Platform$Cmd$batch(
-	_List_fromArray(
-		[
-			author$project$Api$getData(author$project$LoadingScreen$ReceivedKanjis),
-			A2(elm$core$Task$perform, author$project$LoadingScreen$viewportToSize, elm$browser$Browser$Dom$getViewport)
-		]));
-var author$project$LoadingScreen$initState = {V: elm$core$Maybe$Nothing, Z: elm$core$Maybe$Nothing, K: elm$core$Maybe$Nothing};
+var author$project$LoadingScreen$initCommands = function (key) {
+	return elm$core$Platform$Cmd$batch(
+		_List_fromArray(
+			[
+				A2(author$project$Api$getData, author$project$LoadingScreen$ReceivedKanjis, key),
+				A2(elm$core$Task$perform, author$project$LoadingScreen$viewportToSize, elm$browser$Browser$Dom$getViewport)
+			]));
+};
+var author$project$LoadingScreen$initState = {W: elm$core$Maybe$Nothing, G: elm$core$Maybe$Nothing, I: elm$core$Maybe$Nothing};
+var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var author$project$LoadingScreen$init = function (maybeKey) {
-	return _Utils_Tuple2(author$project$LoadingScreen$initState, author$project$LoadingScreen$initCommands);
+	if (!maybeKey.$) {
+		var key = maybeKey.a;
+		return _Utils_Tuple2(
+			author$project$LoadingScreen$initState,
+			author$project$LoadingScreen$initCommands(key));
+	} else {
+		return _Utils_Tuple2(
+			author$project$LoadingScreen$errorState('(屮｀∀´)屮'),
+			elm$core$Platform$Cmd$none);
+	}
 };
 var author$project$Main$Loading = function (a) {
 	return {$: 0, a: a};
@@ -6803,7 +6823,7 @@ var author$project$Main$subscriptions = function (screen) {
 };
 var author$project$KanjiScreen$Model = F3(
 	function (aspect, tiles, gridSize) {
-		return {V: aspect, ab: gridSize, R: tiles};
+		return {W: aspect, ab: gridSize, S: tiles};
 	});
 var author$project$KanjiScreen$sizing = function (srs) {
 	_n0$8:
@@ -7432,7 +7452,6 @@ var author$project$KanjiScreen$init = F3(
 		var gridSize = _n0.b;
 		return A3(author$project$KanjiScreen$Model, aspect, tiles, gridSize);
 	});
-var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var elm$time$Time$posixToMillis = function (_n0) {
 	var millis = _n0;
 	return millis;
@@ -7447,7 +7466,7 @@ var author$project$KanjiScreen$update = F2(
 				var c = _n1.c;
 				return a;
 			},
-			model.R);
+			model.S);
 		if (!msg.$) {
 			var width = msg.a;
 			var height = msg.b;
@@ -7460,7 +7479,7 @@ var author$project$KanjiScreen$update = F2(
 				elm$random$Random$initialSeed(
 					elm$time$Time$posixToMillis(time)));
 			return _Utils_Tuple2(
-				A3(author$project$KanjiScreen$init, model.V, kanjis, seed),
+				A3(author$project$KanjiScreen$init, model.W, kanjis, seed),
 				elm$core$Platform$Cmd$none);
 		}
 	});
@@ -7472,11 +7491,11 @@ var author$project$LoadingScreen$update = F2(
 				return _Utils_update(
 					state,
 					{
-						K: elm$core$Maybe$Just(kanjis)
+						I: elm$core$Maybe$Just(kanjis)
 					});
 			} else {
 				var error = msg.a.a;
-				return state;
+				return author$project$LoadingScreen$errorState('(◕︿◕✿)');
 			}
 		} else {
 			var width = msg.a;
@@ -7484,7 +7503,7 @@ var author$project$LoadingScreen$update = F2(
 			return _Utils_update(
 				state,
 				{
-					V: elm$core$Maybe$Just(width / height)
+					W: elm$core$Maybe$Just(width / height)
 				});
 		}
 	});
@@ -7502,7 +7521,7 @@ var author$project$Main$update = F2(
 					var model = _n0.b.a;
 					var updatedState = A2(author$project$LoadingScreen$update, submsg, model);
 					var nextState = function () {
-						var _n1 = _Utils_Tuple2(updatedState.V, updatedState.K);
+						var _n1 = _Utils_Tuple2(updatedState.W, updatedState.I);
 						if ((!_n1.a.$) && (!_n1.b.$)) {
 							var aspect = _n1.a.a;
 							var kanjis = _n1.b.a;
@@ -7618,7 +7637,7 @@ var author$project$KanjiScreen$view = function (state) {
 			]),
 		_List_fromArray(
 			[
-				A2(author$project$KanjiScreen$viewKanjis, state.R, state.ab)
+				A2(author$project$KanjiScreen$viewKanjis, state.S, state.ab)
 			]));
 };
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
@@ -7641,11 +7660,13 @@ var author$project$LoadingScreen$view = function (state) {
 					[
 						A2(elm$html$Html$Attributes$style, 'color', 'white'),
 						A2(elm$html$Html$Attributes$style, 'font-size', '20vmin'),
+						A2(elm$html$Html$Attributes$style, 'text-align', 'center'),
 						A2(elm$html$Html$Attributes$style, 'margin', 'auto')
 					]),
 				_List_fromArray(
 					[
-						elm$html$Html$text('ロード中')
+						elm$html$Html$text(
+						A2(elm$core$Maybe$withDefault, 'ロード中', state.G))
 					]))
 			]));
 };
