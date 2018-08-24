@@ -5,7 +5,7 @@ import Html
 import KanjiScreen
 import LoadingScreen
 import Url
-import Url.Parser
+import Url.Parser exposing ((<?>))
 import Url.Parser.Query
 
 
@@ -22,8 +22,16 @@ type Msg
 parseUrl : String -> Maybe String
 parseUrl stringUrl =
     let
+        pathParser =
+            Url.Parser.oneOf
+                [ Url.Parser.map "" Url.Parser.top
+                , Url.Parser.string
+                ]
+
         parser =
-            Url.Parser.query (Url.Parser.Query.string "key")
+            pathParser
+                <?> Url.Parser.Query.string "key"
+                |> Url.Parser.map (\_ s -> s)
 
         parse url =
             case Url.Parser.parse parser url of

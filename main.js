@@ -6082,10 +6082,69 @@ var elm$core$Maybe$andThen = F2(
 			return elm$core$Maybe$Nothing;
 		}
 	});
+var elm$url$Url$Parser$Parser = elm$core$Basics$identity;
 var elm$url$Url$Parser$State = F5(
 	function (visited, unvisited, params, frag, value) {
 		return {n: frag, p: params, m: unvisited, i: value, q: visited};
 	});
+var elm$url$Url$Parser$mapState = F2(
+	function (func, _n0) {
+		var visited = _n0.q;
+		var unvisited = _n0.m;
+		var params = _n0.p;
+		var frag = _n0.n;
+		var value = _n0.i;
+		return A5(
+			elm$url$Url$Parser$State,
+			visited,
+			unvisited,
+			params,
+			frag,
+			func(value));
+	});
+var elm$url$Url$Parser$map = F2(
+	function (subValue, _n0) {
+		var parseArg = _n0;
+		return function (_n1) {
+			var visited = _n1.q;
+			var unvisited = _n1.m;
+			var params = _n1.p;
+			var frag = _n1.n;
+			var value = _n1.i;
+			return A2(
+				elm$core$List$map,
+				elm$url$Url$Parser$mapState(value),
+				parseArg(
+					A5(elm$url$Url$Parser$State, visited, unvisited, params, frag, subValue)));
+		};
+	});
+var elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
+		}
+	});
+var elm$core$List$concat = function (lists) {
+	return A3(elm$core$List$foldr, elm$core$List$append, _List_Nil, lists);
+};
+var elm$core$List$concatMap = F2(
+	function (f, list) {
+		return elm$core$List$concat(
+			A2(elm$core$List$map, f, list));
+	});
+var elm$url$Url$Parser$oneOf = function (parsers) {
+	return function (state) {
+		return A2(
+			elm$core$List$concatMap,
+			function (_n0) {
+				var parser = _n0;
+				return parser(state);
+			},
+			parsers);
+	};
+};
 var elm$url$Url$Parser$getFirstMatch = function (states) {
 	getFirstMatch:
 	while (true) {
@@ -6201,7 +6260,6 @@ var elm$url$Url$Parser$parse = F2(
 					url.aa,
 					elm$core$Basics$identity)));
 	});
-var elm$url$Url$Parser$Parser = elm$core$Basics$identity;
 var elm$url$Url$Parser$query = function (_n0) {
 	var queryParser = _n0;
 	return function (_n1) {
@@ -6222,6 +6280,61 @@ var elm$url$Url$Parser$query = function (_n0) {
 					queryParser(params)))
 			]);
 	};
+};
+var elm$url$Url$Parser$slash = F2(
+	function (_n0, _n1) {
+		var parseBefore = _n0;
+		var parseAfter = _n1;
+		return function (state) {
+			return A2(
+				elm$core$List$concatMap,
+				parseAfter,
+				parseBefore(state));
+		};
+	});
+var elm$url$Url$Parser$questionMark = F2(
+	function (parser, queryParser) {
+		return A2(
+			elm$url$Url$Parser$slash,
+			parser,
+			elm$url$Url$Parser$query(queryParser));
+	});
+var elm$url$Url$Parser$custom = F2(
+	function (tipe, stringToSomething) {
+		return function (_n0) {
+			var visited = _n0.q;
+			var unvisited = _n0.m;
+			var params = _n0.p;
+			var frag = _n0.n;
+			var value = _n0.i;
+			if (!unvisited.b) {
+				return _List_Nil;
+			} else {
+				var next = unvisited.a;
+				var rest = unvisited.b;
+				var _n2 = stringToSomething(next);
+				if (!_n2.$) {
+					var nextValue = _n2.a;
+					return _List_fromArray(
+						[
+							A5(
+							elm$url$Url$Parser$State,
+							A2(elm$core$List$cons, next, visited),
+							rest,
+							params,
+							frag,
+							value(nextValue))
+						]);
+				} else {
+					return _List_Nil;
+				}
+			}
+		};
+	});
+var elm$url$Url$Parser$string = A2(elm$url$Url$Parser$custom, 'STRING', elm$core$Maybe$Just);
+var elm$url$Url$Parser$top = function (state) {
+	return _List_fromArray(
+		[state]);
 };
 var elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
@@ -6257,8 +6370,22 @@ var elm$url$Url$Parser$Query$string = function (key) {
 		});
 };
 var author$project$Main$parseUrl = function (stringUrl) {
-	var parser = elm$url$Url$Parser$query(
-		elm$url$Url$Parser$Query$string('key'));
+	var pathParser = elm$url$Url$Parser$oneOf(
+		_List_fromArray(
+			[
+				A2(elm$url$Url$Parser$map, '', elm$url$Url$Parser$top),
+				elm$url$Url$Parser$string
+			]));
+	var parser = A2(
+		elm$url$Url$Parser$map,
+		F2(
+			function (_n1, s) {
+				return s;
+			}),
+		A2(
+			elm$url$Url$Parser$questionMark,
+			pathParser,
+			elm$url$Url$Parser$Query$string('key')));
 	var parse = function (url) {
 		var _n0 = A2(elm$url$Url$Parser$parse, parser, url);
 		if ((!_n0.$) && (!_n0.a.$)) {
@@ -6864,22 +6991,6 @@ var author$project$Layout$bestFit = F2(
 		return _Utils_Tuple2(
 			elm$core$Basics$floor(w),
 			elm$core$Basics$floor(h));
-	});
-var elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
-		}
-	});
-var elm$core$List$concat = function (lists) {
-	return A3(elm$core$List$foldr, elm$core$List$append, _List_Nil, lists);
-};
-var elm$core$List$concatMap = F2(
-	function (f, list) {
-		return elm$core$List$concat(
-			A2(elm$core$List$map, f, list));
 	});
 var author$project$Utils$pairRange = F2(
 	function (_n0, _n1) {
