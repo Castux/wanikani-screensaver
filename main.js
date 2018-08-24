@@ -7485,6 +7485,7 @@ var author$project$KanjiScreen$shuffle = F2(
 			model,
 			{P: gridSize, L: time, B: shuffled, C: time});
 	});
+var author$project$KanjiScreen$shufflePeriod = 24.0;
 var author$project$KanjiScreen$update = F2(
 	function (model, msg) {
 		if (!msg.$) {
@@ -7507,7 +7508,7 @@ var author$project$KanjiScreen$update = F2(
 		} else {
 			var t = msg.a;
 			var newTime = model.C + (t / 1000);
-			var updated = (_Utils_cmp(newTime, model.L + 10.0) > 0) ? A2(author$project$KanjiScreen$shuffle, model, newTime) : _Utils_update(
+			var updated = (_Utils_cmp(newTime, model.L + author$project$KanjiScreen$shufflePeriod) > 0) ? A2(author$project$KanjiScreen$shuffle, model, newTime) : _Utils_update(
 				model,
 				{C: newTime});
 			return _Utils_Tuple2(updated, elm$core$Platform$Cmd$none);
@@ -7582,6 +7583,7 @@ var author$project$Main$update = F2(
 		return _Utils_Tuple2(screen, elm$core$Platform$Cmd$none);
 	});
 var author$project$KanjiScreen$referenceScale = 100;
+var author$project$KanjiScreen$fadeInTime = 2.1;
 var author$project$Anim$grayscale = function (x) {
 	return _Utils_Tuple3(x, x, x);
 };
@@ -7645,14 +7647,16 @@ var elm$svg$Svg$Attributes$display = _VirtualDom_attribute('display');
 var elm$svg$Svg$Attributes$dy = _VirtualDom_attribute('dy');
 var elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
 var elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
-var author$project$KanjiScreen$viewKanji = F3(
-	function (time, lastShuffle, _n0) {
+var author$project$KanjiScreen$viewKanji = F5(
+	function (time, lastShuffle, numTiles, index, _n0) {
 		var data = _n0.a;
 		var size = _n0.b;
 		var _n1 = _n0.c;
 		var x = _n1.a;
 		var y = _n1.b;
-		var disp = true ? elm$svg$Svg$Attributes$transform(
+		var fade = (index * author$project$KanjiScreen$fadeInTime) / numTiles;
+		var show = (_Utils_cmp(time - lastShuffle, 1.0 + fade) > 0) && (_Utils_cmp(time - lastShuffle, ((author$project$KanjiScreen$shufflePeriod - author$project$KanjiScreen$fadeInTime) - 1.0) + fade) < 0);
+		var disp = show ? elm$svg$Svg$Attributes$transform(
 			'translate(' + (elm$core$String$fromInt(x * author$project$KanjiScreen$referenceScale) + (' ' + (elm$core$String$fromInt(y * author$project$KanjiScreen$referenceScale) + (')' + (' scale(' + (elm$core$String$fromInt(size) + ') '))))))) : elm$svg$Svg$Attributes$display('none');
 		return A2(
 			elm$svg$Svg$text_,
@@ -7703,8 +7707,12 @@ var author$project$KanjiScreen$viewKanjis = F4(
 							elm$core$String$fromInt(author$project$KanjiScreen$referenceScale) + 'px')
 						]),
 					A2(
-						elm$core$List$map,
-						A2(author$project$KanjiScreen$viewKanji, time, lastShuffle),
+						elm$core$List$indexedMap,
+						A3(
+							author$project$KanjiScreen$viewKanji,
+							time,
+							lastShuffle,
+							elm$core$List$length(tiles)),
 						tiles))));
 	});
 var elm$html$Html$div = _VirtualDom_node('div');

@@ -31,6 +31,14 @@ type alias Model =
     }
 
 
+shufflePeriod =
+    24.0
+
+
+fadeInTime =
+    2.1
+
+
 init : Float -> List KanjiData -> Model
 init aspect kanjis =
     let
@@ -108,7 +116,7 @@ update model msg =
                     model.time + t / 1000
 
                 updated =
-                    if newTime > model.lastShuffle + 10.0 then
+                    if newTime > model.lastShuffle + shufflePeriod then
                         shuffle model newTime
 
                     else
@@ -127,7 +135,7 @@ viewKanjis tiles ( w, h ) time lastShuffle =
             String.fromInt <| referenceScale * h
     in
     tiles
-        |> List.map (viewKanji time lastShuffle)
+        |> List.indexedMap (viewKanji time lastShuffle (List.length tiles))
         |> Svg.g [ fontSize <| String.fromInt referenceScale ++ "px" ]
         |> List.singleton
         |> Svg.svg
@@ -149,12 +157,17 @@ kanjiColor k time ( x, y ) =
             0.93 |> Anim.grayscale |> Anim.toCss
 
 
-viewKanji : Float -> Float -> Tile -> Svg Msg
-viewKanji time lastShuffle ( data, size, ( x, y ) ) =
+viewKanji : Float -> Float -> Int -> Int -> Tile -> Svg Msg
+viewKanji time lastShuffle numTiles index ( data, size, ( x, y ) ) =
     let
+        fade =
+            toFloat index * fadeInTime / toFloat numTiles
+
+        show =
+            time - lastShuffle > 1.0 + fade && time - lastShuffle < shufflePeriod - fadeInTime - 1.0 + fade
+
         disp =
-            --if time - lastShuffle <= 1.0e4 + toFloat (x + y) * 20.0 then
-            if True then
+            if show then
                 transform <|
                     "translate("
                         ++ String.fromInt (x * referenceScale)
