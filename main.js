@@ -6662,31 +6662,6 @@ var author$project$LoadingScreen$update = F2(
 var author$project$Main$Kanji = function (a) {
 	return {$: 1, a: a};
 };
-var author$project$Main$apply2 = A2(elm$core$Basics$composeL, elm$core$Basics$composeL, elm$core$Basics$composeL);
-var elm$core$Maybe$map2 = F3(
-	function (func, ma, mb) {
-		if (ma.$ === 1) {
-			return elm$core$Maybe$Nothing;
-		} else {
-			var a = ma.a;
-			if (mb.$ === 1) {
-				return elm$core$Maybe$Nothing;
-			} else {
-				var b = mb.a;
-				return elm$core$Maybe$Just(
-					A2(func, a, b));
-			}
-		}
-	});
-var elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (!maybe.$) {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
 var author$project$Main$update = F2(
 	function (msg, screen) {
 		var _n0 = _Utils_Tuple2(msg, screen);
@@ -6696,15 +6671,18 @@ var author$project$Main$update = F2(
 				if (!_n0.b.$) {
 					var submsg = _n0.a.a;
 					var model = _n0.b.a;
-					var newState = A2(author$project$LoadingScreen$update, submsg, model);
-					var nextState = A2(
-						elm$core$Maybe$withDefault,
-						author$project$Main$Loading(newState),
-						A3(
-							elm$core$Maybe$map2,
-							A2(author$project$Main$apply2, author$project$Main$Kanji, author$project$KanjiScreen$init),
-							newState.J,
-							newState.aa));
+					var updatedState = A2(author$project$LoadingScreen$update, submsg, model);
+					var nextState = function () {
+						var _n1 = _Utils_Tuple2(updatedState.J, updatedState.aa);
+						if ((!_n1.a.$) && (!_n1.b.$)) {
+							var aspect = _n1.a.a;
+							var kanjis = _n1.b.a;
+							return author$project$Main$Kanji(
+								A2(author$project$KanjiScreen$init, aspect, kanjis));
+						} else {
+							return author$project$Main$Loading(updatedState);
+						}
+					}();
 					return _Utils_Tuple2(nextState, elm$core$Platform$Cmd$none);
 				} else {
 					break _n0$2;
