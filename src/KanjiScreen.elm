@@ -15,8 +15,7 @@ import Time exposing (Posix)
 
 type Msg
     = WindowResize Float Float
-    | ShuffleTime Posix
-    | Tick Posix
+    | Tick Float
 
 
 type alias Tile =
@@ -28,6 +27,7 @@ type alias Model =
     , tiles : List Tile
     , gridSize : ( Int, Int )
     , time : Float
+    , lastShuffle : Float
     }
 
 
@@ -39,18 +39,21 @@ init aspect kanjis =
                 |> List.map (\kd -> ( kd, sizing kd.srs ))
                 |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
     in
-    Model aspect tiles gridSize 0.0
+    Model aspect tiles gridSize 0.0 0.0
 
 
-shuffle : Model -> Random.Seed -> Model
-shuffle model seed =
+shuffle : Model -> Float -> Model
+shuffle model time =
     let
+        seed =
+            Random.initialSeed (floor time)
+
         ( shuffled, gridSize ) =
             model.tiles
                 |> List.map (\( data, size, _ ) -> ( data, size ))
                 |> (\l -> Layout.computeLayout l model.aspect seed)
     in
-    { model | tiles = shuffled, gridSize = gridSize }
+    { model | tiles = shuffled, gridSize = gridSize, time = time, lastShuffle = time }
 
 
 referenceScale : Int
@@ -91,27 +94,31 @@ sizing srs =
 
 update : Model -> Msg -> ( Model, Cmd Msg )
 update model msg =
-    let
-        kanjis =
-            List.map (\( a, b, c ) -> a) model.tiles
-    in
     case msg of
         WindowResize width height ->
-            ( init (width / height) kanjis, Cmd.none )
-
-        ShuffleTime time ->
-            let
-                seed =
-                    Random.initialSeed (Time.posixToMillis time)
-            in
-            ( shuffle model seed, Cmd.none )
+            ( init
+                (width / height)
+                (List.map (\( a, b, c ) -> a) model.tiles)
+            , Cmd.none
+            )
 
         Tick t ->
-            ( { model | time = Time.posixToMillis t |> toFloat }, Cmd.none )
+            let
+                newTime =
+                    model.time + t / 1000
+
+                updated =
+                    if newTime > model.lastShuffle + 10.0 then
+                        shuffle model newTime
+
+                    else
+                        { model | time = newTime }
+            in
+            ( updated, Cmd.none )
 
 
-viewKanjis : List Tile -> ( Int, Int ) -> Float -> Svg Msg
-viewKanjis tiles ( w, h ) time =
+viewKanjis : List Tile -> ( Int, Int ) -> Float -> Float -> Svg Msg
+viewKanjis tiles ( w, h ) time lastShuffle =
     let
         tw =
             String.fromInt <| referenceScale * w
@@ -120,7 +127,7 @@ viewKanjis tiles ( w, h ) time =
             String.fromInt <| referenceScale * h
     in
     tiles
-        |> List.map (viewKanji time)
+        |> List.map (viewKanji time lastShuffle)
         |> Svg.g [ fontSize <| String.fromInt referenceScale ++ "px" ]
         |> List.singleton
         |> Svg.svg
@@ -142,22 +149,28 @@ kanjiColor k time ( x, y ) =
             0.93 |> Anim.grayscale |> Anim.toCss
 
 
-viewKanji : Float -> Tile -> Svg Msg
-viewKanji time ( data, size, ( x, y ) ) =
+viewKanji : Float -> Float -> Tile -> Svg Msg
+viewKanji time lastShuffle ( data, size, ( x, y ) ) =
     let
-        trans =
-            "translate("
-                ++ String.fromInt (x * referenceScale)
-                ++ " "
-                ++ String.fromInt (y * referenceScale)
-                ++ ")"
-                ++ " scale("
-                ++ String.fromInt size
-                ++ ") "
+        disp =
+            --if time - lastShuffle <= 1.0e4 + toFloat (x + y) * 20.0 then
+            if True then
+                transform <|
+                    "translate("
+                        ++ String.fromInt (x * referenceScale)
+                        ++ " "
+                        ++ String.fromInt (y * referenceScale)
+                        ++ ")"
+                        ++ " scale("
+                        ++ String.fromInt size
+                        ++ ") "
+
+            else
+                display "none"
     in
     Svg.text_
         [ fill (kanjiColor data time ( x, y ))
-        , transform trans
+        , disp
         , dy "0.875em"
         ]
         [ Svg.text data.character ]
@@ -172,13 +185,12 @@ view state =
         , Html.Attributes.style "width" "100%"
         , Html.Attributes.style "height" "100%"
         ]
-        [ viewKanjis state.tiles state.gridSize state.time ]
+        [ viewKanjis state.tiles state.gridSize state.time state.lastShuffle ]
 
 
 subscriptions : Model -> Sub Msg
 subscriptions state =
     Sub.batch
         [ Browser.Events.onResize (\w h -> WindowResize (toFloat w) (toFloat h))
-        , Browser.Events.onAnimationFrame Tick
-        , Time.every (15.0 * 1000) ShuffleTime
+        , Browser.Events.onAnimationFrameDelta Tick
         ]

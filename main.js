@@ -505,11 +505,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.S.y === region.aa.y)
+	if (region.U.y === region.ab.y)
 	{
-		return 'on line ' + region.S.y;
+		return 'on line ' + region.U.y;
 	}
-	return 'on lines ' + region.S.y + ' through ' + region.aa.y;
+	return 'on lines ' + region.U.y + ' through ' + region.ab.y;
 }
 
 
@@ -1836,21 +1836,21 @@ var _Http_toTask = F2(function(request, maybeProgress)
 			callback(_Scheduler_fail(elm$http$Http$Timeout));
 		});
 		xhr.addEventListener('load', function() {
-			callback(_Http_handleResponse(xhr, request.M.a));
+			callback(_Http_handleResponse(xhr, request.O.a));
 		});
 
 		try
 		{
-			xhr.open(request.P, request.aX, true);
+			xhr.open(request.R, request.aY, true);
 		}
 		catch (e)
 		{
-			return callback(_Scheduler_fail(elm$http$Http$BadUrl(request.aX)));
+			return callback(_Scheduler_fail(elm$http$Http$BadUrl(request.aY)));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		var body = request.aw;
+		var body = request.ax;
 		xhr.send(elm$http$Http$Internal$isStringBody(body)
 			? (xhr.setRequestHeader('Content-Type', body.a), body.b)
 			: body.a
@@ -1873,23 +1873,23 @@ function _Http_configureProgress(xhr, maybeProgress)
 			return;
 		}
 		_Scheduler_rawSpawn(maybeProgress.a({
-			ax: event.loaded,
-			ay: event.total
+			ay: event.loaded,
+			az: event.total
 		}));
 	});
 }
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.I; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.J; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
 
-	xhr.responseType = request.M.b;
-	xhr.withCredentials = request.W;
+	xhr.responseType = request.O.b;
+	xhr.withCredentials = request.X;
 
-	elm$core$Maybe$isJust(request.V) && (xhr.timeout = request.V.a);
+	elm$core$Maybe$isJust(request.W) && (xhr.timeout = request.W.a);
 }
 
 
@@ -1921,10 +1921,10 @@ function _Http_handleResponse(xhr, responseToResult)
 function _Http_toResponse(xhr)
 {
 	return {
-		aX: xhr.responseURL,
-		aT: { aB: xhr.status, k: xhr.statusText },
-		I: _Http_parseHeaders(xhr.getAllResponseHeaders()),
-		aw: xhr.response
+		aY: xhr.responseURL,
+		aU: { aC: xhr.status, k: xhr.statusText },
+		J: _Http_parseHeaders(xhr.getAllResponseHeaders()),
+		ax: xhr.response
 	};
 }
 
@@ -2023,9 +2023,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aI,
-		impl.aW,
-		impl.aU,
+		impl.aJ,
+		impl.aX,
+		impl.aV,
 		function() { return function() {} }
 	);
 });
@@ -2826,8 +2826,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		k: func(record.k),
-		T: record.T,
-		R: record.R
+		V: record.V,
+		T: record.T
 	}
 });
 
@@ -3096,10 +3096,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.k;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.T;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.V;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.R) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.T) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -4045,11 +4045,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aI,
-		impl.aW,
-		impl.aU,
+		impl.aJ,
+		impl.aX,
+		impl.aV,
 		function(sendToApp, initialModel) {
-			var view = impl.aY;
+			var view = impl.aZ;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -4081,12 +4081,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aI,
-		impl.aW,
-		impl.aU,
+		impl.aJ,
+		impl.aX,
+		impl.aV,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.z && impl.z(sendToApp)
-			var view = impl.aY;
+			var view = impl.aZ;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4094,12 +4094,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aw);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.ax);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aV) && (_VirtualDom_doc.title = title = doc.aV);
+				(title !== doc.aW) && (_VirtualDom_doc.title = title = doc.aW);
 			});
 		}
 	);
@@ -4150,8 +4150,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aN;
-	var onUrlRequest = impl.aO;
+	var onUrlChange = impl.aO;
+	var onUrlRequest = impl.aP;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -4171,9 +4171,9 @@ function _Browser_application(impl)
 					var next = elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.am === next.am
-							&& curr.ad === next.ad
-							&& curr.aj.a === next.aj.a
+							&& curr.an === next.an
+							&& curr.ae === next.ae
+							&& curr.ak.a === next.ak.a
 						)
 							? elm$browser$Browser$Internal(next)
 							: elm$browser$Browser$External(href)
@@ -4181,13 +4181,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aI: function(flags)
+		aJ: function(flags)
 		{
-			return A3(impl.aI, flags, _Browser_getUrl(), key);
+			return A3(impl.aJ, flags, _Browser_getUrl(), key);
 		},
-		aY: impl.aY,
-		aW: impl.aW,
-		aU: impl.aU
+		aZ: impl.aZ,
+		aX: impl.aX,
+		aV: impl.aV
 	});
 }
 
@@ -4253,17 +4253,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aG: 'hidden', x: 'visibilitychange' }
+		? { aH: 'hidden', x: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aG: 'mozHidden', x: 'mozvisibilitychange' }
+		? { aH: 'mozHidden', x: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aG: 'msHidden', x: 'msvisibilitychange' }
+		? { aH: 'msHidden', x: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aG: 'webkitHidden', x: 'webkitvisibilitychange' }
-		: { aG: 'hidden', x: 'visibilitychange' };
+		? { aH: 'webkitHidden', x: 'webkitvisibilitychange' }
+		: { aH: 'hidden', x: 'visibilitychange' };
 }
 
 
@@ -4344,12 +4344,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aq: _Browser_getScene(),
-		at: {
-			K: _Browser_window.pageXOffset,
-			L: _Browser_window.pageYOffset,
-			aZ: _Browser_doc.documentElement.clientWidth,
-			aF: _Browser_doc.documentElement.clientHeight
+		ar: _Browser_getScene(),
+		au: {
+			M: _Browser_window.pageXOffset,
+			N: _Browser_window.pageYOffset,
+			a_: _Browser_doc.documentElement.clientWidth,
+			aG: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4359,8 +4359,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aZ: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		aF: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		a_: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		aG: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4383,15 +4383,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aq: {
-				aZ: node.scrollWidth,
-				aF: node.scrollHeight
+			ar: {
+				a_: node.scrollWidth,
+				aG: node.scrollHeight
 			},
-			at: {
-				K: node.scrollLeft,
-				L: node.scrollTop,
-				aZ: node.clientWidth,
-				aF: node.clientHeight
+			au: {
+				M: node.scrollLeft,
+				N: node.scrollTop,
+				a_: node.clientWidth,
+				aG: node.clientHeight
 			}
 		};
 	});
@@ -4421,18 +4421,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aq: _Browser_getScene(),
-			at: {
-				K: x,
-				L: y,
-				aZ: _Browser_doc.documentElement.clientWidth,
-				aF: _Browser_doc.documentElement.clientHeight
+			ar: _Browser_getScene(),
+			au: {
+				M: x,
+				N: y,
+				a_: _Browser_doc.documentElement.clientWidth,
+				aG: _Browser_doc.documentElement.clientHeight
 			},
-			aC: {
-				K: x + rect.left,
-				L: y + rect.top,
-				aZ: rect.width,
-				aF: rect.height
+			aD: {
+				M: x + rect.left,
+				N: y + rect.top,
+				a_: rect.width,
+				aG: rect.height
 			}
 		};
 	});
@@ -4487,52 +4487,6 @@ function _Url_percentDecode(string)
 }
 
 
-function _Time_now(millisToPosix)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(millisToPosix(Date.now())));
-	});
-}
-
-var _Time_setInterval = F2(function(interval, task)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
-		return function() { clearInterval(id); };
-	});
-});
-
-function _Time_here()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(
-			A2(elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
-		));
-	});
-}
-
-
-function _Time_getZoneName()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		try
-		{
-			var name = elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
-		}
-		catch (e)
-		{
-			var name = elm$time$Time$Offset(new Date().getTimezoneOffset());
-		}
-		callback(_Scheduler_succeed(name));
-	});
-}
-
-
-
 var _Bitwise_and = F2(function(a, b)
 {
 	return a & b;
@@ -4573,9 +4527,9 @@ var elm$core$Maybe$Just = function (a) {
 var elm$core$Maybe$Nothing = {$: 1};
 var author$project$LoadingScreen$errorState = function (msg) {
 	return {
-		Y: elm$core$Maybe$Nothing,
-		H: elm$core$Maybe$Just(msg),
-		J: elm$core$Maybe$Nothing
+		Z: elm$core$Maybe$Nothing,
+		I: elm$core$Maybe$Just(msg),
+		K: elm$core$Maybe$Nothing
 	};
 };
 var elm$core$Basics$apR = F2(
@@ -4795,7 +4749,7 @@ var author$project$Api$allLevels = A2(
 		A2(elm$core$List$range, 1, 60)));
 var author$project$KanjiData$KanjiData = F6(
 	function (level, character, meaning, onyomi, kunyomi, srs) {
-		return {aA: character, aJ: kunyomi, aK: level, aL: meaning, aP: onyomi, aS: srs};
+		return {aB: character, aK: kunyomi, aL: level, aM: meaning, aQ: onyomi, aT: srs};
 	});
 var elm$core$Array$branchFactor = 32;
 var elm$core$Array$Array_elm_builtin = F4(
@@ -5731,7 +5685,7 @@ var elm$json$Json$Decode$decodeString = _Json_runOnString;
 var elm$http$Http$expectJson = function (decoder) {
 	return elm$http$Http$expectStringResponse(
 		function (response) {
-			var _n0 = A2(elm$json$Json$Decode$decodeString, decoder, response.aw);
+			var _n0 = A2(elm$json$Json$Decode$decodeString, decoder, response.ax);
 			if (_n0.$ === 1) {
 				var decodeError = _n0.a;
 				return elm$core$Result$Err(
@@ -5751,13 +5705,13 @@ var elm$http$Http$get = F2(
 	function (url, decoder) {
 		return elm$http$Http$request(
 			{
-				aw: elm$http$Http$emptyBody,
-				M: elm$http$Http$expectJson(decoder),
-				I: _List_Nil,
-				P: 'GET',
-				V: elm$core$Maybe$Nothing,
-				aX: url,
-				W: false
+				ax: elm$http$Http$emptyBody,
+				O: elm$http$Http$expectJson(decoder),
+				J: _List_Nil,
+				R: 'GET',
+				W: elm$core$Maybe$Nothing,
+				aY: url,
+				X: false
 			});
 	});
 var elm$core$Basics$composeL = F3(
@@ -5878,7 +5832,7 @@ var author$project$LoadingScreen$WindowResize = F2(
 		return {$: 1, a: a, b: b};
 	});
 var author$project$LoadingScreen$viewportToSize = function (vp) {
-	return A2(author$project$LoadingScreen$WindowResize, vp.at.aZ, vp.at.aF);
+	return A2(author$project$LoadingScreen$WindowResize, vp.au.a_, vp.au.aG);
 };
 var elm$browser$Browser$External = function (a) {
 	return {$: 1, a: a};
@@ -5939,7 +5893,7 @@ var elm$core$String$contains = _String_contains;
 var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {ac: fragment, ad: host, ah: path, aj: port_, am: protocol, an: query};
+		return {ad: fragment, ae: host, ai: path, ak: port_, an: protocol, ao: query};
 	});
 var elm$url$Url$chompBeforePath = F5(
 	function (protocol, path, params, frag, str) {
@@ -6053,7 +6007,7 @@ var author$project$LoadingScreen$initCommands = function (key) {
 				A2(elm$core$Task$perform, author$project$LoadingScreen$viewportToSize, elm$browser$Browser$Dom$getViewport)
 			]));
 };
-var author$project$LoadingScreen$initState = {Y: elm$core$Maybe$Nothing, H: elm$core$Maybe$Nothing, J: elm$core$Maybe$Nothing};
+var author$project$LoadingScreen$initState = {Z: elm$core$Maybe$Nothing, I: elm$core$Maybe$Nothing, K: elm$core$Maybe$Nothing};
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var author$project$LoadingScreen$init = function (maybeKey) {
 	if (!maybeKey.$) {
@@ -6255,9 +6209,9 @@ var elm$url$Url$Parser$parse = F2(
 				A5(
 					elm$url$Url$Parser$State,
 					_List_Nil,
-					elm$url$Url$Parser$preparePath(url.ah),
-					elm$url$Url$Parser$prepareQuery(url.an),
-					url.ac,
+					elm$url$Url$Parser$preparePath(url.ai),
+					elm$url$Url$Parser$prepareQuery(url.ao),
+					url.ad,
 					elm$core$Basics$identity)));
 	});
 var elm$url$Url$Parser$query = function (_n0) {
@@ -6417,22 +6371,19 @@ var author$project$Main$init = function (flags) {
 		author$project$LoadingScreen$init(
 			author$project$Main$parseUrl(flags)));
 };
-var author$project$KanjiScreen$ShuffleTime = function (a) {
-	return {$: 1, a: a};
-};
 var author$project$KanjiScreen$Tick = function (a) {
-	return {$: 2, a: a};
+	return {$: 1, a: a};
 };
 var author$project$KanjiScreen$WindowResize = F2(
 	function (a, b) {
 		return {$: 0, a: a, b: b};
 	});
-var elm$browser$Browser$AnimationManager$Time = function (a) {
-	return {$: 0, a: a};
+var elm$browser$Browser$AnimationManager$Delta = function (a) {
+	return {$: 1, a: a};
 };
 var elm$browser$Browser$AnimationManager$State = F3(
 	function (subs, request, oldTime) {
-		return {Q: oldTime, ap: request, ar: subs};
+		return {S: oldTime, aq: request, as: subs};
 	});
 var elm$browser$Browser$AnimationManager$init = elm$core$Task$succeed(
 	A3(elm$browser$Browser$AnimationManager$State, _List_Nil, elm$core$Maybe$Nothing, 0));
@@ -6443,8 +6394,8 @@ var elm$core$Process$kill = _Scheduler_kill;
 var elm$core$Process$spawn = _Scheduler_spawn;
 var elm$browser$Browser$AnimationManager$onEffects = F3(
 	function (router, subs, _n0) {
-		var request = _n0.ap;
-		var oldTime = _n0.Q;
+		var request = _n0.aq;
+		var oldTime = _n0.S;
 		var _n1 = _Utils_Tuple2(request, subs);
 		if (_n1.a.$ === 1) {
 			if (!_n1.b.b) {
@@ -6492,8 +6443,8 @@ var elm$time$Time$Posix = elm$core$Basics$identity;
 var elm$time$Time$millisToPosix = elm$core$Basics$identity;
 var elm$browser$Browser$AnimationManager$onSelfMsg = F3(
 	function (router, newTime, _n0) {
-		var subs = _n0.ar;
-		var oldTime = _n0.Q;
+		var subs = _n0.as;
+		var oldTime = _n0.S;
 		var send = function (sub) {
 			if (!sub.$) {
 				var tagger = sub.a;
@@ -6532,8 +6483,8 @@ var elm$browser$Browser$AnimationManager$onSelfMsg = F3(
 					elm$core$Platform$sendToSelf(router),
 					elm$browser$Browser$AnimationManager$rAF)));
 	});
-var elm$browser$Browser$AnimationManager$Delta = function (a) {
-	return {$: 1, a: a};
+var elm$browser$Browser$AnimationManager$Time = function (a) {
+	return {$: 0, a: a};
 };
 var elm$browser$Browser$AnimationManager$subMap = F2(
 	function (func, sub) {
@@ -6549,11 +6500,11 @@ var elm$browser$Browser$AnimationManager$subMap = F2(
 	});
 _Platform_effectManagers['Browser.AnimationManager'] = _Platform_createManager(elm$browser$Browser$AnimationManager$init, elm$browser$Browser$AnimationManager$onEffects, elm$browser$Browser$AnimationManager$onSelfMsg, 0, elm$browser$Browser$AnimationManager$subMap);
 var elm$browser$Browser$AnimationManager$subscription = _Platform_leaf('Browser.AnimationManager');
-var elm$browser$Browser$AnimationManager$onAnimationFrame = function (tagger) {
+var elm$browser$Browser$AnimationManager$onAnimationFrameDelta = function (tagger) {
 	return elm$browser$Browser$AnimationManager$subscription(
-		elm$browser$Browser$AnimationManager$Time(tagger));
+		elm$browser$Browser$AnimationManager$Delta(tagger));
 };
-var elm$browser$Browser$Events$onAnimationFrame = elm$browser$Browser$AnimationManager$onAnimationFrame;
+var elm$browser$Browser$Events$onAnimationFrameDelta = elm$browser$Browser$AnimationManager$onAnimationFrameDelta;
 var elm$browser$Browser$Events$Window = 1;
 var elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
@@ -6561,7 +6512,7 @@ var elm$browser$Browser$Events$MySub = F3(
 	});
 var elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {ai: pids, ar: subs};
+		return {aj: pids, as: subs};
 	});
 var elm$browser$Browser$Events$init = elm$core$Task$succeed(
 	A2(elm$browser$Browser$Events$State, _List_Nil, elm$core$Dict$empty));
@@ -6583,7 +6534,7 @@ var elm$browser$Browser$Events$addKey = function (sub) {
 };
 var elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
-		return {ab: event, ae: key};
+		return {ac: event, af: key};
 	});
 var elm$browser$Browser$Events$spawn = F3(
 	function (router, key, _n0) {
@@ -6755,7 +6706,7 @@ var elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.ai,
+			state.aj,
 			elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, elm$core$Dict$empty, _List_Nil));
 		var deadPids = _n0.a;
@@ -6801,8 +6752,8 @@ var elm$core$List$filterMap = F2(
 	});
 var elm$browser$Browser$Events$onSelfMsg = F3(
 	function (router, _n0, state) {
-		var key = _n0.ae;
-		var event = _n0.ab;
+		var key = _n0.af;
+		var event = _n0.ac;
 		var toMessage = function (_n2) {
 			var subKey = _n2.a;
 			var _n3 = _n2.b;
@@ -6811,7 +6762,7 @@ var elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _n3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : elm$core$Maybe$Nothing;
 		};
-		var messages = A2(elm$core$List$filterMap, toMessage, state.ar);
+		var messages = A2(elm$core$List$filterMap, toMessage, state.as);
 		return A2(
 			elm$core$Task$andThen,
 			function (_n1) {
@@ -6856,181 +6807,6 @@ var elm$browser$Browser$Events$onResize = function (func) {
 				A2(elm$json$Json$Decode$field, 'innerHeight', elm$json$Json$Decode$int))));
 };
 var elm$core$Platform$Sub$batch = _Platform_batch;
-var elm$time$Time$Every = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var elm$time$Time$State = F2(
-	function (taggers, processes) {
-		return {al: processes, as: taggers};
-	});
-var elm$time$Time$init = elm$core$Task$succeed(
-	A2(elm$time$Time$State, elm$core$Dict$empty, elm$core$Dict$empty));
-var elm$time$Time$addMySub = F2(
-	function (_n0, state) {
-		var interval = _n0.a;
-		var tagger = _n0.b;
-		var _n1 = A2(elm$core$Dict$get, interval, state);
-		if (_n1.$ === 1) {
-			return A3(
-				elm$core$Dict$insert,
-				interval,
-				_List_fromArray(
-					[tagger]),
-				state);
-		} else {
-			var taggers = _n1.a;
-			return A3(
-				elm$core$Dict$insert,
-				interval,
-				A2(elm$core$List$cons, tagger, taggers),
-				state);
-		}
-	});
-var elm$time$Time$Name = function (a) {
-	return {$: 0, a: a};
-};
-var elm$time$Time$Offset = function (a) {
-	return {$: 1, a: a};
-};
-var elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var elm$time$Time$customZone = elm$time$Time$Zone;
-var elm$time$Time$setInterval = _Time_setInterval;
-var elm$time$Time$spawnHelp = F3(
-	function (router, intervals, processes) {
-		if (!intervals.b) {
-			return elm$core$Task$succeed(processes);
-		} else {
-			var interval = intervals.a;
-			var rest = intervals.b;
-			var spawnTimer = elm$core$Process$spawn(
-				A2(
-					elm$time$Time$setInterval,
-					interval,
-					A2(elm$core$Platform$sendToSelf, router, interval)));
-			var spawnRest = function (id) {
-				return A3(
-					elm$time$Time$spawnHelp,
-					router,
-					rest,
-					A3(elm$core$Dict$insert, interval, id, processes));
-			};
-			return A2(elm$core$Task$andThen, spawnRest, spawnTimer);
-		}
-	});
-var elm$time$Time$onEffects = F3(
-	function (router, subs, _n0) {
-		var processes = _n0.al;
-		var rightStep = F3(
-			function (_n6, id, _n7) {
-				var spawns = _n7.a;
-				var existing = _n7.b;
-				var kills = _n7.c;
-				return _Utils_Tuple3(
-					spawns,
-					existing,
-					A2(
-						elm$core$Task$andThen,
-						function (_n5) {
-							return kills;
-						},
-						elm$core$Process$kill(id)));
-			});
-		var newTaggers = A3(elm$core$List$foldl, elm$time$Time$addMySub, elm$core$Dict$empty, subs);
-		var leftStep = F3(
-			function (interval, taggers, _n4) {
-				var spawns = _n4.a;
-				var existing = _n4.b;
-				var kills = _n4.c;
-				return _Utils_Tuple3(
-					A2(elm$core$List$cons, interval, spawns),
-					existing,
-					kills);
-			});
-		var bothStep = F4(
-			function (interval, taggers, id, _n3) {
-				var spawns = _n3.a;
-				var existing = _n3.b;
-				var kills = _n3.c;
-				return _Utils_Tuple3(
-					spawns,
-					A3(elm$core$Dict$insert, interval, id, existing),
-					kills);
-			});
-		var _n1 = A6(
-			elm$core$Dict$merge,
-			leftStep,
-			bothStep,
-			rightStep,
-			newTaggers,
-			processes,
-			_Utils_Tuple3(
-				_List_Nil,
-				elm$core$Dict$empty,
-				elm$core$Task$succeed(0)));
-		var spawnList = _n1.a;
-		var existingDict = _n1.b;
-		var killTask = _n1.c;
-		return A2(
-			elm$core$Task$andThen,
-			function (newProcesses) {
-				return elm$core$Task$succeed(
-					A2(elm$time$Time$State, newTaggers, newProcesses));
-			},
-			A2(
-				elm$core$Task$andThen,
-				function (_n2) {
-					return A3(elm$time$Time$spawnHelp, router, spawnList, existingDict);
-				},
-				killTask));
-	});
-var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
-var elm$time$Time$onSelfMsg = F3(
-	function (router, interval, state) {
-		var _n0 = A2(elm$core$Dict$get, interval, state.as);
-		if (_n0.$ === 1) {
-			return elm$core$Task$succeed(state);
-		} else {
-			var taggers = _n0.a;
-			var tellTaggers = function (time) {
-				return elm$core$Task$sequence(
-					A2(
-						elm$core$List$map,
-						function (tagger) {
-							return A2(
-								elm$core$Platform$sendToApp,
-								router,
-								tagger(time));
-						},
-						taggers));
-			};
-			return A2(
-				elm$core$Task$andThen,
-				function (_n1) {
-					return elm$core$Task$succeed(state);
-				},
-				A2(elm$core$Task$andThen, tellTaggers, elm$time$Time$now));
-		}
-	});
-var elm$time$Time$subMap = F2(
-	function (f, _n0) {
-		var interval = _n0.a;
-		var tagger = _n0.b;
-		return A2(
-			elm$time$Time$Every,
-			interval,
-			A2(elm$core$Basics$composeL, f, tagger));
-	});
-_Platform_effectManagers['Time'] = _Platform_createManager(elm$time$Time$init, elm$time$Time$onEffects, elm$time$Time$onSelfMsg, 0, elm$time$Time$subMap);
-var elm$time$Time$subscription = _Platform_leaf('Time');
-var elm$time$Time$every = F2(
-	function (interval, tagger) {
-		return elm$time$Time$subscription(
-			A2(elm$time$Time$Every, interval, tagger));
-	});
 var author$project$KanjiScreen$subscriptions = function (state) {
 	return elm$core$Platform$Sub$batch(
 		_List_fromArray(
@@ -7040,8 +6816,7 @@ var author$project$KanjiScreen$subscriptions = function (state) {
 					function (w, h) {
 						return A2(author$project$KanjiScreen$WindowResize, w, h);
 					})),
-				elm$browser$Browser$Events$onAnimationFrame(author$project$KanjiScreen$Tick),
-				A2(elm$time$Time$every, 15.0 * 1000, author$project$KanjiScreen$ShuffleTime)
+				elm$browser$Browser$Events$onAnimationFrameDelta(author$project$KanjiScreen$Tick)
 			]));
 };
 var author$project$LoadingScreen$subscriptions = function (state) {
@@ -7074,9 +6849,9 @@ var author$project$Main$subscriptions = function (screen) {
 			author$project$KanjiScreen$subscriptions(model));
 	}
 };
-var author$project$KanjiScreen$Model = F4(
-	function (aspect, tiles, gridSize, time) {
-		return {Y: aspect, N: gridSize, B: tiles, U: time};
+var author$project$KanjiScreen$Model = F5(
+	function (aspect, tiles, gridSize, time, lastShuffle) {
+		return {Z: aspect, P: gridSize, L: lastShuffle, B: tiles, C: time};
 	});
 var author$project$KanjiScreen$sizing = function (srs) {
 	_n0$8:
@@ -7682,17 +7457,19 @@ var author$project$KanjiScreen$init = F2(
 				function (kd) {
 					return _Utils_Tuple2(
 						kd,
-						author$project$KanjiScreen$sizing(kd.aS));
+						author$project$KanjiScreen$sizing(kd.aT));
 				},
 				kanjis));
 		var tiles = _n0.a;
 		var gridSize = _n0.b;
-		return A4(author$project$KanjiScreen$Model, aspect, tiles, gridSize, 0.0);
+		return A5(author$project$KanjiScreen$Model, aspect, tiles, gridSize, 0.0, 0.0);
 	});
 var author$project$KanjiScreen$shuffle = F2(
-	function (model, seed) {
+	function (model, time) {
+		var seed = elm$random$Random$initialSeed(
+			elm$core$Basics$floor(time));
 		var _n0 = function (l) {
-			return A3(author$project$Layout$computeLayout, l, model.Y, seed);
+			return A3(author$project$Layout$computeLayout, l, model.Z, seed);
 		}(
 			A2(
 				elm$core$List$map,
@@ -7706,46 +7483,34 @@ var author$project$KanjiScreen$shuffle = F2(
 		var gridSize = _n0.b;
 		return _Utils_update(
 			model,
-			{N: gridSize, B: shuffled});
+			{P: gridSize, L: time, B: shuffled, C: time});
 	});
-var elm$time$Time$posixToMillis = function (_n0) {
-	var millis = _n0;
-	return millis;
-};
 var author$project$KanjiScreen$update = F2(
 	function (model, msg) {
-		var kanjis = A2(
-			elm$core$List$map,
-			function (_n1) {
-				var a = _n1.a;
-				var b = _n1.b;
-				var c = _n1.c;
-				return a;
-			},
-			model.B);
-		switch (msg.$) {
-			case 0:
-				var width = msg.a;
-				var height = msg.b;
-				return _Utils_Tuple2(
-					A2(author$project$KanjiScreen$init, width / height, kanjis),
-					elm$core$Platform$Cmd$none);
-			case 1:
-				var time = msg.a;
-				var seed = elm$random$Random$initialSeed(
-					elm$time$Time$posixToMillis(time));
-				return _Utils_Tuple2(
-					A2(author$project$KanjiScreen$shuffle, model, seed),
-					elm$core$Platform$Cmd$none);
-			default:
-				var t = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							U: elm$time$Time$posixToMillis(t)
-						}),
-					elm$core$Platform$Cmd$none);
+		if (!msg.$) {
+			var width = msg.a;
+			var height = msg.b;
+			return _Utils_Tuple2(
+				A2(
+					author$project$KanjiScreen$init,
+					width / height,
+					A2(
+						elm$core$List$map,
+						function (_n1) {
+							var a = _n1.a;
+							var b = _n1.b;
+							var c = _n1.c;
+							return a;
+						},
+						model.B)),
+				elm$core$Platform$Cmd$none);
+		} else {
+			var t = msg.a;
+			var newTime = model.C + (t / 1000);
+			var updated = (_Utils_cmp(newTime, model.L + 10.0) > 0) ? A2(author$project$KanjiScreen$shuffle, model, newTime) : _Utils_update(
+				model,
+				{C: newTime});
+			return _Utils_Tuple2(updated, elm$core$Platform$Cmd$none);
 		}
 	});
 var author$project$LoadingScreen$update = F2(
@@ -7756,7 +7521,7 @@ var author$project$LoadingScreen$update = F2(
 				return _Utils_update(
 					state,
 					{
-						J: elm$core$Maybe$Just(kanjis)
+						K: elm$core$Maybe$Just(kanjis)
 					});
 			} else {
 				var error = msg.a.a;
@@ -7768,7 +7533,7 @@ var author$project$LoadingScreen$update = F2(
 			return _Utils_update(
 				state,
 				{
-					Y: elm$core$Maybe$Just(width / height)
+					Z: elm$core$Maybe$Just(width / height)
 				});
 		}
 	});
@@ -7786,7 +7551,7 @@ var author$project$Main$update = F2(
 					var model = _n0.b.a;
 					var updatedState = A2(author$project$LoadingScreen$update, submsg, model);
 					var nextState = function () {
-						var _n1 = _Utils_Tuple2(updatedState.Y, updatedState.J);
+						var _n1 = _Utils_Tuple2(updatedState.Z, updatedState.K);
 						if ((!_n1.a.$) && (!_n1.b.$)) {
 							var aspect = _n1.a.a;
 							var kanjis = _n1.b.a;
@@ -7838,9 +7603,9 @@ var author$project$Anim$plasma = F3(
 	function (x, y, t) {
 		var components = _List_fromArray(
 			[
-				author$project$Anim$sine((x / 45.0) + (t / 8000.0)),
+				author$project$Anim$sine((x / 45.0) + (t / 8.0)),
 				author$project$Anim$cose(
-				(((x * author$project$Anim$sine(t / 20000.0)) + (y * author$project$Anim$cose(t / 18000.0))) / 35.0) + (t / 10000.0))
+				(((x * author$project$Anim$sine(t / 20.0)) + (y * author$project$Anim$cose(t / 18.0))) / 35.0) + (t / 10.0))
 			]);
 		var avg = elm$core$List$sum(components) / elm$core$List$length(components);
 		return avg;
@@ -7858,7 +7623,7 @@ var author$project$KanjiScreen$kanjiColor = F3(
 	function (k, time, _n0) {
 		var x = _n0.a;
 		var y = _n0.b;
-		var _n1 = k.aS;
+		var _n1 = k.aT;
 		if (_n1.$ === 1) {
 			return author$project$Anim$toCss(
 				author$project$Anim$grayscale(
@@ -7876,17 +7641,19 @@ var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$svg$Svg$text = elm$virtual_dom$VirtualDom$text;
 var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
 var elm$svg$Svg$text_ = elm$svg$Svg$trustedNode('text');
+var elm$svg$Svg$Attributes$display = _VirtualDom_attribute('display');
 var elm$svg$Svg$Attributes$dy = _VirtualDom_attribute('dy');
 var elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
 var elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
-var author$project$KanjiScreen$viewKanji = F2(
-	function (time, _n0) {
+var author$project$KanjiScreen$viewKanji = F3(
+	function (time, lastShuffle, _n0) {
 		var data = _n0.a;
 		var size = _n0.b;
 		var _n1 = _n0.c;
 		var x = _n1.a;
 		var y = _n1.b;
-		var trans = 'translate(' + (elm$core$String$fromInt(x * author$project$KanjiScreen$referenceScale) + (' ' + (elm$core$String$fromInt(y * author$project$KanjiScreen$referenceScale) + (')' + (' scale(' + (elm$core$String$fromInt(size) + ') '))))));
+		var disp = true ? elm$svg$Svg$Attributes$transform(
+			'translate(' + (elm$core$String$fromInt(x * author$project$KanjiScreen$referenceScale) + (' ' + (elm$core$String$fromInt(y * author$project$KanjiScreen$referenceScale) + (')' + (' scale(' + (elm$core$String$fromInt(size) + ') '))))))) : elm$svg$Svg$Attributes$display('none');
 		return A2(
 			elm$svg$Svg$text_,
 			_List_fromArray(
@@ -7897,12 +7664,12 @@ var author$project$KanjiScreen$viewKanji = F2(
 						data,
 						time,
 						_Utils_Tuple2(x, y))),
-					elm$svg$Svg$Attributes$transform(trans),
+					disp,
 					elm$svg$Svg$Attributes$dy('0.875em')
 				]),
 			_List_fromArray(
 				[
-					elm$svg$Svg$text(data.aA)
+					elm$svg$Svg$text(data.aB)
 				]));
 	});
 var elm$core$List$singleton = function (value) {
@@ -7914,8 +7681,8 @@ var elm$svg$Svg$svg = elm$svg$Svg$trustedNode('svg');
 var elm$svg$Svg$Attributes$fontSize = _VirtualDom_attribute('font-size');
 var elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
 var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
-var author$project$KanjiScreen$viewKanjis = F3(
-	function (tiles, _n0, time) {
+var author$project$KanjiScreen$viewKanjis = F4(
+	function (tiles, _n0, time, lastShuffle) {
 		var w = _n0.a;
 		var h = _n0.b;
 		var tw = elm$core$String$fromInt(author$project$KanjiScreen$referenceScale * w);
@@ -7937,7 +7704,7 @@ var author$project$KanjiScreen$viewKanjis = F3(
 						]),
 					A2(
 						elm$core$List$map,
-						author$project$KanjiScreen$viewKanji(time),
+						A2(author$project$KanjiScreen$viewKanji, time, lastShuffle),
 						tiles))));
 	});
 var elm$html$Html$div = _VirtualDom_node('div');
@@ -7956,7 +7723,7 @@ var author$project$KanjiScreen$view = function (state) {
 			]),
 		_List_fromArray(
 			[
-				A3(author$project$KanjiScreen$viewKanjis, state.B, state.N, state.U)
+				A4(author$project$KanjiScreen$viewKanjis, state.B, state.P, state.C, state.L)
 			]));
 };
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
@@ -7985,7 +7752,7 @@ var author$project$LoadingScreen$view = function (state) {
 				_List_fromArray(
 					[
 						elm$html$Html$text(
-						A2(elm$core$Maybe$withDefault, 'ロード中', state.H))
+						A2(elm$core$Maybe$withDefault, 'ロード中', state.I))
 					]))
 			]));
 };
@@ -8008,5 +7775,5 @@ var author$project$Main$view = function (screen) {
 };
 var elm$browser$Browser$element = _Browser_element;
 var author$project$Main$main = elm$browser$Browser$element(
-	{aI: author$project$Main$init, aU: author$project$Main$subscriptions, aW: author$project$Main$update, aY: author$project$Main$view});
+	{aJ: author$project$Main$init, aV: author$project$Main$subscriptions, aX: author$project$Main$update, aZ: author$project$Main$view});
 _Platform_export({'Main':{'init':author$project$Main$main(elm$json$Json$Decode$string)(0)}});}(this));

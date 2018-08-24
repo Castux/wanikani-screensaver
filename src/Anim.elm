@@ -13,8 +13,8 @@ plasma : Float -> Float -> Float -> Float
 plasma x y t =
     let
         components =
-            [ sine (x / 45.0 + t / 8000.0)
-            , cose ((x * sine (t / 2.0e4) + y * cose (t / 1.8e4)) / 35.0 + t / 1.0e4)
+            [ sine (x / 45.0 + t / 8.0)
+            , cose ((x * sine (t / 20.0) + y * cose (t / 18.0)) / 35.0 + t / 10.0)
             ]
 
         avg =
