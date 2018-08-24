@@ -505,11 +505,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.Q.y === region.X.y)
+	if (region.U.z === region.ab.z)
 	{
-		return 'on line ' + region.Q.y;
+		return 'on line ' + region.U.z;
 	}
-	return 'on lines ' + region.Q.y + ' through ' + region.X.y;
+	return 'on lines ' + region.U.z + ' through ' + region.ab.z;
 }
 
 
@@ -1836,21 +1836,21 @@ var _Http_toTask = F2(function(request, maybeProgress)
 			callback(_Scheduler_fail(elm$http$Http$Timeout));
 		});
 		xhr.addEventListener('load', function() {
-			callback(_Http_handleResponse(xhr, request.K.a));
+			callback(_Http_handleResponse(xhr, request.O.a));
 		});
 
 		try
 		{
-			xhr.open(request.M, request.aU, true);
+			xhr.open(request.R, request.aY, true);
 		}
 		catch (e)
 		{
-			return callback(_Scheduler_fail(elm$http$Http$BadUrl(request.aU)));
+			return callback(_Scheduler_fail(elm$http$Http$BadUrl(request.aY)));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		var body = request.at;
+		var body = request.ax;
 		xhr.send(elm$http$Http$Internal$isStringBody(body)
 			? (xhr.setRequestHeader('Content-Type', body.a), body.b)
 			: body.a
@@ -1873,23 +1873,23 @@ function _Http_configureProgress(xhr, maybeProgress)
 			return;
 		}
 		_Scheduler_rawSpawn(maybeProgress.a({
-			au: event.loaded,
-			av: event.total
+			ay: event.loaded,
+			az: event.total
 		}));
 	});
 }
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.G; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.K; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
 
-	xhr.responseType = request.K.b;
-	xhr.withCredentials = request.T;
+	xhr.responseType = request.O.b;
+	xhr.withCredentials = request.X;
 
-	elm$core$Maybe$isJust(request.S) && (xhr.timeout = request.S.a);
+	elm$core$Maybe$isJust(request.W) && (xhr.timeout = request.W.a);
 }
 
 
@@ -1921,10 +1921,10 @@ function _Http_handleResponse(xhr, responseToResult)
 function _Http_toResponse(xhr)
 {
 	return {
-		aU: xhr.responseURL,
-		aQ: { ay: xhr.status, k: xhr.statusText },
-		G: _Http_parseHeaders(xhr.getAllResponseHeaders()),
-		at: xhr.response
+		aY: xhr.responseURL,
+		aU: { aC: xhr.status, k: xhr.statusText },
+		K: _Http_parseHeaders(xhr.getAllResponseHeaders()),
+		ax: xhr.response
 	};
 }
 
@@ -2023,9 +2023,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aF,
-		impl.aT,
-		impl.aR,
+		impl.aJ,
+		impl.aX,
+		impl.aV,
 		function() { return function() {} }
 	);
 });
@@ -2826,8 +2826,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		k: func(record.k),
-		R: record.R,
-		O: record.O
+		V: record.V,
+		T: record.T
 	}
 });
 
@@ -3096,10 +3096,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.k;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.R;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.V;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.O) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.T) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -4045,11 +4045,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aF,
-		impl.aT,
-		impl.aR,
+		impl.aJ,
+		impl.aX,
+		impl.aV,
 		function(sendToApp, initialModel) {
-			var view = impl.aV;
+			var view = impl.aZ;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -4081,12 +4081,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aF,
-		impl.aT,
-		impl.aR,
+		impl.aJ,
+		impl.aX,
+		impl.aV,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.z && impl.z(sendToApp)
-			var view = impl.aV;
+			var divertHrefToApp = impl.A && impl.A(sendToApp)
+			var view = impl.aZ;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4094,12 +4094,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.at);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.ax);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aS) && (_VirtualDom_doc.title = title = doc.aS);
+				(title !== doc.aW) && (_VirtualDom_doc.title = title = doc.aW);
 			});
 		}
 	);
@@ -4150,12 +4150,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aK;
-	var onUrlRequest = impl.aL;
+	var onUrlChange = impl.aO;
+	var onUrlRequest = impl.aP;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		z: function(sendToApp)
+		A: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4171,9 +4171,9 @@ function _Browser_application(impl)
 					var next = elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aj === next.aj
-							&& curr._ === next._
-							&& curr.ag.a === next.ag.a
+							&& curr.an === next.an
+							&& curr.ae === next.ae
+							&& curr.ak.a === next.ak.a
 						)
 							? elm$browser$Browser$Internal(next)
 							: elm$browser$Browser$External(href)
@@ -4181,13 +4181,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aF: function(flags)
+		aJ: function(flags)
 		{
-			return A3(impl.aF, flags, _Browser_getUrl(), key);
+			return A3(impl.aJ, flags, _Browser_getUrl(), key);
 		},
-		aV: impl.aV,
-		aT: impl.aT,
-		aR: impl.aR
+		aZ: impl.aZ,
+		aX: impl.aX,
+		aV: impl.aV
 	});
 }
 
@@ -4253,17 +4253,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aD: 'hidden', x: 'visibilitychange' }
+		? { aH: 'hidden', x: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aD: 'mozHidden', x: 'mozvisibilitychange' }
+		? { aH: 'mozHidden', x: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aD: 'msHidden', x: 'msvisibilitychange' }
+		? { aH: 'msHidden', x: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aD: 'webkitHidden', x: 'webkitvisibilitychange' }
-		: { aD: 'hidden', x: 'visibilitychange' };
+		? { aH: 'webkitHidden', x: 'webkitvisibilitychange' }
+		: { aH: 'hidden', x: 'visibilitychange' };
 }
 
 
@@ -4344,12 +4344,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		an: _Browser_getScene(),
-		aq: {
-			H: _Browser_window.pageXOffset,
-			I: _Browser_window.pageYOffset,
-			aW: _Browser_doc.documentElement.clientWidth,
-			aC: _Browser_doc.documentElement.clientHeight
+		ar: _Browser_getScene(),
+		au: {
+			M: _Browser_window.pageXOffset,
+			N: _Browser_window.pageYOffset,
+			a_: _Browser_doc.documentElement.clientWidth,
+			aG: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4359,8 +4359,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aW: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		aC: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		a_: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		aG: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4383,15 +4383,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			an: {
-				aW: node.scrollWidth,
-				aC: node.scrollHeight
+			ar: {
+				a_: node.scrollWidth,
+				aG: node.scrollHeight
 			},
-			aq: {
-				H: node.scrollLeft,
-				I: node.scrollTop,
-				aW: node.clientWidth,
-				aC: node.clientHeight
+			au: {
+				M: node.scrollLeft,
+				N: node.scrollTop,
+				a_: node.clientWidth,
+				aG: node.clientHeight
 			}
 		};
 	});
@@ -4421,18 +4421,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			an: _Browser_getScene(),
-			aq: {
-				H: x,
-				I: y,
-				aW: _Browser_doc.documentElement.clientWidth,
-				aC: _Browser_doc.documentElement.clientHeight
+			ar: _Browser_getScene(),
+			au: {
+				M: x,
+				N: y,
+				a_: _Browser_doc.documentElement.clientWidth,
+				aG: _Browser_doc.documentElement.clientHeight
 			},
-			az: {
-				H: x + rect.left,
-				I: y + rect.top,
-				aW: rect.width,
-				aC: rect.height
+			aD: {
+				M: x + rect.left,
+				N: y + rect.top,
+				a_: rect.width,
+				aG: rect.height
 			}
 		};
 	});
@@ -4469,51 +4469,22 @@ function _Browser_load(url)
 }
 
 
-
-function _Time_now(millisToPosix)
+function _Url_percentEncode(string)
 {
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(millisToPosix(Date.now())));
-	});
+	return encodeURIComponent(string);
 }
 
-var _Time_setInterval = F2(function(interval, task)
+function _Url_percentDecode(string)
 {
-	return _Scheduler_binding(function(callback)
+	try
 	{
-		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
-		return function() { clearInterval(id); };
-	});
-});
-
-function _Time_here()
-{
-	return _Scheduler_binding(function(callback)
+		return elm$core$Maybe$Just(decodeURIComponent(string));
+	}
+	catch (e)
 	{
-		callback(_Scheduler_succeed(
-			A2(elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
-		));
-	});
+		return elm$core$Maybe$Nothing;
+	}
 }
-
-
-function _Time_getZoneName()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		try
-		{
-			var name = elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
-		}
-		catch (e)
-		{
-			var name = elm$time$Time$Offset(new Date().getTimezoneOffset());
-		}
-		callback(_Scheduler_succeed(name));
-	});
-}
-
 
 
 var _Bitwise_and = F2(function(a, b)
@@ -4550,6 +4521,17 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 {
 	return a >>> offset;
 });
+var elm$core$Maybe$Just = function (a) {
+	return {$: 0, a: a};
+};
+var elm$core$Maybe$Nothing = {$: 1};
+var author$project$LoadingScreen$errorState = function (msg) {
+	return {
+		Z: elm$core$Maybe$Nothing,
+		J: elm$core$Maybe$Just(msg),
+		L: elm$core$Maybe$Nothing
+	};
+};
 var elm$core$Basics$apR = F2(
 	function (x, f) {
 		return f(x);
@@ -4750,10 +4732,6 @@ var elm$core$List$range = F2(
 	function (lo, hi) {
 		return A3(elm$core$List$rangeHelp, lo, hi, _List_Nil);
 	});
-var elm$core$Maybe$Just = function (a) {
-	return {$: 0, a: a};
-};
-var elm$core$Maybe$Nothing = {$: 1};
 var elm$core$String$fromInt = _String_fromNumber;
 var elm$core$String$join = F2(
 	function (sep, chunks) {
@@ -4771,7 +4749,7 @@ var author$project$Api$allLevels = A2(
 		A2(elm$core$List$range, 1, 60)));
 var author$project$KanjiData$KanjiData = F6(
 	function (level, character, meaning, onyomi, kunyomi, srs) {
-		return {ax: character, aG: kunyomi, aH: level, aI: meaning, aM: onyomi, aP: srs};
+		return {aB: character, aK: kunyomi, aL: level, aM: meaning, aQ: onyomi, aT: srs};
 	});
 var elm$core$Array$branchFactor = 32;
 var elm$core$Array$Array_elm_builtin = F4(
@@ -5707,7 +5685,7 @@ var elm$json$Json$Decode$decodeString = _Json_runOnString;
 var elm$http$Http$expectJson = function (decoder) {
 	return elm$http$Http$expectStringResponse(
 		function (response) {
-			var _n0 = A2(elm$json$Json$Decode$decodeString, decoder, response.at);
+			var _n0 = A2(elm$json$Json$Decode$decodeString, decoder, response.ax);
 			if (_n0.$ === 1) {
 				var decodeError = _n0.a;
 				return elm$core$Result$Err(
@@ -5727,13 +5705,13 @@ var elm$http$Http$get = F2(
 	function (url, decoder) {
 		return elm$http$Http$request(
 			{
-				at: elm$http$Http$emptyBody,
-				K: elm$http$Http$expectJson(decoder),
-				G: _List_Nil,
-				M: 'GET',
-				S: elm$core$Maybe$Nothing,
-				aU: url,
-				T: false
+				ax: elm$http$Http$emptyBody,
+				O: elm$http$Http$expectJson(decoder),
+				K: _List_Nil,
+				R: 'GET',
+				W: elm$core$Maybe$Nothing,
+				aY: url,
+				X: false
 			});
 	});
 var elm$core$Basics$composeL = F3(
@@ -5840,11 +5818,12 @@ var elm$http$Http$send = F2(
 			resultToMessage,
 			elm$http$Http$toTask(request_));
 	});
-var author$project$Api$getData = function (msg) {
-	var url = 'https://www.wanikani.com/api/user/5e63183f2d2d844f0aef5c0665676a71/kanji/' + author$project$Api$allLevels;
-	var req = A2(elm$http$Http$get, url, author$project$Api$requestDecode);
-	return A2(elm$http$Http$send, msg, req);
-};
+var author$project$Api$getData = F2(
+	function (msg, key) {
+		var url = 'https://www.wanikani.com/api/user/' + (key + ('/kanji/' + author$project$Api$allLevels));
+		var req = A2(elm$http$Http$get, url, author$project$Api$requestDecode);
+		return A2(elm$http$Http$send, msg, req);
+	});
 var author$project$LoadingScreen$ReceivedKanjis = function (a) {
 	return {$: 0, a: a};
 };
@@ -5853,7 +5832,7 @@ var author$project$LoadingScreen$WindowResize = F2(
 		return {$: 1, a: a, b: b};
 	});
 var author$project$LoadingScreen$viewportToSize = function (vp) {
-	return A2(author$project$LoadingScreen$WindowResize, vp.aq.aW, vp.aq.aC);
+	return A2(author$project$LoadingScreen$WindowResize, vp.au.a_, vp.au.aG);
 };
 var elm$browser$Browser$External = function (a) {
 	return {$: 1, a: a};
@@ -5914,7 +5893,7 @@ var elm$core$String$contains = _String_contains;
 var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {Z: fragment, _: host, ae: path, ag: port_, aj: protocol, ak: query};
+		return {ad: fragment, ae: host, ai: path, ak: port_, an: protocol, ao: query};
 	});
 var elm$url$Url$chompBeforePath = F5(
 	function (protocol, path, params, frag, str) {
@@ -6020,19 +5999,360 @@ var elm$url$Url$fromString = function (str) {
 };
 var elm$browser$Browser$Dom$getViewport = _Browser_withWindow(_Browser_getViewport);
 var elm$core$Platform$Cmd$batch = _Platform_batch;
-var author$project$LoadingScreen$initCommands = elm$core$Platform$Cmd$batch(
-	_List_fromArray(
-		[
-			author$project$Api$getData(author$project$LoadingScreen$ReceivedKanjis),
-			A2(elm$core$Task$perform, author$project$LoadingScreen$viewportToSize, elm$browser$Browser$Dom$getViewport)
-		]));
-var author$project$LoadingScreen$initState = {J: elm$core$Maybe$Nothing, aa: elm$core$Maybe$Nothing};
-var author$project$LoadingScreen$init = _Utils_Tuple2(author$project$LoadingScreen$initState, author$project$LoadingScreen$initCommands);
+var author$project$LoadingScreen$initCommands = function (key) {
+	return elm$core$Platform$Cmd$batch(
+		_List_fromArray(
+			[
+				A2(author$project$Api$getData, author$project$LoadingScreen$ReceivedKanjis, key),
+				A2(elm$core$Task$perform, author$project$LoadingScreen$viewportToSize, elm$browser$Browser$Dom$getViewport)
+			]));
+};
+var author$project$LoadingScreen$initState = {Z: elm$core$Maybe$Nothing, J: elm$core$Maybe$Nothing, L: elm$core$Maybe$Nothing};
+var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
+var author$project$LoadingScreen$init = function (maybeKey) {
+	if (!maybeKey.$) {
+		var key = maybeKey.a;
+		return _Utils_Tuple2(
+			author$project$LoadingScreen$initState,
+			author$project$LoadingScreen$initCommands(key));
+	} else {
+		return _Utils_Tuple2(
+			author$project$LoadingScreen$errorState('(屮｀∀´)屮'),
+			elm$core$Platform$Cmd$none);
+	}
+};
 var author$project$Main$Loading = function (a) {
 	return {$: 0, a: a};
 };
 var author$project$Main$LoadingMsg = function (a) {
 	return {$: 0, a: a};
+};
+var elm$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		if (!maybeValue.$) {
+			var value = maybeValue.a;
+			return callback(value);
+		} else {
+			return elm$core$Maybe$Nothing;
+		}
+	});
+var elm$url$Url$Parser$Parser = elm$core$Basics$identity;
+var elm$url$Url$Parser$State = F5(
+	function (visited, unvisited, params, frag, value) {
+		return {n: frag, p: params, m: unvisited, i: value, q: visited};
+	});
+var elm$url$Url$Parser$mapState = F2(
+	function (func, _n0) {
+		var visited = _n0.q;
+		var unvisited = _n0.m;
+		var params = _n0.p;
+		var frag = _n0.n;
+		var value = _n0.i;
+		return A5(
+			elm$url$Url$Parser$State,
+			visited,
+			unvisited,
+			params,
+			frag,
+			func(value));
+	});
+var elm$url$Url$Parser$map = F2(
+	function (subValue, _n0) {
+		var parseArg = _n0;
+		return function (_n1) {
+			var visited = _n1.q;
+			var unvisited = _n1.m;
+			var params = _n1.p;
+			var frag = _n1.n;
+			var value = _n1.i;
+			return A2(
+				elm$core$List$map,
+				elm$url$Url$Parser$mapState(value),
+				parseArg(
+					A5(elm$url$Url$Parser$State, visited, unvisited, params, frag, subValue)));
+		};
+	});
+var elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
+		}
+	});
+var elm$core$List$concat = function (lists) {
+	return A3(elm$core$List$foldr, elm$core$List$append, _List_Nil, lists);
+};
+var elm$core$List$concatMap = F2(
+	function (f, list) {
+		return elm$core$List$concat(
+			A2(elm$core$List$map, f, list));
+	});
+var elm$url$Url$Parser$oneOf = function (parsers) {
+	return function (state) {
+		return A2(
+			elm$core$List$concatMap,
+			function (_n0) {
+				var parser = _n0;
+				return parser(state);
+			},
+			parsers);
+	};
+};
+var elm$url$Url$Parser$getFirstMatch = function (states) {
+	getFirstMatch:
+	while (true) {
+		if (!states.b) {
+			return elm$core$Maybe$Nothing;
+		} else {
+			var state = states.a;
+			var rest = states.b;
+			var _n1 = state.m;
+			if (!_n1.b) {
+				return elm$core$Maybe$Just(state.i);
+			} else {
+				if ((_n1.a === '') && (!_n1.b.b)) {
+					return elm$core$Maybe$Just(state.i);
+				} else {
+					var $temp$states = rest;
+					states = $temp$states;
+					continue getFirstMatch;
+				}
+			}
+		}
+	}
+};
+var elm$url$Url$Parser$removeFinalEmpty = function (segments) {
+	if (!segments.b) {
+		return _List_Nil;
+	} else {
+		if ((segments.a === '') && (!segments.b.b)) {
+			return _List_Nil;
+		} else {
+			var segment = segments.a;
+			var rest = segments.b;
+			return A2(
+				elm$core$List$cons,
+				segment,
+				elm$url$Url$Parser$removeFinalEmpty(rest));
+		}
+	}
+};
+var elm$url$Url$Parser$preparePath = function (path) {
+	var _n0 = A2(elm$core$String$split, '/', path);
+	if (_n0.b && (_n0.a === '')) {
+		var segments = _n0.b;
+		return elm$url$Url$Parser$removeFinalEmpty(segments);
+	} else {
+		var segments = _n0;
+		return elm$url$Url$Parser$removeFinalEmpty(segments);
+	}
+};
+var elm$url$Url$percentDecode = _Url_percentDecode;
+var elm$url$Url$Parser$addToParametersHelp = F2(
+	function (value, maybeList) {
+		if (maybeList.$ === 1) {
+			return elm$core$Maybe$Just(
+				_List_fromArray(
+					[value]));
+		} else {
+			var list = maybeList.a;
+			return elm$core$Maybe$Just(
+				A2(elm$core$List$cons, value, list));
+		}
+	});
+var elm$url$Url$Parser$addParam = F2(
+	function (segment, dict) {
+		var _n0 = A2(elm$core$String$split, '=', segment);
+		if ((_n0.b && _n0.b.b) && (!_n0.b.b.b)) {
+			var rawKey = _n0.a;
+			var _n1 = _n0.b;
+			var rawValue = _n1.a;
+			var _n2 = elm$url$Url$percentDecode(rawKey);
+			if (_n2.$ === 1) {
+				return dict;
+			} else {
+				var key = _n2.a;
+				var _n3 = elm$url$Url$percentDecode(rawValue);
+				if (_n3.$ === 1) {
+					return dict;
+				} else {
+					var value = _n3.a;
+					return A3(
+						elm$core$Dict$update,
+						key,
+						elm$url$Url$Parser$addToParametersHelp(value),
+						dict);
+				}
+			}
+		} else {
+			return dict;
+		}
+	});
+var elm$url$Url$Parser$prepareQuery = function (maybeQuery) {
+	if (maybeQuery.$ === 1) {
+		return elm$core$Dict$empty;
+	} else {
+		var qry = maybeQuery.a;
+		return A3(
+			elm$core$List$foldr,
+			elm$url$Url$Parser$addParam,
+			elm$core$Dict$empty,
+			A2(elm$core$String$split, '&', qry));
+	}
+};
+var elm$url$Url$Parser$parse = F2(
+	function (_n0, url) {
+		var parser = _n0;
+		return elm$url$Url$Parser$getFirstMatch(
+			parser(
+				A5(
+					elm$url$Url$Parser$State,
+					_List_Nil,
+					elm$url$Url$Parser$preparePath(url.ai),
+					elm$url$Url$Parser$prepareQuery(url.ao),
+					url.ad,
+					elm$core$Basics$identity)));
+	});
+var elm$url$Url$Parser$query = function (_n0) {
+	var queryParser = _n0;
+	return function (_n1) {
+		var visited = _n1.q;
+		var unvisited = _n1.m;
+		var params = _n1.p;
+		var frag = _n1.n;
+		var value = _n1.i;
+		return _List_fromArray(
+			[
+				A5(
+				elm$url$Url$Parser$State,
+				visited,
+				unvisited,
+				params,
+				frag,
+				value(
+					queryParser(params)))
+			]);
+	};
+};
+var elm$url$Url$Parser$slash = F2(
+	function (_n0, _n1) {
+		var parseBefore = _n0;
+		var parseAfter = _n1;
+		return function (state) {
+			return A2(
+				elm$core$List$concatMap,
+				parseAfter,
+				parseBefore(state));
+		};
+	});
+var elm$url$Url$Parser$questionMark = F2(
+	function (parser, queryParser) {
+		return A2(
+			elm$url$Url$Parser$slash,
+			parser,
+			elm$url$Url$Parser$query(queryParser));
+	});
+var elm$url$Url$Parser$custom = F2(
+	function (tipe, stringToSomething) {
+		return function (_n0) {
+			var visited = _n0.q;
+			var unvisited = _n0.m;
+			var params = _n0.p;
+			var frag = _n0.n;
+			var value = _n0.i;
+			if (!unvisited.b) {
+				return _List_Nil;
+			} else {
+				var next = unvisited.a;
+				var rest = unvisited.b;
+				var _n2 = stringToSomething(next);
+				if (!_n2.$) {
+					var nextValue = _n2.a;
+					return _List_fromArray(
+						[
+							A5(
+							elm$url$Url$Parser$State,
+							A2(elm$core$List$cons, next, visited),
+							rest,
+							params,
+							frag,
+							value(nextValue))
+						]);
+				} else {
+					return _List_Nil;
+				}
+			}
+		};
+	});
+var elm$url$Url$Parser$string = A2(elm$url$Url$Parser$custom, 'STRING', elm$core$Maybe$Just);
+var elm$url$Url$Parser$top = function (state) {
+	return _List_fromArray(
+		[state]);
+};
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (!maybe.$) {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var elm$url$Url$Parser$Internal$Parser = elm$core$Basics$identity;
+var elm$url$Url$Parser$Query$custom = F2(
+	function (key, func) {
+		return function (dict) {
+			return func(
+				A2(
+					elm$core$Maybe$withDefault,
+					_List_Nil,
+					A2(elm$core$Dict$get, key, dict)));
+		};
+	});
+var elm$url$Url$Parser$Query$string = function (key) {
+	return A2(
+		elm$url$Url$Parser$Query$custom,
+		key,
+		function (stringList) {
+			if (stringList.b && (!stringList.b.b)) {
+				var str = stringList.a;
+				return elm$core$Maybe$Just(str);
+			} else {
+				return elm$core$Maybe$Nothing;
+			}
+		});
+};
+var author$project$Main$parseUrl = function (stringUrl) {
+	var pathParser = elm$url$Url$Parser$oneOf(
+		_List_fromArray(
+			[
+				A2(elm$url$Url$Parser$map, '', elm$url$Url$Parser$top),
+				elm$url$Url$Parser$string
+			]));
+	var parser = A2(
+		elm$url$Url$Parser$map,
+		F2(
+			function (_n1, s) {
+				return s;
+			}),
+		A2(
+			elm$url$Url$Parser$questionMark,
+			pathParser,
+			elm$url$Url$Parser$Query$string('key')));
+	var parse = function (url) {
+		var _n0 = A2(elm$url$Url$Parser$parse, parser, url);
+		if ((!_n0.$) && (!_n0.a.$)) {
+			var key = _n0.a.a;
+			return elm$core$Maybe$Just(key);
+		} else {
+			return elm$core$Maybe$Nothing;
+		}
+	};
+	return A2(
+		elm$core$Maybe$andThen,
+		parse,
+		elm$url$Url$fromString(stringUrl));
 };
 var elm$core$Platform$Cmd$map = _Platform_map;
 var author$project$Main$wrap = F3(
@@ -6044,7 +6364,12 @@ var author$project$Main$wrap = F3(
 			A2(elm$core$Platform$Cmd$map, msgCon, msg));
 	});
 var author$project$Main$init = function (flags) {
-	return A3(author$project$Main$wrap, author$project$Main$Loading, author$project$Main$LoadingMsg, author$project$LoadingScreen$init);
+	return A3(
+		author$project$Main$wrap,
+		author$project$Main$Loading,
+		author$project$Main$LoadingMsg,
+		author$project$LoadingScreen$init(
+			author$project$Main$parseUrl(flags)));
 };
 var author$project$KanjiScreen$Tick = function (a) {
 	return {$: 1, a: a};
@@ -6053,6 +6378,133 @@ var author$project$KanjiScreen$WindowResize = F2(
 	function (a, b) {
 		return {$: 0, a: a, b: b};
 	});
+var elm$browser$Browser$AnimationManager$Delta = function (a) {
+	return {$: 1, a: a};
+};
+var elm$browser$Browser$AnimationManager$State = F3(
+	function (subs, request, oldTime) {
+		return {S: oldTime, aq: request, as: subs};
+	});
+var elm$browser$Browser$AnimationManager$init = elm$core$Task$succeed(
+	A3(elm$browser$Browser$AnimationManager$State, _List_Nil, elm$core$Maybe$Nothing, 0));
+var elm$browser$Browser$AnimationManager$now = _Browser_now(0);
+var elm$browser$Browser$AnimationManager$rAF = _Browser_rAF(0);
+var elm$core$Platform$sendToSelf = _Platform_sendToSelf;
+var elm$core$Process$kill = _Scheduler_kill;
+var elm$core$Process$spawn = _Scheduler_spawn;
+var elm$browser$Browser$AnimationManager$onEffects = F3(
+	function (router, subs, _n0) {
+		var request = _n0.aq;
+		var oldTime = _n0.S;
+		var _n1 = _Utils_Tuple2(request, subs);
+		if (_n1.a.$ === 1) {
+			if (!_n1.b.b) {
+				var _n2 = _n1.a;
+				return elm$browser$Browser$AnimationManager$init;
+			} else {
+				var _n4 = _n1.a;
+				return A2(
+					elm$core$Task$andThen,
+					function (pid) {
+						return A2(
+							elm$core$Task$andThen,
+							function (time) {
+								return elm$core$Task$succeed(
+									A3(
+										elm$browser$Browser$AnimationManager$State,
+										subs,
+										elm$core$Maybe$Just(pid),
+										time));
+							},
+							elm$browser$Browser$AnimationManager$now);
+					},
+					elm$core$Process$spawn(
+						A2(
+							elm$core$Task$andThen,
+							elm$core$Platform$sendToSelf(router),
+							elm$browser$Browser$AnimationManager$rAF)));
+			}
+		} else {
+			if (!_n1.b.b) {
+				var pid = _n1.a.a;
+				return A2(
+					elm$core$Task$andThen,
+					function (_n3) {
+						return elm$browser$Browser$AnimationManager$init;
+					},
+					elm$core$Process$kill(pid));
+			} else {
+				return elm$core$Task$succeed(
+					A3(elm$browser$Browser$AnimationManager$State, subs, request, oldTime));
+			}
+		}
+	});
+var elm$time$Time$Posix = elm$core$Basics$identity;
+var elm$time$Time$millisToPosix = elm$core$Basics$identity;
+var elm$browser$Browser$AnimationManager$onSelfMsg = F3(
+	function (router, newTime, _n0) {
+		var subs = _n0.as;
+		var oldTime = _n0.S;
+		var send = function (sub) {
+			if (!sub.$) {
+				var tagger = sub.a;
+				return A2(
+					elm$core$Platform$sendToApp,
+					router,
+					tagger(
+						elm$time$Time$millisToPosix(newTime)));
+			} else {
+				var tagger = sub.a;
+				return A2(
+					elm$core$Platform$sendToApp,
+					router,
+					tagger(newTime - oldTime));
+			}
+		};
+		return A2(
+			elm$core$Task$andThen,
+			function (pid) {
+				return A2(
+					elm$core$Task$andThen,
+					function (_n1) {
+						return elm$core$Task$succeed(
+							A3(
+								elm$browser$Browser$AnimationManager$State,
+								subs,
+								elm$core$Maybe$Just(pid),
+								newTime));
+					},
+					elm$core$Task$sequence(
+						A2(elm$core$List$map, send, subs)));
+			},
+			elm$core$Process$spawn(
+				A2(
+					elm$core$Task$andThen,
+					elm$core$Platform$sendToSelf(router),
+					elm$browser$Browser$AnimationManager$rAF)));
+	});
+var elm$browser$Browser$AnimationManager$Time = function (a) {
+	return {$: 0, a: a};
+};
+var elm$browser$Browser$AnimationManager$subMap = F2(
+	function (func, sub) {
+		if (!sub.$) {
+			var tagger = sub.a;
+			return elm$browser$Browser$AnimationManager$Time(
+				A2(elm$core$Basics$composeL, func, tagger));
+		} else {
+			var tagger = sub.a;
+			return elm$browser$Browser$AnimationManager$Delta(
+				A2(elm$core$Basics$composeL, func, tagger));
+		}
+	});
+_Platform_effectManagers['Browser.AnimationManager'] = _Platform_createManager(elm$browser$Browser$AnimationManager$init, elm$browser$Browser$AnimationManager$onEffects, elm$browser$Browser$AnimationManager$onSelfMsg, 0, elm$browser$Browser$AnimationManager$subMap);
+var elm$browser$Browser$AnimationManager$subscription = _Platform_leaf('Browser.AnimationManager');
+var elm$browser$Browser$AnimationManager$onAnimationFrameDelta = function (tagger) {
+	return elm$browser$Browser$AnimationManager$subscription(
+		elm$browser$Browser$AnimationManager$Delta(tagger));
+};
+var elm$browser$Browser$Events$onAnimationFrameDelta = elm$browser$Browser$AnimationManager$onAnimationFrameDelta;
 var elm$browser$Browser$Events$Window = 1;
 var elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
@@ -6060,7 +6512,7 @@ var elm$browser$Browser$Events$MySub = F3(
 	});
 var elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {af: pids, ao: subs};
+		return {aj: pids, as: subs};
 	});
 var elm$browser$Browser$Events$init = elm$core$Task$succeed(
 	A2(elm$browser$Browser$Events$State, _List_Nil, elm$core$Dict$empty));
@@ -6082,9 +6534,8 @@ var elm$browser$Browser$Events$addKey = function (sub) {
 };
 var elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
-		return {Y: event, ab: key};
+		return {ac: event, af: key};
 	});
-var elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var elm$browser$Browser$Events$spawn = F3(
 	function (router, key, _n0) {
 		var node = _n0.a;
@@ -6214,7 +6665,6 @@ var elm$core$Dict$union = F2(
 	function (t1, t2) {
 		return A3(elm$core$Dict$foldl, elm$core$Dict$insert, t2, t1);
 	});
-var elm$core$Process$kill = _Scheduler_kill;
 var elm$browser$Browser$Events$onEffects = F3(
 	function (router, subs, state) {
 		var stepRight = F3(
@@ -6256,7 +6706,7 @@ var elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.af,
+			state.aj,
 			elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, elm$core$Dict$empty, _List_Nil));
 		var deadPids = _n0.a;
@@ -6302,8 +6752,8 @@ var elm$core$List$filterMap = F2(
 	});
 var elm$browser$Browser$Events$onSelfMsg = F3(
 	function (router, _n0, state) {
-		var key = _n0.ab;
-		var event = _n0.Y;
+		var key = _n0.af;
+		var event = _n0.ac;
 		var toMessage = function (_n2) {
 			var subKey = _n2.a;
 			var _n3 = _n2.b;
@@ -6312,7 +6762,7 @@ var elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _n3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : elm$core$Maybe$Nothing;
 		};
-		var messages = A2(elm$core$List$filterMap, toMessage, state.ao);
+		var messages = A2(elm$core$List$filterMap, toMessage, state.as);
 		return A2(
 			elm$core$Task$andThen,
 			function (_n1) {
@@ -6357,184 +6807,6 @@ var elm$browser$Browser$Events$onResize = function (func) {
 				A2(elm$json$Json$Decode$field, 'innerHeight', elm$json$Json$Decode$int))));
 };
 var elm$core$Platform$Sub$batch = _Platform_batch;
-var elm$time$Time$Every = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var elm$time$Time$State = F2(
-	function (taggers, processes) {
-		return {ai: processes, ap: taggers};
-	});
-var elm$time$Time$init = elm$core$Task$succeed(
-	A2(elm$time$Time$State, elm$core$Dict$empty, elm$core$Dict$empty));
-var elm$time$Time$addMySub = F2(
-	function (_n0, state) {
-		var interval = _n0.a;
-		var tagger = _n0.b;
-		var _n1 = A2(elm$core$Dict$get, interval, state);
-		if (_n1.$ === 1) {
-			return A3(
-				elm$core$Dict$insert,
-				interval,
-				_List_fromArray(
-					[tagger]),
-				state);
-		} else {
-			var taggers = _n1.a;
-			return A3(
-				elm$core$Dict$insert,
-				interval,
-				A2(elm$core$List$cons, tagger, taggers),
-				state);
-		}
-	});
-var elm$core$Process$spawn = _Scheduler_spawn;
-var elm$time$Time$Name = function (a) {
-	return {$: 0, a: a};
-};
-var elm$time$Time$Offset = function (a) {
-	return {$: 1, a: a};
-};
-var elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var elm$time$Time$customZone = elm$time$Time$Zone;
-var elm$time$Time$setInterval = _Time_setInterval;
-var elm$time$Time$spawnHelp = F3(
-	function (router, intervals, processes) {
-		if (!intervals.b) {
-			return elm$core$Task$succeed(processes);
-		} else {
-			var interval = intervals.a;
-			var rest = intervals.b;
-			var spawnTimer = elm$core$Process$spawn(
-				A2(
-					elm$time$Time$setInterval,
-					interval,
-					A2(elm$core$Platform$sendToSelf, router, interval)));
-			var spawnRest = function (id) {
-				return A3(
-					elm$time$Time$spawnHelp,
-					router,
-					rest,
-					A3(elm$core$Dict$insert, interval, id, processes));
-			};
-			return A2(elm$core$Task$andThen, spawnRest, spawnTimer);
-		}
-	});
-var elm$time$Time$onEffects = F3(
-	function (router, subs, _n0) {
-		var processes = _n0.ai;
-		var rightStep = F3(
-			function (_n6, id, _n7) {
-				var spawns = _n7.a;
-				var existing = _n7.b;
-				var kills = _n7.c;
-				return _Utils_Tuple3(
-					spawns,
-					existing,
-					A2(
-						elm$core$Task$andThen,
-						function (_n5) {
-							return kills;
-						},
-						elm$core$Process$kill(id)));
-			});
-		var newTaggers = A3(elm$core$List$foldl, elm$time$Time$addMySub, elm$core$Dict$empty, subs);
-		var leftStep = F3(
-			function (interval, taggers, _n4) {
-				var spawns = _n4.a;
-				var existing = _n4.b;
-				var kills = _n4.c;
-				return _Utils_Tuple3(
-					A2(elm$core$List$cons, interval, spawns),
-					existing,
-					kills);
-			});
-		var bothStep = F4(
-			function (interval, taggers, id, _n3) {
-				var spawns = _n3.a;
-				var existing = _n3.b;
-				var kills = _n3.c;
-				return _Utils_Tuple3(
-					spawns,
-					A3(elm$core$Dict$insert, interval, id, existing),
-					kills);
-			});
-		var _n1 = A6(
-			elm$core$Dict$merge,
-			leftStep,
-			bothStep,
-			rightStep,
-			newTaggers,
-			processes,
-			_Utils_Tuple3(
-				_List_Nil,
-				elm$core$Dict$empty,
-				elm$core$Task$succeed(0)));
-		var spawnList = _n1.a;
-		var existingDict = _n1.b;
-		var killTask = _n1.c;
-		return A2(
-			elm$core$Task$andThen,
-			function (newProcesses) {
-				return elm$core$Task$succeed(
-					A2(elm$time$Time$State, newTaggers, newProcesses));
-			},
-			A2(
-				elm$core$Task$andThen,
-				function (_n2) {
-					return A3(elm$time$Time$spawnHelp, router, spawnList, existingDict);
-				},
-				killTask));
-	});
-var elm$time$Time$Posix = elm$core$Basics$identity;
-var elm$time$Time$millisToPosix = elm$core$Basics$identity;
-var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
-var elm$time$Time$onSelfMsg = F3(
-	function (router, interval, state) {
-		var _n0 = A2(elm$core$Dict$get, interval, state.ap);
-		if (_n0.$ === 1) {
-			return elm$core$Task$succeed(state);
-		} else {
-			var taggers = _n0.a;
-			var tellTaggers = function (time) {
-				return elm$core$Task$sequence(
-					A2(
-						elm$core$List$map,
-						function (tagger) {
-							return A2(
-								elm$core$Platform$sendToApp,
-								router,
-								tagger(time));
-						},
-						taggers));
-			};
-			return A2(
-				elm$core$Task$andThen,
-				function (_n1) {
-					return elm$core$Task$succeed(state);
-				},
-				A2(elm$core$Task$andThen, tellTaggers, elm$time$Time$now));
-		}
-	});
-var elm$time$Time$subMap = F2(
-	function (f, _n0) {
-		var interval = _n0.a;
-		var tagger = _n0.b;
-		return A2(
-			elm$time$Time$Every,
-			interval,
-			A2(elm$core$Basics$composeL, f, tagger));
-	});
-_Platform_effectManagers['Time'] = _Platform_createManager(elm$time$Time$init, elm$time$Time$onEffects, elm$time$Time$onSelfMsg, 0, elm$time$Time$subMap);
-var elm$time$Time$subscription = _Platform_leaf('Time');
-var elm$time$Time$every = F2(
-	function (interval, tagger) {
-		return elm$time$Time$subscription(
-			A2(elm$time$Time$Every, interval, tagger));
-	});
 var author$project$KanjiScreen$subscriptions = function (state) {
 	return elm$core$Platform$Sub$batch(
 		_List_fromArray(
@@ -6544,7 +6816,7 @@ var author$project$KanjiScreen$subscriptions = function (state) {
 					function (w, h) {
 						return A2(author$project$KanjiScreen$WindowResize, w, h);
 					})),
-				A2(elm$time$Time$every, 10.0 * 1000, author$project$KanjiScreen$Tick)
+				elm$browser$Browser$Events$onAnimationFrameDelta(author$project$KanjiScreen$Tick)
 			]));
 };
 var author$project$LoadingScreen$subscriptions = function (state) {
@@ -6577,155 +6849,10 @@ var author$project$Main$subscriptions = function (screen) {
 			author$project$KanjiScreen$subscriptions(model));
 	}
 };
-var author$project$KanjiScreen$Model = F3(
-	function (aspect, kanjis, seed) {
-		return {J: aspect, aa: kanjis, P: seed};
+var author$project$KanjiScreen$Model = F5(
+	function (aspect, tiles, gridSize, time, iterTime) {
+		return {Z: aspect, P: gridSize, y: iterTime, C: tiles, D: time};
 	});
-var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var elm$random$Random$next = function (_n0) {
-	var state0 = _n0.a;
-	var incr = _n0.b;
-	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
-};
-var elm$random$Random$initialSeed = function (x) {
-	var _n0 = elm$random$Random$next(
-		A2(elm$random$Random$Seed, 0, 1013904223));
-	var state1 = _n0.a;
-	var incr = _n0.b;
-	var state2 = (state1 + x) >>> 0;
-	return elm$random$Random$next(
-		A2(elm$random$Random$Seed, state2, incr));
-};
-var author$project$KanjiScreen$init = F2(
-	function (aspect, kanjis) {
-		return A3(
-			author$project$KanjiScreen$Model,
-			aspect,
-			kanjis,
-			elm$random$Random$initialSeed(0));
-	});
-var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
-var elm$time$Time$posixToMillis = function (_n0) {
-	var millis = _n0;
-	return millis;
-};
-var author$project$KanjiScreen$update = F2(
-	function (model, msg) {
-		if (!msg.$) {
-			var width = msg.a;
-			var height = msg.b;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{J: width / height}),
-				elm$core$Platform$Cmd$none);
-		} else {
-			var time = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{
-						P: elm$random$Random$initialSeed(
-							elm$time$Time$posixToMillis(time))
-					}),
-				elm$core$Platform$Cmd$none);
-		}
-	});
-var author$project$LoadingScreen$update = F2(
-	function (msg, state) {
-		if (!msg.$) {
-			if (!msg.a.$) {
-				var kanjis = msg.a.a;
-				return _Utils_update(
-					state,
-					{
-						aa: elm$core$Maybe$Just(kanjis)
-					});
-			} else {
-				var error = msg.a.a;
-				return state;
-			}
-		} else {
-			var width = msg.a;
-			var height = msg.b;
-			return _Utils_update(
-				state,
-				{
-					J: elm$core$Maybe$Just(width / height)
-				});
-		}
-	});
-var author$project$Main$Kanji = function (a) {
-	return {$: 1, a: a};
-};
-var author$project$Main$apply2 = A2(elm$core$Basics$composeL, elm$core$Basics$composeL, elm$core$Basics$composeL);
-var elm$core$Maybe$map2 = F3(
-	function (func, ma, mb) {
-		if (ma.$ === 1) {
-			return elm$core$Maybe$Nothing;
-		} else {
-			var a = ma.a;
-			if (mb.$ === 1) {
-				return elm$core$Maybe$Nothing;
-			} else {
-				var b = mb.a;
-				return elm$core$Maybe$Just(
-					A2(func, a, b));
-			}
-		}
-	});
-var elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (!maybe.$) {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
-var author$project$Main$update = F2(
-	function (msg, screen) {
-		var _n0 = _Utils_Tuple2(msg, screen);
-		_n0$2:
-		while (true) {
-			if (!_n0.a.$) {
-				if (!_n0.b.$) {
-					var submsg = _n0.a.a;
-					var model = _n0.b.a;
-					var newState = A2(author$project$LoadingScreen$update, submsg, model);
-					var nextState = A2(
-						elm$core$Maybe$withDefault,
-						author$project$Main$Loading(newState),
-						A3(
-							elm$core$Maybe$map2,
-							A2(author$project$Main$apply2, author$project$Main$Kanji, author$project$KanjiScreen$init),
-							newState.J,
-							newState.aa));
-					return _Utils_Tuple2(nextState, elm$core$Platform$Cmd$none);
-				} else {
-					break _n0$2;
-				}
-			} else {
-				if (_n0.b.$ === 1) {
-					var submsg = _n0.a.a;
-					var model = _n0.b.a;
-					return A3(
-						author$project$Main$wrap,
-						author$project$Main$Kanji,
-						author$project$Main$KanjiMsg,
-						A2(author$project$KanjiScreen$update, model, submsg));
-				} else {
-					break _n0$2;
-				}
-			}
-		}
-		return _Utils_Tuple2(screen, elm$core$Platform$Cmd$none);
-	});
-var author$project$KanjiScreen$referenceScale = 100;
 var author$project$KanjiScreen$sizing = function (srs) {
 	_n0$8:
 	while (true) {
@@ -6756,43 +6883,6 @@ var author$project$KanjiScreen$sizing = function (srs) {
 	}
 	return 0;
 };
-var author$project$KanjiScreen$kanjiColor = function (k) {
-	var _n0 = k.aP;
-	if (_n0.$ === 1) {
-		return '#202020';
-	} else {
-		var level = _n0.a;
-		return 'rgb(238, 238, 236)';
-	}
-};
-var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var elm$svg$Svg$text = elm$virtual_dom$VirtualDom$text;
-var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
-var elm$svg$Svg$text_ = elm$svg$Svg$trustedNode('text');
-var elm$svg$Svg$Attributes$dy = _VirtualDom_attribute('dy');
-var elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
-var elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
-var author$project$KanjiScreen$viewKanji = function (_n0) {
-	var data = _n0.a;
-	var size = _n0.b;
-	var _n1 = _n0.c;
-	var x = _n1.a;
-	var y = _n1.b;
-	var trans = 'translate(' + (elm$core$String$fromInt(x * author$project$KanjiScreen$referenceScale) + (' ' + (elm$core$String$fromInt(y * author$project$KanjiScreen$referenceScale) + (')' + (' scale(' + (elm$core$String$fromInt(size) + ') '))))));
-	return A2(
-		elm$svg$Svg$text_,
-		_List_fromArray(
-			[
-				elm$svg$Svg$Attributes$fill(
-				author$project$KanjiScreen$kanjiColor(data)),
-				elm$svg$Svg$Attributes$transform(trans),
-				elm$svg$Svg$Attributes$dy('0.875em')
-			]),
-		_List_fromArray(
-			[
-				elm$svg$Svg$text(data.ax)
-			]));
-};
 var elm$core$Basics$sqrt = _Basics_sqrt;
 var author$project$Layout$bestFit = F2(
 	function (numItems, aspectRatio) {
@@ -6802,22 +6892,6 @@ var author$project$Layout$bestFit = F2(
 		return _Utils_Tuple2(
 			elm$core$Basics$floor(w),
 			elm$core$Basics$floor(h));
-	});
-var elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
-		}
-	});
-var elm$core$List$concat = function (lists) {
-	return A3(elm$core$List$foldr, elm$core$List$append, _List_Nil, lists);
-};
-var elm$core$List$concatMap = F2(
-	function (f, list) {
-		return elm$core$List$concat(
-			A2(elm$core$List$map, f, list));
 	});
 var author$project$Utils$pairRange = F2(
 	function (_n0, _n1) {
@@ -7154,6 +7228,16 @@ var elm$core$Basics$negate = function (n) {
 	return -n;
 };
 var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var elm$random$Random$next = function (_n0) {
+	var state0 = _n0.a;
+	var incr = _n0.b;
+	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
 var elm$core$Bitwise$xor = _Bitwise_xor;
 var elm$random$Random$peel = function (_n0) {
 	var state = _n0.a;
@@ -7350,6 +7434,249 @@ var author$project$Layout$computeLayout = F3(
 			A3(author$project$Layout$randomFill, grid, sorted, seed),
 			_Utils_Tuple2(w, h));
 	});
+var elm$random$Random$initialSeed = function (x) {
+	var _n0 = elm$random$Random$next(
+		A2(elm$random$Random$Seed, 0, 1013904223));
+	var state1 = _n0.a;
+	var incr = _n0.b;
+	var state2 = (state1 + x) >>> 0;
+	return elm$random$Random$next(
+		A2(elm$random$Random$Seed, state2, incr));
+};
+var author$project$KanjiScreen$init = F2(
+	function (aspect, kanjis) {
+		var _n0 = function (l) {
+			return A3(
+				author$project$Layout$computeLayout,
+				l,
+				aspect,
+				elm$random$Random$initialSeed(0));
+		}(
+			A2(
+				elm$core$List$map,
+				function (kd) {
+					return _Utils_Tuple2(
+						kd,
+						author$project$KanjiScreen$sizing(kd.aT));
+				},
+				kanjis));
+		var tiles = _n0.a;
+		var gridSize = _n0.b;
+		return A5(author$project$KanjiScreen$Model, aspect, tiles, gridSize, 0.0, 0.0);
+	});
+var author$project$KanjiScreen$shuffle = F2(
+	function (model, time) {
+		var seed = elm$random$Random$initialSeed(
+			elm$core$Basics$floor(time));
+		var _n0 = function (l) {
+			return A3(author$project$Layout$computeLayout, l, model.Z, seed);
+		}(
+			A2(
+				elm$core$List$map,
+				function (_n1) {
+					var data = _n1.a;
+					var size = _n1.b;
+					return _Utils_Tuple2(data, size);
+				},
+				model.C));
+		var shuffled = _n0.a;
+		var gridSize = _n0.b;
+		return _Utils_update(
+			model,
+			{P: gridSize, y: 0, C: shuffled, D: time});
+	});
+var author$project$KanjiScreen$shufflePeriod = 24.0;
+var author$project$KanjiScreen$update = F2(
+	function (model, msg) {
+		if (!msg.$) {
+			var width = msg.a;
+			var height = msg.b;
+			return _Utils_Tuple2(
+				A2(
+					author$project$KanjiScreen$init,
+					width / height,
+					A2(
+						elm$core$List$map,
+						function (_n1) {
+							var a = _n1.a;
+							var b = _n1.b;
+							var c = _n1.c;
+							return a;
+						},
+						model.C)),
+				elm$core$Platform$Cmd$none);
+		} else {
+			var t = msg.a;
+			var newTime = model.D + (t / 1000);
+			var iterTime = model.y + (t / 1000);
+			var updated = (_Utils_cmp(iterTime, author$project$KanjiScreen$shufflePeriod) > 0) ? A2(author$project$KanjiScreen$shuffle, model, newTime) : _Utils_update(
+				model,
+				{y: iterTime, D: newTime});
+			return _Utils_Tuple2(updated, elm$core$Platform$Cmd$none);
+		}
+	});
+var author$project$LoadingScreen$update = F2(
+	function (msg, state) {
+		if (!msg.$) {
+			if (!msg.a.$) {
+				var kanjis = msg.a.a;
+				return _Utils_update(
+					state,
+					{
+						L: elm$core$Maybe$Just(kanjis)
+					});
+			} else {
+				var error = msg.a.a;
+				return author$project$LoadingScreen$errorState('(◕︿◕✿)');
+			}
+		} else {
+			var width = msg.a;
+			var height = msg.b;
+			return _Utils_update(
+				state,
+				{
+					Z: elm$core$Maybe$Just(width / height)
+				});
+		}
+	});
+var author$project$Main$Kanji = function (a) {
+	return {$: 1, a: a};
+};
+var author$project$Main$update = F2(
+	function (msg, screen) {
+		var _n0 = _Utils_Tuple2(msg, screen);
+		_n0$2:
+		while (true) {
+			if (!_n0.a.$) {
+				if (!_n0.b.$) {
+					var submsg = _n0.a.a;
+					var model = _n0.b.a;
+					var updatedState = A2(author$project$LoadingScreen$update, submsg, model);
+					var nextState = function () {
+						var _n1 = _Utils_Tuple2(updatedState.Z, updatedState.L);
+						if ((!_n1.a.$) && (!_n1.b.$)) {
+							var aspect = _n1.a.a;
+							var kanjis = _n1.b.a;
+							return author$project$Main$Kanji(
+								A2(author$project$KanjiScreen$init, aspect, kanjis));
+						} else {
+							return author$project$Main$Loading(updatedState);
+						}
+					}();
+					return _Utils_Tuple2(nextState, elm$core$Platform$Cmd$none);
+				} else {
+					break _n0$2;
+				}
+			} else {
+				if (_n0.b.$ === 1) {
+					var submsg = _n0.a.a;
+					var model = _n0.b.a;
+					return A3(
+						author$project$Main$wrap,
+						author$project$Main$Kanji,
+						author$project$Main$KanjiMsg,
+						A2(author$project$KanjiScreen$update, model, submsg));
+				} else {
+					break _n0$2;
+				}
+			}
+		}
+		return _Utils_Tuple2(screen, elm$core$Platform$Cmd$none);
+	});
+var author$project$KanjiScreen$referenceScale = 100;
+var author$project$KanjiScreen$fadeInTime = 2.1;
+var author$project$Anim$grayscale = function (x) {
+	return _Utils_Tuple3(x, x, x);
+};
+var elm$core$Basics$cos = _Basics_cos;
+var elm$core$Basics$pi = _Basics_pi;
+var elm$core$Basics$turns = function (angleInTurns) {
+	return (2 * elm$core$Basics$pi) * angleInTurns;
+};
+var author$project$Anim$cose = function (x) {
+	return elm$core$Basics$cos(
+		elm$core$Basics$turns(x));
+};
+var elm$core$Basics$sin = _Basics_sin;
+var author$project$Anim$sine = function (x) {
+	return elm$core$Basics$sin(
+		elm$core$Basics$turns(x));
+};
+var author$project$Anim$plasma = F3(
+	function (x, y, t) {
+		var components = _List_fromArray(
+			[
+				author$project$Anim$sine((x / 45.0) + (t / 8.0)),
+				author$project$Anim$cose(
+				(((x * author$project$Anim$sine(t / 20.0)) + (y * author$project$Anim$cose(t / 18.0))) / 35.0) + (t / 10.0))
+			]);
+		var avg = elm$core$List$sum(components) / elm$core$List$length(components);
+		return avg;
+	});
+var author$project$Anim$toCss = function (_n0) {
+	var r = _n0.a;
+	var g = _n0.b;
+	var b = _n0.c;
+	return 'rgb(' + (elm$core$String$fromInt(
+		elm$core$Basics$floor(r * 255.0)) + (',' + (elm$core$String$fromInt(
+		elm$core$Basics$floor(g * 255.0)) + (',' + (elm$core$String$fromInt(
+		elm$core$Basics$floor(b * 255.0)) + ')')))));
+};
+var author$project$KanjiScreen$kanjiColor = F3(
+	function (k, time, _n0) {
+		var x = _n0.a;
+		var y = _n0.b;
+		var _n1 = k.aT;
+		if (_n1.$ === 1) {
+			return author$project$Anim$toCss(
+				author$project$Anim$grayscale(
+					function (u) {
+						return 0.15 + (u * 5.0e-2);
+					}(
+						A3(author$project$Anim$plasma, x, y, time))));
+		} else {
+			var level = _n1.a;
+			return author$project$Anim$toCss(
+				author$project$Anim$grayscale(0.93));
+		}
+	});
+var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var elm$svg$Svg$text = elm$virtual_dom$VirtualDom$text;
+var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var elm$svg$Svg$text_ = elm$svg$Svg$trustedNode('text');
+var elm$svg$Svg$Attributes$display = _VirtualDom_attribute('display');
+var elm$svg$Svg$Attributes$dy = _VirtualDom_attribute('dy');
+var elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
+var elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
+var author$project$KanjiScreen$viewKanji = F5(
+	function (time, iterTime, numTiles, index, _n0) {
+		var data = _n0.a;
+		var size = _n0.b;
+		var _n1 = _n0.c;
+		var x = _n1.a;
+		var y = _n1.b;
+		var fade = (index * author$project$KanjiScreen$fadeInTime) / numTiles;
+		var show = (_Utils_cmp(iterTime, 1.0 + fade) > 0) && (_Utils_cmp(iterTime, ((author$project$KanjiScreen$shufflePeriod - author$project$KanjiScreen$fadeInTime) - 1.0) + fade) < 0);
+		var disp = show ? elm$svg$Svg$Attributes$transform(
+			'translate(' + (elm$core$String$fromInt(x * author$project$KanjiScreen$referenceScale) + (' ' + (elm$core$String$fromInt(y * author$project$KanjiScreen$referenceScale) + (')' + (' scale(' + (elm$core$String$fromInt(size) + ') '))))))) : elm$svg$Svg$Attributes$display('none');
+		return A2(
+			elm$svg$Svg$text_,
+			_List_fromArray(
+				[
+					elm$svg$Svg$Attributes$fill(
+					A3(
+						author$project$KanjiScreen$kanjiColor,
+						data,
+						time,
+						_Utils_Tuple2(x, y))),
+					disp,
+					elm$svg$Svg$Attributes$dy('0.875em')
+				]),
+			_List_fromArray(
+				[
+					elm$svg$Svg$text(data.aB)
+				]));
+	});
 var elm$core$List$singleton = function (value) {
 	return _List_fromArray(
 		[value]);
@@ -7359,25 +7686,12 @@ var elm$svg$Svg$svg = elm$svg$Svg$trustedNode('svg');
 var elm$svg$Svg$Attributes$fontSize = _VirtualDom_attribute('font-size');
 var elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
 var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
-var author$project$KanjiScreen$viewKanjis = F3(
-	function (kanjis, aspect, seed) {
-		var _n0 = function (l) {
-			return A3(author$project$Layout$computeLayout, l, aspect, seed);
-		}(
-			A2(
-				elm$core$List$map,
-				function (kd) {
-					return _Utils_Tuple2(
-						kd,
-						author$project$KanjiScreen$sizing(kd.aP));
-				},
-				kanjis));
-		var tiles = _n0.a;
-		var _n1 = _n0.b;
-		var w = _n1.a;
-		var h = _n1.b;
-		var th = elm$core$String$fromInt(author$project$KanjiScreen$referenceScale * h);
+var author$project$KanjiScreen$viewKanjis = F4(
+	function (tiles, _n0, time, iterTime) {
+		var w = _n0.a;
+		var h = _n0.b;
 		var tw = elm$core$String$fromInt(author$project$KanjiScreen$referenceScale * w);
+		var th = elm$core$String$fromInt(author$project$KanjiScreen$referenceScale * h);
 		return A2(
 			elm$svg$Svg$svg,
 			_List_fromArray(
@@ -7393,7 +7707,14 @@ var author$project$KanjiScreen$viewKanjis = F3(
 							elm$svg$Svg$Attributes$fontSize(
 							elm$core$String$fromInt(author$project$KanjiScreen$referenceScale) + 'px')
 						]),
-					A2(elm$core$List$map, author$project$KanjiScreen$viewKanji, tiles))));
+					A2(
+						elm$core$List$indexedMap,
+						A3(
+							author$project$KanjiScreen$viewKanji,
+							time,
+							iterTime,
+							elm$core$List$length(tiles)),
+						tiles))));
 	});
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
@@ -7411,7 +7732,7 @@ var author$project$KanjiScreen$view = function (state) {
 			]),
 		_List_fromArray(
 			[
-				A3(author$project$KanjiScreen$viewKanjis, state.aa, state.J, state.P)
+				A4(author$project$KanjiScreen$viewKanjis, state.C, state.P, state.D, state.y)
 			]));
 };
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
@@ -7434,11 +7755,13 @@ var author$project$LoadingScreen$view = function (state) {
 					[
 						A2(elm$html$Html$Attributes$style, 'color', 'white'),
 						A2(elm$html$Html$Attributes$style, 'font-size', '20vmin'),
+						A2(elm$html$Html$Attributes$style, 'text-align', 'center'),
 						A2(elm$html$Html$Attributes$style, 'margin', 'auto')
 					]),
 				_List_fromArray(
 					[
-						elm$html$Html$text('ロード中')
+						elm$html$Html$text(
+						A2(elm$core$Maybe$withDefault, 'ロード中', state.J))
 					]))
 			]));
 };
@@ -7461,6 +7784,5 @@ var author$project$Main$view = function (screen) {
 };
 var elm$browser$Browser$element = _Browser_element;
 var author$project$Main$main = elm$browser$Browser$element(
-	{aF: author$project$Main$init, aR: author$project$Main$subscriptions, aT: author$project$Main$update, aV: author$project$Main$view});
-_Platform_export({'Main':{'init':author$project$Main$main(
-	elm$json$Json$Decode$succeed(0))(0)}});}(this));
+	{aJ: author$project$Main$init, aV: author$project$Main$subscriptions, aX: author$project$Main$update, aZ: author$project$Main$view});
+_Platform_export({'Main':{'init':author$project$Main$main(elm$json$Json$Decode$string)(0)}});}(this));
