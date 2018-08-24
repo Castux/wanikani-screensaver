@@ -14,7 +14,7 @@ import Time exposing (Posix)
 
 type Msg
     = WindowResize Float Float
-    | Tick Posix
+    | ShuffleTime Posix
 
 
 type alias Tile =
@@ -31,8 +31,13 @@ type alias Model =
 init : Float -> List KanjiData -> Maybe Random.Seed -> Model
 init aspect kanjis maybeSeed =
     let
+        seed =
+            Maybe.withDefault (Random.initialSeed 0) maybeSeed
+
         ( tiles, gridSize ) =
-            shuffle kanjis aspect (Maybe.withDefault (Random.initialSeed 0) maybeSeed)
+            kanjis
+                |> List.map (\kd -> ( kd, sizing kd.srs ))
+                |> (\l -> Layout.computeLayout l aspect seed)
     in
     Model aspect tiles gridSize
 
@@ -73,13 +78,6 @@ sizing srs =
             0
 
 
-shuffle : List KanjiData -> Float -> Random.Seed -> ( List Tile, ( Int, Int ) )
-shuffle kanjis aspect seed =
-    kanjis
-        |> List.map (\kd -> ( kd, sizing kd.srs ))
-        |> (\l -> Layout.computeLayout l aspect seed)
-
-
 update : Model -> Msg -> ( Model, Cmd Msg )
 update model msg =
     let
@@ -90,7 +88,7 @@ update model msg =
         WindowResize width height ->
             ( init (width / height) kanjis Nothing, Cmd.none )
 
-        Tick time ->
+        ShuffleTime time ->
             let
                 seed =
                     Just <| Random.initialSeed (Time.posixToMillis time)
@@ -164,5 +162,5 @@ subscriptions : Model -> Sub Msg
 subscriptions state =
     Sub.batch
         [ Browser.Events.onResize (\w h -> WindowResize (toFloat w) (toFloat h))
-        , Time.every (10.0 * 1000) Tick
+        , Time.every (10.0 * 1000) ShuffleTime
         ]

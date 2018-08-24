@@ -6046,7 +6046,7 @@ var author$project$Main$wrap = F3(
 var author$project$Main$init = function (flags) {
 	return A3(author$project$Main$wrap, author$project$Main$Loading, author$project$Main$LoadingMsg, author$project$LoadingScreen$init);
 };
-var author$project$KanjiScreen$Tick = function (a) {
+var author$project$KanjiScreen$ShuffleTime = function (a) {
 	return {$: 1, a: a};
 };
 var author$project$KanjiScreen$WindowResize = F2(
@@ -6544,7 +6544,7 @@ var author$project$KanjiScreen$subscriptions = function (state) {
 					function (w, h) {
 						return A2(author$project$KanjiScreen$WindowResize, w, h);
 					})),
-				A2(elm$time$Time$every, 10.0 * 1000, author$project$KanjiScreen$Tick)
+				A2(elm$time$Time$every, 10.0 * 1000, author$project$KanjiScreen$ShuffleTime)
 			]));
 };
 var author$project$LoadingScreen$subscriptions = function (state) {
@@ -7178,20 +7178,6 @@ var author$project$Layout$computeLayout = F3(
 			A3(author$project$Layout$randomFill, grid, sorted, seed),
 			_Utils_Tuple2(w, h));
 	});
-var author$project$KanjiScreen$shuffle = F3(
-	function (kanjis, aspect, seed) {
-		return function (l) {
-			return A3(author$project$Layout$computeLayout, l, aspect, seed);
-		}(
-			A2(
-				elm$core$List$map,
-				function (kd) {
-					return _Utils_Tuple2(
-						kd,
-						author$project$KanjiScreen$sizing(kd.aQ));
-				},
-				kanjis));
-	});
 var elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (!maybe.$) {
@@ -7212,14 +7198,21 @@ var elm$random$Random$initialSeed = function (x) {
 };
 var author$project$KanjiScreen$init = F3(
 	function (aspect, kanjis, maybeSeed) {
-		var _n0 = A3(
-			author$project$KanjiScreen$shuffle,
-			kanjis,
-			aspect,
+		var seed = A2(
+			elm$core$Maybe$withDefault,
+			elm$random$Random$initialSeed(0),
+			maybeSeed);
+		var _n0 = function (l) {
+			return A3(author$project$Layout$computeLayout, l, aspect, seed);
+		}(
 			A2(
-				elm$core$Maybe$withDefault,
-				elm$random$Random$initialSeed(0),
-				maybeSeed));
+				elm$core$List$map,
+				function (kd) {
+					return _Utils_Tuple2(
+						kd,
+						author$project$KanjiScreen$sizing(kd.aQ));
+				},
+				kanjis));
 		var tiles = _n0.a;
 		var gridSize = _n0.b;
 		return A3(author$project$KanjiScreen$Model, aspect, tiles, gridSize);
