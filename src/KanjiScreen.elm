@@ -39,11 +39,28 @@ fadeInTime =
     2.1
 
 
+kanjiOrder ka kb =
+    case ( ka.srs, kb.srs ) of
+        ( Just sa, Just sb ) ->
+            compare sa sb
+
+        ( Nothing, Just sb ) ->
+            LT
+
+        ( Just sa, Nothing ) ->
+            GT
+
+        ( Nothing, Nothing ) ->
+            EQ
+
+
 init : Float -> List KanjiData -> Model
 init aspect kanjis =
     let
         ( tiles, gridSize ) =
             kanjis
+                |> List.sortWith kanjiOrder
+                |> List.reverse
                 |> List.map (\kd -> ( kd, sizing kd.srs ))
                 |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
     in
@@ -58,6 +75,7 @@ shuffle model time =
 
         ( shuffled, gridSize ) =
             model.tiles
+                |> List.reverse
                 |> List.map (\( data, size, _ ) -> ( data, size ))
                 |> (\l -> Layout.computeLayout l model.aspect seed)
     in
@@ -97,7 +115,7 @@ sizing srs =
             1
 
         _ ->
-            0
+            1
 
 
 update : Model -> Msg -> ( Model, Cmd Msg )

@@ -103,45 +103,23 @@ randomFill emptyGrid allItems initialSeed =
 
 
 
--- Items with size 0 are considered filling: they take size 1,
--- but are placed after all the others
+-- The algorithm attempts to place the objects in the order they are given,
+-- so it works better when larger ones come first, and filling (size 1) comes at
+-- the end.
 
 
 computeLayout : List ( a, Int ) -> Float -> Random.Seed -> ( List ( a, Int, ( Int, Int ) ), ( Int, Int ) )
 computeLayout items aspectRatio seed =
     let
-        sorted =
-            items
-                |> List.sortWith decreasingSize
-                |> (List.map << Tuple.mapSecond)
-                    (\s ->
-                        if s == 0 then
-                            1
-
-                        else
-                            s
-                    )
-
         surface =
-            sorted
+            items
                 |> List.map (Tuple.second >> (\n -> n * n))
                 |> List.sum
 
         ( w, h ) =
             bestFit surface aspectRatio
 
-        decreasingSize ( a, sa ) ( b, sb ) =
-            case compare sa sb of
-                LT ->
-                    GT
-
-                EQ ->
-                    EQ
-
-                GT ->
-                    LT
-
         grid =
             makeGrid ( w, h )
     in
-    ( randomFill grid sorted seed, ( w, h ) )
+    ( randomFill grid items seed, ( w, h ) )
