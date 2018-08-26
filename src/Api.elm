@@ -5,14 +5,24 @@ import Json.Decode exposing (..)
 import KanjiData exposing (KanjiData)
 
 
+computePercentage read_ok read_nok mean_ok mean_nok =
+    Maybe.map4
+        (\a b c d -> (toFloat a + toFloat c) / (toFloat a + toFloat b + toFloat c + toFloat d))
+        read_ok
+        read_nok
+        mean_ok
+        mean_nok
+
+
 kanjiDecode =
-    map6 KanjiData
+    map7 (\level character srs read_ok read_nok mean_ok mean_nok -> KanjiData level character srs (computePercentage read_ok read_nok mean_ok mean_nok))
         (field "level" int)
         (field "character" string)
-        (field "meaning" string)
-        (maybe (field "onyomi" string))
-        (maybe (field "kunyomi" string))
         (maybe (at [ "user_specific", "srs_numeric" ] int))
+        (maybe (at [ "user_specific", "reading_correct" ] int))
+        (maybe (at [ "user_specific", "reading_incorrect" ] int))
+        (maybe (at [ "user_specific", "meaning_correct" ] int))
+        (maybe (at [ "user_specific", "meaning_incorrect" ] int))
 
 
 requestDecode =

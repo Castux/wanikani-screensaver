@@ -1,4 +1,4 @@
-module Anim exposing (grayscale, plasma, toCss)
+module Anim exposing (grayscale, plasma, toCss, vibrate)
 
 
 sine x =
@@ -21,6 +21,11 @@ plasma x y t =
             List.sum components / toFloat (List.length components)
     in
     avg
+
+
+vibrate : Float -> Float
+vibrate t =
+    sine (t * 10.0) * (1 - abs (sine (t / 8.0))) ^ 3 * 5.0
 
 
 grayscale : Float -> ( Float, Float, Float )

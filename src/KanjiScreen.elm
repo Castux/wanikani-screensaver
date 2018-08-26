@@ -174,6 +174,16 @@ viewKanji time iterTime numTiles index ( data, size, ( x, y ) ) =
         fade =
             toFloat index * fadeInTime / toFloat numTiles
 
+        leech =
+            data.correct |> Maybe.map ((>=) 0.75) |> Maybe.withDefault False
+
+        leechRot =
+            if leech then
+                Anim.vibrate (time + toFloat index / 100)
+
+            else
+                0.0
+
         show =
             iterTime > 1.0 + fade && iterTime < shufflePeriod - fadeInTime - 1.0 + fade
 
@@ -187,7 +197,14 @@ viewKanji time iterTime numTiles index ( data, size, ( x, y ) ) =
                         ++ ")"
                         ++ " scale("
                         ++ String.fromInt size
-                        ++ ") "
+                        ++ ")"
+                        ++ " rotate("
+                        ++ String.fromFloat leechRot
+                        ++ ","
+                        ++ String.fromFloat (toFloat referenceScale / 2.0)
+                        ++ ","
+                        ++ String.fromFloat (toFloat referenceScale / 2.0)
+                        ++ ")"
 
             else
                 display "none"

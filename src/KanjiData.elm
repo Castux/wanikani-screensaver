@@ -1,11 +1,9 @@
-module KanjiData exposing (..)
+module KanjiData exposing (KanjiData)
 
 
 type alias KanjiData =
     { level : Int
     , character : String
-    , meaning : String
-    , onyomi : Maybe String
-    , kunyomi : Maybe String
     , srs : Maybe Int
+    , correct : Maybe Float
     }
