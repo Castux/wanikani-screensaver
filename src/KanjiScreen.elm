@@ -24,6 +24,7 @@ type alias Tile =
 
 type alias Model =
     { aspect : Float
+    , padding : Int
     , tiles : List Tile
     , gridSize : ( Int, Int )
     , time : Float
@@ -45,8 +46,8 @@ kanjiOrder ka kb =
         (kb.srs |> Maybe.withDefault 100)
 
 
-init : Float -> List KanjiData -> Model
-init aspect kanjis =
+init : Float -> Int -> List KanjiData -> Model
+init aspect padding kanjis =
     let
         ( tiles, gridSize ) =
             kanjis
@@ -54,7 +55,7 @@ init aspect kanjis =
                 |> List.map (\kd -> ( kd, sizing kd.srs ))
                 |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
     in
-    Model aspect tiles gridSize 0.0 0.0
+    Model aspect padding tiles gridSize 0.0 0.0
 
 
 shuffle : Model -> Float -> Model
@@ -113,7 +114,8 @@ update model msg =
     case msg of
         WindowResize width height ->
             ( init
-                (width / height)
+                ((width - 2 * toFloat model.padding) / (height - 2 * toFloat model.padding))
+                model.padding
                 (List.map (\( a, b, c ) -> a) model.tiles)
             , Cmd.none
             )
@@ -136,8 +138,8 @@ update model msg =
             ( updated, Cmd.none )
 
 
-viewKanjis : List Tile -> ( Int, Int ) -> Float -> Float -> Svg Msg
-viewKanjis tiles ( w, h ) time iterTime =
+viewKanjis : List Tile -> ( Int, Int ) -> Float -> Float -> Int -> Svg Msg
+viewKanjis tiles ( w, h ) time iterTime padding =
     let
         tw =
             String.fromInt <| referenceScale * w
@@ -151,7 +153,12 @@ viewKanjis tiles ( w, h ) time iterTime =
         |> List.singleton
         |> Svg.svg
             [ viewBox <| "0 0 " ++ tw ++ " " ++ th
-            , style "margin:auto; width: 100%; height: 100%;"
+            , style <|
+                "margin:auto; width: calc(100% - "
+                    ++ String.fromInt (2 * padding)
+                    ++ "px); height: calc(100% - "
+                    ++ String.fromInt (2 * padding)
+                    ++ "px);"
             ]
 
 
@@ -226,7 +233,7 @@ view state =
         , Html.Attributes.style "width" "100%"
         , Html.Attributes.style "height" "100%"
         ]
-        [ viewKanjis state.tiles state.gridSize state.time state.iterTime ]
+        [ viewKanjis state.tiles state.gridSize state.time state.iterTime state.padding ]
 
 
 subscriptions : Model -> Sub Msg

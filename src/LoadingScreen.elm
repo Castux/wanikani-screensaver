@@ -1,4 +1,4 @@
-module LoadingScreen exposing (Model, Msg, init, subscriptions, update, view)
+module LoadingScreen exposing (Model, Msg, Params, init, subscriptions, update, view)
 
 import Api
 import Browser.Dom
@@ -10,10 +10,17 @@ import KanjiData exposing (KanjiData)
 import Task
 
 
+type alias Params =
+    { key : String
+    , padding : Maybe Int
+    }
+
+
 type alias Model =
     { kanjis : Maybe (List KanjiData)
     , aspect : Maybe Float
     , errorMsg : Maybe String
+    , padding : Int
     }
 
 
@@ -22,11 +29,12 @@ type Msg
     | WindowResize Float Float
 
 
-initState : Model
-initState =
+initState : Params -> Model
+initState params =
     { kanjis = Nothing
     , aspect = Nothing
     , errorMsg = Nothing
+    , padding = params.padding |> Maybe.withDefault 0
     }
 
 
@@ -37,10 +45,10 @@ viewportToSize vp =
         vp.viewport.height
 
 
-initCommands : String -> Cmd Msg
-initCommands key =
+initCommands : Params -> Cmd Msg
+initCommands params =
     Cmd.batch
-        [ Api.getData ReceivedKanjis key
+        [ Api.getData ReceivedKanjis params.key
         , Task.perform viewportToSize Browser.Dom.getViewport
         ]
 
@@ -50,14 +58,15 @@ errorState msg =
     { kanjis = Nothing
     , aspect = Nothing
     , errorMsg = Just msg
+    , padding = 0
     }
 
 
-init : Maybe String -> ( Model, Cmd Msg )
-init maybeKey =
-    case maybeKey of
-        Just key ->
-            ( initState, initCommands key )
+init : Maybe Params -> ( Model, Cmd Msg )
+init maybeParams =
+    case maybeParams of
+        Just params ->
+            ( initState params, initCommands params )
 
         Nothing ->
             ( errorState "(屮｀∀´)屮", Cmd.none )
@@ -73,7 +82,7 @@ update msg state =
             errorState "(◕︿◕✿)"
 
         WindowResize width height ->
-            { state | aspect = Just (width / height) }
+            { state | aspect = Just ((width - 2 * toFloat state.padding) / (height - 2 * toFloat state.padding)) }
 
 
 view : Model -> Html.Html Msg

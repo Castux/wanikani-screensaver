@@ -6,7 +6,7 @@ import KanjiScreen
 import LoadingScreen
 import Url
 import Url.Parser exposing ((<?>))
-import Url.Parser.Query
+import Url.Parser.Query exposing (int, map2, string)
 
 
 type Screen
@@ -19,7 +19,7 @@ type Msg
     | KanjiMsg KanjiScreen.Msg
 
 
-parseUrl : String -> Maybe String
+parseUrl : String -> Maybe LoadingScreen.Params
 parseUrl stringUrl =
     let
         pathParser =
@@ -30,13 +30,13 @@ parseUrl stringUrl =
 
         parser =
             pathParser
-                <?> Url.Parser.Query.string "key"
+                <?> map2 Tuple.pair (string "key") (int "padding")
                 |> Url.Parser.map (\_ s -> s)
 
         parse url =
             case Url.Parser.parse parser url of
-                Just (Just key) ->
-                    Just key
+                Just ( Just key, maybePadding ) ->
+                    Just (LoadingScreen.Params key maybePadding)
 
                 _ ->
                     Nothing
@@ -66,7 +66,7 @@ update msg screen =
                 nextState =
                     case ( updatedState.aspect, updatedState.kanjis ) of
                         ( Just aspect, Just kanjis ) ->
-                            Kanji (KanjiScreen.init aspect kanjis)
+                            Kanji (KanjiScreen.init aspect model.padding kanjis)
 
                         _ ->
                             Loading updatedState
