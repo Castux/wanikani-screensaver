@@ -25,6 +25,7 @@ type alias Tile =
 type alias Model =
     { aspect : Float
     , padding : Int
+    , kanjis : List KanjiData
     , tiles : List Tile
     , gridSize : ( Int, Int )
     , time : Float
@@ -55,7 +56,7 @@ init aspect padding kanjis =
                 |> List.map (\kd -> ( kd, sizing kd.srs ))
                 |> (\l -> Layout.computeLayout l aspect (Random.initialSeed 0))
     in
-    Model aspect padding tiles gridSize 0.0 0.0
+    Model aspect padding kanjis tiles gridSize 0.0 0.0
 
 
 shuffle : Model -> Float -> Model
@@ -65,9 +66,9 @@ shuffle model time =
             Random.initialSeed (floor time)
 
         ( shuffled, gridSize ) =
-            model.tiles
-                |> List.sortWith (\( ka, _, _ ) ( kb, _, _ ) -> kanjiOrder ka kb)
-                |> List.map (\( data, size, _ ) -> ( data, size ))
+            model.kanjis
+                |> List.sortWith kanjiOrder
+                |> List.map (\kd -> ( kd, sizing kd.srs ))
                 |> (\l -> Layout.computeLayout l model.aspect seed)
     in
     { model | tiles = shuffled, gridSize = gridSize, time = time, iterTime = 0 }
